@@ -74,8 +74,9 @@ this is bbs
   
 <script type="text/javascript">
 
-getBbsListData();
+getBbsListData(0);
 loadPage(20);
+
 
 function writeBbs(myid) {
 	
@@ -99,25 +100,35 @@ function getBbsListData(pnum){
       url : "./getBbsListData",
       type : "get",
       data: {"pnum" : pnum, "search" : search, "title" : title},
-      success:function(list){
+      success:function(data){
          //alert('success');
          //alert(list);
-
-         $(".list_col").remove();
-
-         $.each(list, function(i, val){
-        	 
-        	 var newfilename = val.newfilename;
-        	 var bbsseq = val.hometaxbbs_seq;
-            //alert(val.jobSeq);
+         
+          var count = data.count;
+          console.log(data);
+          console.log("총 카운트 : "+count);
+          
+          //페이지네이션 생성
+          loadPage(count);
+         
+          
+		$(".list_col").remove();
+         
+         for(var i in data.list) {
+        	 var newfilename = data.list[i].newfilename;
+        	 var bbsseq = data.list[i].hometaxbbs_seq;
+            console.log(bbsseq);
+            
+            let j = parseInt(i);
+            
             let app = "<tr class= 'list_col'>"
-                     +"<th scope='row'>" + (i+1) +"</th>";
+                     +"<th scope='row'>" + (j+1) +"</th>";
                      
-                   if(val.del==0){
-                	 app +="<td>"+"<a href=detailBbs?seq="+val.hometaxbbs_seq+">"+val.title+"</a>"+"</td>"
-                	 	 +"<td>"+val.readcount+"</td>"
-                	 	 +"<td>"+val.downcount+"</td>"
-                	 	 +"<td><input type='button' name='btnDown' value='다운로드'  onclick="+"filedown('"+val.newfilename+"','"+val.seq+"','"+val.filename+"')> </td>";
+                   if(data.list[i].del==0){
+                	 app +="<td>"+"<a href=detailBbs?seq="+data.list[i].hometaxbbs_seq+">"+data.list[i].title+"</a>"+"</td>"
+                	 	 +"<td>"+data.list[i].readcount+"</td>"
+                	 	 +"<td>"+data.list[i].downcount+"</td>"
+                	 	 +"<td><input type='button' name='btnDown' value='다운로드'  onclick="+"filedown('"+data.list[i].newfilename+"','"+data.list[i].seq+"','"+data.list[i].filename+"')> </td>";
                 	 
                 	}else{
                 	   app += "<td colspan='4'>"
@@ -127,16 +138,12 @@ function getBbsListData(pnum){
                      
                 app +="</tr>";
                   
-		$("#table").append(app);
-         });
-      },
-      error:function(){
-         alert('error');
-      }
-
-   });
-
-  }
+			$("#table").append(app);
+   
+         }//for
+      }//success
+   });//ajax
+}//function
   
   
 //이렇게 하면 자바스크립트를 사용하면서도 post형태로 보낼수가 있다 
@@ -191,27 +198,6 @@ function loadPage( totalCount ) {
    });
 }
 
-function getBbsDataCount(pnum) {
-	
-	let search = "";
-	let title = "";
-	
-	$.ajax({
-	      url : "./getBbsDataCount",
-	      type : "get",
-	      data: {"pnum" : pnum, "search" : search, "title" : title},
-	      success:function(count){
-	         //alert('success');
-	         
-			loadPage(count);
-	      },
-	      error:function(){
-	         alert('error');
-	      }
-
-	   });
-
-}
 
 </script>
 

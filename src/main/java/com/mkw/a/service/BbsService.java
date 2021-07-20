@@ -17,4 +17,6 @@ public interface BbsService {
 
 	boolean updateBbs(BbsVo vo);
 
+	int getBbsDataCount(BbsParam param);
+
 }

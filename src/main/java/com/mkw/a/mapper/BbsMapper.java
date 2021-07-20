@@ -17,5 +17,7 @@ public interface BbsMapper {
 
 	boolean updateBbs(BbsVo vo);
 
+	int getBbsDataCount(BbsParam param);
+
 
 }

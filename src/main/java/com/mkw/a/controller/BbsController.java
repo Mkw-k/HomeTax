@@ -3,7 +3,9 @@ package com.mkw.a.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -48,6 +50,8 @@ public class BbsController {
 	public String writeBbsAf(BbsVo bbs, @RequestParam(value = "fileload", required = false)MultipartFile fileload
 								, HttpServletRequest req) {
 		
+		System.out.println("writeBbsAf :" +bbs.toString());
+		
 		String filename = fileload.getOriginalFilename();
 		bbs.setFilename(filename);
 		
@@ -83,11 +87,34 @@ public class BbsController {
 	
 	@ResponseBody
 	@RequestMapping(value = "getBbsListData", method = RequestMethod.GET)
-	public List<BbsVo> getBbsListData(BbsParam param, Model model) {
+	public Map<String, Object> getBbsListData(BbsParam param, Model model) {
+		
+		int count = 0; 
+		
+		//paging 처리
+		if(param.getPnum() == 0) {
+
+			int sn = param.getPnum();
+			int start = sn * 5 + 1; 	//1  11
+			int end = (sn + 1) * 5; 	//10 20
+
+			//System.out.println("start ="+start);
+			//System.out.println("end ="+end);
+			param.setStart(start);
+			param.setEnd(end);
+
+		}
 		
 		List<BbsVo> list = bbsservice.getBbsListData(param);
 		
-		return list;
+		count = bbsservice.getBbsDataCount(param);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		map.put("list", list);
+		map.put("count", count);
+		
+		return map;
 	}
 	
 	@RequestMapping(value = "fileDownload", method = RequestMethod.POST)

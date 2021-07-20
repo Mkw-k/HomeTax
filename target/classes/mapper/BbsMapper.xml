@@ -23,7 +23,7 @@
       	  		</if>
       	  </if>
       )
-      WHERE RNUM BETWEEN 1 AND 5
+      WHERE RNUM BETWEEN ${start} AND ${end}
 </select>
 
 <!-- 문의사항 디테일 페이지 -->
@@ -51,6 +51,21 @@
 	WHERE HOMETAXBBS_SEQ = #{hometaxbbs_seq}
 </update>
 
+<!-- 총데이터수 가져오기 -->
+<select id="getBbsDataCount" resultType="Integer" parameterType="com.mkw.a.domain.BbsParam">
+SELECT COUNT(*)
+      	  FROM HOMETAXBBS
+      	  WHERE 1=1 
+      	  <if test="title != null and title != ''">
+      	  		<if test="title == '제목'">
+      	  			AND TITLE LIKE '%'||#{search}||'%'
+      	  		</if>
+      	  		<if test="title == '작성자'">
+      	  			AND MYID LIKE '%'||#{search}||'%'
+      	  		</if>
+      	  </if>
+
+</select>
 
 
 </mapper>

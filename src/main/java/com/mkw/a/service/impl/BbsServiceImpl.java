@@ -40,4 +40,9 @@ public class BbsServiceImpl implements BbsService {
 	public boolean updateBbs(BbsVo vo) {
 		return bbsmapper.updateBbs(vo);
 	}
+
+	@Override
+	public int getBbsDataCount(BbsParam param) {
+		return bbsmapper.getBbsDataCount(param);
+	}
 }
