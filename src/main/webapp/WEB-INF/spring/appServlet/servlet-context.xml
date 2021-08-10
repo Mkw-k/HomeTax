@@ -21,24 +21,23 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<!-- MultipartResolver 파일 업로드 다운로드 설정-->
-    <beans:bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <beans:property name="maxUploadSize" value="100000000"/>
-        <beans:property name="maxInMemorySize" value="100000000"/>
-    </beans:bean>
-    
-    <!-- download -->
-	<beans:bean id="DownloadView" class="com.mkw.a.util.DownloadView"/>
 	
-	<beans:bean id="downloadViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
-		<beans:property name="order">
-			<beans:value>0</beans:value>
-		</beans:property>
+	 <!-- 파일업로드에 필요한 bean -->
+	<beans:bean id="mulitpartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	    <!-- 파일업로드 용량 -->
+	    <beans:property name="maxUploadSize" value="10485760"/>
+	    <beans:property name="maxInMemorySize" value="100000000"/>
+	    <beans:property name="defaultEncoding" value="UTF-8"/>
 	</beans:bean>
 	
 	
-	
-	
+    <!-- download -->
+	<beans:bean id="DownloadView" class="com.mkw.a.util.DownloadView"/>
+		<beans:bean id="downloadViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+			<beans:property name="order">
+			<beans:value>0</beans:value>
+		</beans:property>
+	</beans:bean>
 	
 	
 	<context:component-scan base-package="com.mkw.a" />

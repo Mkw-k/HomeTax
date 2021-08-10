@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.mkw.a.domain.MemberVo;
 
-public interface MemberMapper {
+public interface MemberDao {
 	//회원가입
 	boolean regiAf (MemberVo mem);
 	//아이디중복확인

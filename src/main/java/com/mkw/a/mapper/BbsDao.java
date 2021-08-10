@@ -5,7 +5,8 @@ import java.util.List;
 import com.mkw.a.domain.BbsParam;
 import com.mkw.a.domain.BbsVo;
 
-public interface BbsMapper {
+
+public interface BbsDao {
 
 	 boolean uploadBbs(BbsVo bbs);
 

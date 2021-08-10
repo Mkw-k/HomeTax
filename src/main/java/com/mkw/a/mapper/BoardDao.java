@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.mkw.a.domain.BoardVo;
 
-public interface BoardMapper {
+public interface BoardDao {
 
 	public List<BoardVo> viewAll();
 }

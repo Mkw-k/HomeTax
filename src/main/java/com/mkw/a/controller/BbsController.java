@@ -2,7 +2,10 @@ package com.mkw.a.controller;
 
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +13,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +34,8 @@ import com.mkw.a.util.PdsUtil;
 @Controller
 public class BbsController {
 	
+	private static final Logger logger = LoggerFactory.getLogger(BbsController.class);
+	
 	@Autowired
 	BbsService bbsservice;
 	
@@ -46,29 +53,14 @@ public class BbsController {
 		return "board/writeBbs";
 	}
 	
+	
 	@RequestMapping(value = "writeBbsAf", method = RequestMethod.POST)
 	public String writeBbsAf(BbsVo bbs, @RequestParam(value = "fileload", required = false)MultipartFile fileload
 								, HttpServletRequest req) {
 		
-		System.out.println("writeBbsAf :" +bbs.toString());
-		
-		String filename = fileload.getOriginalFilename();
-		bbs.setFilename(filename);
-		
-		String fupload = req.getServletContext().getRealPath("/upload");
-		
-		System.out.println("fuload :"+fupload);
-		
-		String newfilename = PdsUtil.getNewFileName(bbs.getFilename());
-		
-		bbs.setNewfilename(newfilename);
-		
-		File file = new File(fupload + "/" +newfilename);
-		
 		try {
-			FileUtils.writeByteArrayToFile(file, fileload.getBytes());
 			
-			boolean b = bbsservice.uploadBbs(bbs);
+			boolean b = bbsservice.uploadBbs(bbs, fileload, req);
 			
 			if(b) {
 				System.out.println("글 업로드 성공");
@@ -76,8 +68,13 @@ public class BbsController {
 				System.out.println("글 업로드 실패");
 			}
 			
-		} catch (IOException e) {
+		} catch (NullPointerException e) {
 			// TODO Auto-generated catch block
+			logger.debug(">>> BbsController >>> writeBbsAf >>> NPE Fail");
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO: handle exception
+			logger.debug(">>> BbsController >>> writeBbsAf >>> Exception Fail");
 			e.printStackTrace();
 		}
 		
@@ -190,7 +187,7 @@ public class BbsController {
 		bbs.setNewfilename(newfilename);
 		
 		File file = new File(fupload + "/" +newfilename);
-		
+		System.out.println(fupload + "/" +newfilename);
 		try {
 			FileUtils.writeByteArrayToFile(file, fileload.getBytes());
 			boolean b = bbsservice.updateBbs(bbs);

@@ -6,53 +6,53 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mkw.a.domain.MemberVo;
-import com.mkw.a.mapper.MemberMapper;
+import com.mkw.a.mapper.MemberDao;
 import com.mkw.a.service.MemberService;
 
 @Service
 public class MemberServiceImpl implements MemberService{
 	
 	@Autowired
-	private MemberMapper mapper;
+	MemberDao memberdao;
 
 	@Override
 	public boolean regiAf(MemberVo mem) {
-		return mapper.regiAf(mem);
+		return memberdao.regiAf(mem);
 	}
 
 	@Override
 	public int getId(MemberVo mem) {
-		return mapper.getId(mem);
+		return memberdao.getId(mem);
 	}
 
 	@Override
 	public MemberVo login(MemberVo mem) {
-		return mapper.login(mem);
+		return memberdao.login(mem);
 	}
 
 	@Override
 	public boolean memberDelete(MemberVo mem) {
-		return mapper.memberDelete(mem);
+		return memberdao.memberDelete(mem);
 	}
 
 	@Override
 	public boolean updateMember(MemberVo mem) {
-		return mapper.updateMember(mem);
+		return memberdao.updateMember(mem);
 	}
 
 	@Override
 	public int getnomalLen() {
-		return mapper.getnomalLen();
+		return memberdao.getnomalLen();
 	}
 
 	@Override
 	public int getdiscountLen() {
-		return mapper.getdiscountLen();
+		return memberdao.getdiscountLen();
 	}
 
 	@Override
 	public List<MemberVo> getMemberList() {
-		return mapper.getMemberList();
+		return memberdao.getMemberList();
 	}
 
 }

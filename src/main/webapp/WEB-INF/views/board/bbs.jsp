@@ -54,7 +54,7 @@
   
   <input type="button" onclick="javascript:writeBbs('${login.myid}')" id="_writeBbs" value="글쓰기"><br>
 		
-this is bbs
+
   
   
   <form name="file_Down" action="fileDownload" method="post">
@@ -75,7 +75,7 @@ this is bbs
 <script type="text/javascript">
 
 getBbsListData(0);
-loadPage(20);
+
 
 
 function writeBbs(myid) {

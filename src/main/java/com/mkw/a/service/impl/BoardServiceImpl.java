@@ -6,18 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mkw.a.domain.BoardVo;
-import com.mkw.a.mapper.BoardMapper;
+import com.mkw.a.mapper.BoardDao;
 import com.mkw.a.service.BoardService;
 
 @Service
 public class BoardServiceImpl implements BoardService{
 
 	@Autowired
-	private BoardMapper mapper;
+	BoardDao dao;
 	
 	@Override
 	public List<BoardVo> viewAll() {
-		return mapper.viewAll();
+		return dao.viewAll();
 	}
 
 }

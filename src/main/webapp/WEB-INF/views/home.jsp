@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+<%@page import="javax.annotation.Resource"%>
+<%@page import="com.fasterxml.jackson.annotation.JsonInclude.Include"%>
 <html>
 
 <meta charset="utf-8">
@@ -6,14 +8,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
 request.setCharacterEncoding("UTF-8");
-%>
 
-<head>
+%>
+<!-- 파일의 위치와 존재여부를 확인하기 위해 인크루드 파일로 체크 해봄  -->
+<%-- <%@ include file="/resources/content/js/home.js" %> --%>
+
+
+<head> 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
   <link rel="stylesheet" href="https://static.pingendo.com/bootstrap/bootstrap-4.3.1.css">
-  
-  
+ 
 
 <style type="text/css">
 .title{
@@ -37,11 +42,14 @@ request.setCharacterEncoding("UTF-8");
       <div class="row">
         <div class="mx-auto col-lg-8 col-md-10">
           <h1 class="display-3 mb-4">A wonderful serenity</h1>
-          <p class="lead mb-5">Has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of existence.</p> <a href="#" class="btn btn-lg btn-primary mx-1">Take me there</a> <a class="btn btn-lg mx-1 btn-outline-primary" href="#">Let's Go</a>
+          <p class="lead mb-5">Has taken possession of my entire soul, like these sweet mornings of spring which I enjoy with my whole heart. I am alone, and feel the charm of existence.</p> 
+          <a href="javascript:void(0)" id="_uploadTest" class="btn btn-lg btn-primary mx-1">Take me there</a> 
+          <a class="btn btn-lg mx-1 btn-outline-primary" id="_imageTest" href="javascript:void(0)">업로드테스트로</a>
         </div>
       </div>
     </div>
   </div>
+  
   <div class="py-5" >
     <div class="container-fluid">
       <div class="row">
@@ -70,6 +78,14 @@ request.setCharacterEncoding("UTF-8");
     </div>
   </div>
   
+  <div class="container">
+  	<div class="row">
+	  	<%-- <img style="width: 200px; height: 200px; margin: 0 auto" src="resources/upload/'${login.newfilename}'" onerror="this.src='https://e7.pngegg.com/pngimages/342/260/png-clipart-computer-icons-blog-people-shadow-silhouette-tomcat.png'" /> --%>
+	  	<img style="width: 200px; height: 200px; margin: 0 auto" src="resources\\upload\\1628602298304.jpg"/>
+	  	
+  	</div>
+  </div>
+  
  <c:import url="/footer.jsp" charEncoding="utf-8"/> 
  
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -78,6 +94,9 @@ request.setCharacterEncoding("UTF-8");
   
   <!-- JQuery -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
+
+<!-- 못불러옴 ㅠ  -->
+ <!-- <script type="text/javascript" src="/resources/content/js/home.js"/> -->
 
   <script type="text/javascript">
   		
@@ -212,6 +231,25 @@ request.setCharacterEncoding("UTF-8");
 		day = year + month;
 		getTaxListData(day);
 	}
+  	
+  	
+  			
+        let button = document.getElementById('_imageTest');
+        button.addEventListener('click', function() {
+            alert('업로드 테스트 클릭');
+  	  		location.href = "uploadTest";
+        });
+  			 
+  	  		
+       
+        
+        let upButton = document.getElementById('_uploadTest');
+        upButton.addEventListener('click', function() {
+            alert('클릭');
+  	  		location.href = "upload";
+        });
+  	
+  
   </script>
   
   
