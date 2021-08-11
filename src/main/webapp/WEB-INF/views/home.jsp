@@ -248,8 +248,51 @@ request.setCharacterEncoding("UTF-8");
             alert('클릭');
   	  		location.href = "upload";
         });
+        
+        
   	
-  
+        let skBtn = document.getElementById('_skTest');
+        skBtn.addEventListener('click', function() {
+            alert('_skTest 클릭');
+            
+            const data1 = {
+            	VAR1 : "variable1",
+            	VAR2 : "variable2"
+            };
+            
+            const data2 = {
+            	VAR1 : "variable3",
+            	VAR2 : "variable4"
+            }
+            
+            var arr = [];
+            
+            arr.push(data1);
+            arr.push(data2);
+            
+            console.log(arr);
+            
+            
+            //alert('데이터취득');
+       	   $.ajax({
+       	      url : "./skTest",
+       	      type : "post",
+       	      dataType : "json",
+       	   	  contentType: 'application/json; charset=utf-8',
+       	      data: JSON.stringify(arr),
+       	      success:function(list){
+       	         //alert('success');
+       	         //alert(list);
+
+       	      },
+       	      error:function(){
+       	         alert('error');
+       	      }
+
+       	   });
+            
+  	  		
+        });
   </script>
   
   

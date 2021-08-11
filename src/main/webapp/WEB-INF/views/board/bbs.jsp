@@ -77,7 +77,6 @@
 getBbsListData(0);
 
 
-
 function writeBbs(myid) {
 	
 	if(myid == null){

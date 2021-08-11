@@ -2,10 +2,108 @@
 <!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
 <mapper namespace="com.mkw.a.mapper.BoardDao">
 
+ <resultMap type="hashMap" id="testRst02">
+	<result javaType="java.lang.String" column="VAR1" property="VAR1"></result>
+	<result javaType="java.lang.String" column="ok" property="ok"></result>
+</resultMap>
+
+
 <select id="viewAll" resultType="com.mkw.a.domain.BoardVo">
 	select * from board ORDER BY SEQ DESC 
 </select>
 
 
+<insert id="skTest" parameterType="hashmap" >
+
+	<!-- <bind name="VAR1" value="_parameter.get('VAR1').toString()"/> -->
 	
+	
+	INSERT INTO SKTEST(VAR1,VAR2)
+	
+	<foreach collection="list" item="item" separator=" union ">
+
+	select
+	
+	 #{item.VAR1}, 
+	
+	 #{item.VAR2}
+	
+	from dual
+	
+	RETURNING VAR1
+	
+	</foreach>
+	
+	<selectKey keyProperty="VAR1" resultType="String" order="AFTER">
+	 	SELECT #{VAR1} as VAR1 FROM DUAL
+    </selectKey>    
+
+</insert>
+
+
+
+
+
+
+<select id="skTestReturn" parameterType="hashmap">
+	INSERT INTO SKTEST(VAR1,VAR2)
+	VALUES(
+		 #{VAR1}, 
+		 #{VAR2}
+	)
+	
+</select>
+
+
+
+<insert id="insertPost" parameterType="java.util.HashMap" useGeneratedKeys="true" keyProperty="postNo" >
+	INSERT INTO POST    (
+							BBS_NO			--게시판번호
+						  , POST_NO			--게시글번호
+						  , POST_TITLE		--게시글제목
+						  , CONTENTS		--게시글내용
+						  , WRT_ID			--작성자ID
+						  , WRT_DTT			--작성일시
+						  , VIEW_CNT		--조회수
+						  , TOP_POST_YN		--공지여부
+						  , DISP_YN			--노출여부
+						  , REPLY_YN		--댓글허용여부
+						)
+	VALUES              (
+							#{bbsNo,jdbcType=VARCHAR}
+						  , TO_CHAR(POST_SEQ.NEXTVAL)	--시퀀스 사용
+						  , #{postTitle,jdbcType=VARCHAR}
+						  , #{contents,jdbcType=VARCHAR}
+						  , #{wrtId,jdbcType=VARCHAR}
+						  , SYSDATE
+						  , 0
+						  , NVL(#{topPostYn,jdbcType=VARCHAR}, 'N')
+						  , NVL(#{dispYn,jdbcType=VARCHAR}, 'Y')
+						  , NVL(#{replyYn,jdbcType=VARCHAR}, 'Y')
+						)
+</insert>
+
+
+
+<!-- <insert id="skTest" parameterType="hashmap">
+	<foreach collection="list" item="param" open="INSERT ALL" close="SELECT * FROM DUAL" separator=" ">
+		INTO SKTEST 
+		(
+		VAR1 
+		,VAR2
+		)
+		VALUES
+		(
+		#{param.VAR1}, 
+		#{param.VAR2}
+		)
+		
+	</foreach>
+	
+	 <selectKey keyProperty="VAR1" resultType="String" order="AFTER">
+                SELECT VAR1 as VAR1 FROM DUAL
+    </selectKey>    
+
+</insert>
+ -->	
 </mapper>

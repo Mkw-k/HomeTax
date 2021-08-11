@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,9 +18,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -186,6 +190,28 @@ public class maincontroller {
 	        }catch(Exception e){System.out.println(e);}  
 	        return new ModelAndView("/testpage/upload-success","filename",path+"/"+filename);  
 	    }  
+	
+	
+	@ResponseBody
+	@RequestMapping(value="/skTest",method=RequestMethod.POST)  
+	public void skTest(@RequestBody ArrayList<HashMap<String, Object>> param, HttpServletResponse response) throws IOException{  
+		
+		ArrayList<String> resultList = new ArrayList<String>();
+		
+		System.out.println(param.toString());
+		
+		//resultList = boardService.skTest(param);
+		String var1 =  boardService.skTestReturn(param);
+		
+		System.out.println("리턴값 확인 : " + var1 + "**************************");
+		
+		PrintWriter pw = response.getWriter();
+		
+		pw.println("<script>alert(확인); " +
+				"location.href='home';</script>");
+		pw.flush();
+		
+	}
 	
 	
 }

@@ -19,7 +19,7 @@
           <li class="nav-item"> <a class="nav-link" href="toCreateTax">월세입력</a> </li>
         </c:if>
         
-		<li class="nav-item"> <a class="nav-link" href="toUploadForm2">업로드테스트</a> </li>
+		<li class="nav-item"> <a class="nav-link" href="javascript:void(0)" id="_skTest">업로드테스트</a> </li>
 		
         </ul>
         <ul class="navbar-nav">
