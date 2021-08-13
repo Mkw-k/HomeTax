@@ -9,6 +9,9 @@
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
+	<!-- 파일 업로드 디폴트 경로 로드 -->	
+	<default-servlet-handler/>
+	
 	<!-- Enables the Spring MVC @Controller programming model -->
 	<annotation-driven />
 
@@ -41,9 +44,5 @@
 	
 	
 	<context:component-scan base-package="com.mkw.a" />
-	
-	
-	 	
-	
-	
+
 </beans:beans>

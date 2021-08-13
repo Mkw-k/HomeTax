@@ -3,9 +3,12 @@ package com.mkw.a.controller;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -68,6 +71,37 @@ public class maincontroller {
 	public void regiAf(Model model, MemberVo mem, 
 						@RequestParam(value = "userPic", required = false)MultipartFile userPic, 
 						HttpServletRequest req, HttpServletResponse response) throws IOException {
+		/*
+		String pattern = "yyyyMMdd";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		String yymmdd = simpleDateFormat.format(new Date());
+		logger.debug("폴더명 >>> " + yymmdd);
+		*/
+		
+		String patter2 = "yyyyMMddHHmmss";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(patter2);
+		String yymmddhhmmss = simpleDateFormat.format(new Date());
+		logger.debug("현재시간 >>> " + yymmddhhmmss);
+		
+		String dirStr = "D:/Temp/MemberLog";
+		
+		File loggerfile = new File(dirStr+ "/" + yymmddhhmmss +".txt");
+	    logger.debug("경로 및 파일명 확인 >>> "+ dirStr+ "/" + yymmddhhmmss +".txt");
+	    
+		FileWriter fw = new FileWriter(loggerfile, true);
+		
+		/*
+		//경로를 문자열로 받을 수도 있다
+	    File newFile = new File(dirStr);
+	   
+	    if(newFile.mkdir()){   //만드려는 디렉토리가 하나일 경우
+	    	logger.debug(" <<<< 디렉토리를 생성했습니다. >>>> ");
+	    }else{
+	    	logger.debug(" <<<< 디렉토리를 생성하지 못했습니다. >>>> ");
+	    }
+	    */
+		
+	    fw.write("입력시간 >>> " + yymmddhhmmss + "\r\n");
 		
 		PrintWriter out = response.getWriter();
 		String filename = userPic.getOriginalFilename();
@@ -79,6 +113,7 @@ public class maincontroller {
 		mem.setNewfilename(newfilename);
 		
 		File file = new File(fupload + "/" +newfilename);
+		fw.write(">>> 업로드 경로 및 파일네임 : " + fupload + "/" +newfilename);
 		
 		try {
 			FileUtils.writeByteArrayToFile(file, userPic.getBytes());
@@ -111,6 +146,9 @@ public class maincontroller {
 			
 		}catch (Exception e) {
 			logger.debug(e.toString());
+		}
+		finally {
+			fw.close();
 		}
 		
 	}

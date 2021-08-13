@@ -81,7 +81,7 @@ request.setCharacterEncoding("UTF-8");
   <div class="container">
   	<div class="row">
 	  	<%-- <img style="width: 200px; height: 200px; margin: 0 auto" src="resources/upload/'${login.newfilename}'" onerror="this.src='https://e7.pngegg.com/pngimages/342/260/png-clipart-computer-icons-blog-people-shadow-silhouette-tomcat.png'" /> --%>
-	  	<img style="width: 200px; height: 200px; margin: 0 auto" src="resources\\upload\\1628602298304.jpg"/>
+	  	<img style="width: 200px; height: 200px; margin: 0 auto" src="./upload/${login.newfilename}"/>
 	  	
   	</div>
   </div>
