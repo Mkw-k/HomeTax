@@ -4,12 +4,14 @@
 
 <!-- 문의사항글쓰기 -->
 <insert id="uploadBbs" parameterType="com.mkw.a.domain.BbsVo">
+	/*BbsMapper.uploadBbs*/
 	INSERT INTO HOMETAXBBS (HOMETAXBBS_SEQ, MYID,  TITLE, CONTENT, READCOUNT, DEL, DEPTH, REF, FILENAME, NEWFILENAME)
 	VALUES(HOMETAXBBS_SEQ.NEXTVAL, #{myid},  #{title}, #{content}, 0, 0, 0, HOMETAXBBS_SEQ.NEXTVAL, #{filename}, #{newfilename})
 </insert>
 
 <!-- 문의사항 글 가져오기 -->
 <select id="getBbsListData" parameterType="com.mkw.a.domain.BbsParam" resultType="com.mkw.a.domain.BbsVo">
+	/*BbsMapper.getBbsListData*/
 	SELECT RNUM, HOMETAXBBS_SEQ, MYID, TITLE, CONTENT, READCOUNT, DEL, DEPTH, REF, FILENAME, NEWFILENAME, DOWNCOUNT
 	FROM (SELECT ROW_NUMBER() OVER (ORDER BY HOMETAXBBS_SEQ) AS RNUM, MYID, HOMETAXBBS_SEQ, TITLE, CONTENT, READCOUNT, DEL, DEPTH, REF, FILENAME, NEWFILENAME, DOWNCOUNT
       	  FROM HOMETAXBBS
@@ -28,6 +30,7 @@
 
 <!-- 문의사항 디테일 페이지 -->
 <select id="getDetailBbs" parameterType="Integer" resultType="com.mkw.a.domain.BbsVo">
+	/*BbsMapper.getDetailBbs*/
 	SELECT * 
 	FROM HOMETAXBBS
 	WHERE HOMETAXBBS_SEQ = #{seq}
@@ -36,6 +39,7 @@
 
 <!-- 문의사항 글삭제 -->
 <update id="deleteBbs" parameterType="Integer">
+	/*BbsMapper.deleteBbs*/
 	UPDATE HOMETAXBBS
 	SET DEL = 1 
 	WHERE HOMETAXBBS_SEQ = #{seq}
@@ -43,6 +47,7 @@
 
 <!-- 문의사항 글 업데이트 -->
 <update id="updateBbs" parameterType="com.mkw.a.domain.BbsVo">
+	/*BbsMapper.updateBbs*/
 	UPDATE HOMETAXBBS 
 	SET TITLE = #{title}, CONTENT = #{content}
 	<if test="title != null and title != ''">
@@ -53,6 +58,7 @@
 
 <!-- 총데이터수 가져오기 -->
 <select id="getBbsDataCount" resultType="Integer" parameterType="com.mkw.a.domain.BbsParam">
+/*BbsMapper.getBbsDataCount*/
 SELECT COUNT(*)
       	  FROM HOMETAXBBS
       	  WHERE 1=1 

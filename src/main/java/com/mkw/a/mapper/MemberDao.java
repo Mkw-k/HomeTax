@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mkw.a.domain.MemberVo;
 
+/*여기가 맵퍼인터페이스임*/
 public interface MemberDao {
 	//회원가입
 	boolean regiAf (MemberVo mem);
@@ -21,4 +22,5 @@ public interface MemberDao {
 	int getdiscountLen();
 	//모든 회원정보를 리스트로 가져오기
 	List<MemberVo> getMemberList();
+	
 }

@@ -55,4 +55,6 @@ public class MemberServiceImpl implements MemberService{
 		return memberdao.getMemberList();
 	}
 
+
+
 }

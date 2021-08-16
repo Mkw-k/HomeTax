@@ -25,8 +25,14 @@
         <ul class="navbar-nav">
         	<c:choose>
         		<c:when test="${login ne null}">
+        			<li class="nav-item">
+        				<img style="width: 50px; height: 50px; margin: 0 auto; border-radius: 70%; " 
+        				onerror="this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgQICbknzB9ayaw3aI2J3RpPh2eeWIAL5-Bg&usqp=CAU'"
+        				 src="./upload/${login.newfilename}"/>
+        			</li>
         			<li class="nav-item"> <a class="nav-link" href="mypage">${login.name} 님 환영합니다.</a> </li>
         			<li class="nav-item"> <a class="nav-link text-primary" href="logout">로그아웃</a> </li>
+        			<li class="nav-item"> <a class="nav-link text-primary" href="memberUpdate">정보수정</a> </li>
         		</c:when>
         		<c:otherwise>
         			<li class="nav-item"> <a class="nav-link" href="login">로그인</a> </li>
@@ -34,8 +40,6 @@
         		</c:otherwise>
         	</c:choose>
 		  	        
-          
-        
         </ul>
       </div>
     </div>

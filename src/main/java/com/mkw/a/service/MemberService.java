@@ -22,5 +22,6 @@ public interface MemberService {
 	int getdiscountLen();
 	//모든 회원정보를 리스트로 가져오기
 	List<MemberVo> getMemberList();
+
 	
 }

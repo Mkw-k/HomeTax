@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>   
+
 <!DOCTYPE html>
 <html>
 
@@ -21,50 +23,61 @@
 </head>
 
 <body>
+
+<c:import url="/header.jsp" charEncoding="utf-8"/> 
 	
 	<div class="py-5 text-center">
 		<div class="container">
 			<div class="row">
 				<div class="mx-auto col-lg-6 col-10">
-					<h1>회원가입</h1>
+					<c:choose>
+						<c:when test="${isUpdate == 'YES'}">
+							<h1>회원정보수정</h1>
+						</c:when>
+						<c:otherwise>
+							<h1>회원가입</h1>
+						</c:otherwise>
+					</c:choose>
+					
 					<p class="mb-3">관리자 허가없는 회원가입은 강제탈퇴처리 될수 있습니다</p>
 					
-					<form class="text-left" action="regiAf" method="post" enctype="multipart/form-data">
+					<form class="text-left" id="memberFrm"  method="post" enctype="multipart/form-data">
 						
 						<div class="form-control userPicArea" style="height: 300px;">
 							<div id="image_container" style="text-align: center;"></div>
-							<label for="form24">사진</label> 
-							<input type="file" name="userPic"accept="image/*" onchange="setThumbnail(event);" id="userPic">
+							<label for="form24">사진명 : </label> 
+							<span>${login.filename}</span>
+							<input type="file" name="userPic" accept="image/*" value="${login.newfilename}" onchange="setThumbnail(event);" id="userPic">
 						</div>
 
 						<div class="form-group">
 							<label for="form16">이름</label> 
-							<input type="text" class="form-control" name="name" id="_name" oninput="handleOnInput(this, 'name')"  placeholder="고명우">
+							<input type="text" class="form-control" value="${login.name}" name="name" id="_name" oninput="handleOnInput(this, 'name')"  placeholder="insert name">
 						</div>
 						<div class="form-group">
-							<label for="form23">아이디</label> 
-							<input type="text" class="form-control" name="myid" id=_id  oninput="handleOnInput(this, 'userId')" placeholder="아이디">
+							<label for="form23">아이디</label>  
+							<input type="text" class="form-control" value="${login.myid}" name="myid" id=_id  oninput="handleOnInput(this, 'userId')" placeholder="insert id">
 						</div>
 						<div class="form-group">
 							<label for="form17">소속</label> 
-							<input type="text" class="form-control" name="classify" id="_classify" oninput="handleOnInput(this, 'classify')" placeholder="우신빌라">
+							<input type="text" class="form-control" value="${login.classify}" name="classify" id="_classify" oninput="handleOnInput(this, 'classify')" placeholder="insert classify">
 						</div>
 						<div class="form-group">
 							<label for="form18">이메일</label> 
-							<input type="email" class="form-control" name="email" id="_email" oninput="handleOnInput(this, 'email')" placeholder="j.goethe@werther.com">
+							<input type="email" class="form-control" value="${login.email}" name="email" id="_email" oninput="handleOnInput(this, 'email')" placeholder="xxx@xxx.com">
 						</div>
 						<div class="form-group">
 							<label for="form22">전화번호</label> 
-							<input type="number" class="form-control" name="phone" id="_phone" oninput="handleOnInput(this, 'phone')" placeholder="-없이 숫자만 입력해주세요">
+							<input type="number" class="form-control" value="${login.phone}" name="phone" id="_phone" oninput="handleOnInput(this, 'phone')" placeholder="-없이 숫자만 입력해주세요">
 						</div>
 						<div class="form-row">
 							<div class="form-group col-md-6">
 								<label for="form19">비밀번호</label> 
-								<input type="password" name="pwd" class="form-control" oninput="handleOnInput(this, 'pw')" id="_pw" placeholder="비밀번호">
+								<input type="password" name="pwd" value="${login.pwd}" class="form-control" oninput="handleOnInput(this, 'pw')" id="_pw" placeholder="비밀번호">
 							</div>
 							<div class="form-group col-md-6">
 								<label for="form20">비밀번호 확인</label> 
-								<input type="password" class="form-control"  id="_pwcheck" oninput="handleOnInput(this, 'pwCheck')" placeholder="비밀번호체크">
+								<input type="password" class="form-control" value="${login.pwd}"  id="_pwcheck" oninput="handleOnInput(this, 'pwCheck')" placeholder="비밀번호체크">
 								<span id="comparePw" ></span>
 							</div>
 						</div>
@@ -76,13 +89,22 @@
 									</label>
 							</div>
 						</div>
-						<button type="submit" class="btn btn-primary">Sign in</button>
+						<c:choose>
+							<c:when test="${isUpdate == 'YES'}">
+								<button type="button" id="_updateBtn" class="btn btn-primary">Update</button>
+							</c:when>
+							<c:otherwise>
+								<button type="button" id="_regiBtn" class="btn btn-primary">Sign in</button>	
+							</c:otherwise>
+						</c:choose>
+						
 					</form>
 				</div>
 			</div>
 		</div>
 	</div>
 
+  <c:import url="/footer.jsp" charEncoding="utf-8"/> 
 
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
@@ -90,12 +112,29 @@
 
 
 <script> 
+	//JSTL로 받아온 지역 정보의 대분류 네임이 서울이면 (일단 자바스크립트 변수로 변경) selected 조건을 줌 
+	var area1Name = '<c:out value="${login.newfilename}"/>';
+	
+	console.log(area1Name);
+	
+	var image_container = document.getElementById("image_container");
+	var img = document.createElement("img"); 
+	var imgArea = document.querySelector("div#image_container").appendChild(img);
+	imgArea.style.height = "250px";
+	imgArea.style.width = "200px";
+	
+	
+	imgArea.src = "./upload/" + area1Name;
+	//document.getElementById("imgId").src = "b.PNG";
 	
 	function setThumbnail(event) { 
 		for (var image of event.target.files) { 
 			var reader = new FileReader(); 
 			
 				reader.onload = function(event) { 
+				
+				var container = document.getElementById('image_container');
+				
 				var img = document.createElement("img"); 
 				img.setAttribute("src", event.target.result); 
 				document.querySelector("div#image_container").appendChild(img);
@@ -103,10 +142,15 @@
 				imgArea.style.height = "250px";
 				imgArea.style.width = "200px";
 				
+				
+				
 				}; 
 				
 				console.log(image); 
 				reader.readAsDataURL(image); 
+				
+				var firchild = document.querySelector("div#image_container").firstChild;
+				firchild.remove();
 			} 
 		} 
 	
@@ -209,6 +253,13 @@
 	}
 	
 	
+	$("#_regiBtn").click(function() {
+		$("form").attr("action", "regiAf").submit();
+	});
+	
+	$("#_updateBtn").click(function() {
+		$("form").attr("action", "updateAf").submit();
+	});
 	
 	
 	
