@@ -11,7 +11,7 @@
 	  <java-version>1.8</java-version>
 	  <org.springframework-version>5.0.7.RELEASE</org.springframework-version>
 	  <org.aspectj-version>1.6.10</org.aspectj-version>
-	  <org.slf4j-version>1.6.6</org.slf4j-version>
+	  <org.slf4j-version>1.7.21</org.slf4j-version>
 	</properties>
 	
 	<repositories>
@@ -37,7 +37,9 @@
 					<artifactId>commons-logging</artifactId>
 				 </exclusion>
 			</exclusions>
-		</dependency>
+			</dependency>
+			
+		
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
@@ -201,7 +203,31 @@
 	            <artifactId>commons-fileupload</artifactId>
 	            <version>1.2.2</version>
 	        </dependency>
-	
+	       	<!-- logback 로깅관린 --> 
+	        <dependency>
+	        	<groupId>ch.qos.logback</groupId>
+	        	<artifactId>logback-classic</artifactId>
+	        	<version>1.1.7</version>
+	        </dependency>
+	        
+	        
+	        <!-- https://mvnrepository.com/artifact/org.imgscalr/imgscalr-lib -->
+	        <!-- 이미지 썸네일 라이브러리 -->
+			<dependency>
+			    <groupId>org.imgscalr</groupId>
+			    <artifactId>imgscalr-lib</artifactId>
+			    <version>4.2</version>
+			</dependency>
+			
+			<!-- https://mvnrepository.com/artifact/javax.annotation/javax.annotation-api -->
+			<!-- 어노테이션 API @Resource 안떠서 넣음 -->
+			<dependency>
+			    <groupId>javax.annotation</groupId>
+			    <artifactId>javax.annotation-api</artifactId>
+			    <version>1.3.2</version>
+			</dependency>
+	        
+	       
 	</dependencies>
 	
 	

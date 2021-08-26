@@ -5,7 +5,7 @@ import java.util.Map;
 
 import com.mkw.a.domain.HomeTaxVo;
 
-public interface HomeTaxMapper {
+public interface HomeTaxDao {
 
 	boolean createTax(HomeTaxVo tax);
 

@@ -5,21 +5,26 @@
 	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
 	
-	<!-- Root Context: defines shared resources visible to all other web components -->
-		
-		
-	<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">
-  <property value="oracle.jdbc.driver.OracleDriver" name="driverClassName" />
-  <property value="jdbc:oracle:thin:@localhost:1521:xe" name="url" />
+<!-- Root Context: defines shared resources visible to all other web components -->
+<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="/WEB-INF/config/config.properties"/>
+        <property name="fileEncoding" value="UTF-8" />
+</bean>
+
+
+<!-- DB셋팅 -->
+<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">
+  <property value="${db.driver}" name="driverClassName" />
+  <property value="${db.url}" name="url" />
   <!-- 오라클 사용자 이름 -->
-  <property value="hr" name="username" />
+  <property value="${db.username}" name="username" />
   <!-- 오라클 사용자 비밀번호 -->
-  <property value="hr" name="password" />
+  <property value="${db.password}" name="password" />
 </bean>
 
 
 	
-
+<!-- 마이바티스 설정 -->
 <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="SqlSessionFactory">
   <property name="dataSource" ref="dataSource" />
   <property value="classpath:mybatis-config.xml" name="configLocation" />

@@ -17,7 +17,9 @@
           <li class="nav-item"> <a class="nav-link" href="bbs">문의사항</a> </li>
 		<c:if test="${login.auth == 3}">
           <li class="nav-item"> <a class="nav-link" href="toCreateTax">월세입력</a> </li>
-		</c:if>
+        </c:if>
+        
+		<li class="nav-item"> <a class="nav-link" href="javascript:void(0)" id="_skTest">업로드테스트</a> </li>
 		
         </ul>
         <ul class="navbar-nav">

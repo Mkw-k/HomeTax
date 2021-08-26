@@ -12,11 +12,22 @@ public class MemberVo implements Serializable{
 	private String issale;
 	private String myid;
 	private int auth;
+	private String filename;
+	private String newfilename;
 	
 	
-	
-	
-	
+	public String getFilename() {
+		return filename;
+	}
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+	public String getNewfilename() {
+		return newfilename;
+	}
+	public void setNewfilename(String newfilename) {
+		this.newfilename = newfilename;
+	}
 	public int getAuth() {
 		return auth;
 	}
@@ -77,10 +88,14 @@ public class MemberVo implements Serializable{
 		this.issale = issale;
 		this.myid = myid;
 	}
+	
+	
+	
 	@Override
 	public String toString() {
 		return "MemberVo [name=" + name + ", classify=" + classify + ", email=" + email + ", phone=" + phone + ", pwd="
-				+ pwd + ", issale=" + issale + ", myid=" + myid + "]";
+				+ pwd + ", issale=" + issale + ", myid=" + myid + ", auth=" + auth + ", filename=" + filename
+				+ ", newfilename=" + newfilename + "]";
 	}
 	public MemberVo() {
 		// TODO Auto-generated constructor stub
