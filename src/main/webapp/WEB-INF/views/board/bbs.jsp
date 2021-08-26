@@ -15,6 +15,8 @@
 <!--   <link rel="stylesheet" href="https://static.pingendo.com/bootstrap/bootstrap-4.3.1.css"> -->
  
   <script type="text/javascript" src="./resources/jquery/jquery.twbsPagination.min.js"></script>
+  <script src="./resources/content/js/bbs/bbs.js"></script>
+  
 </head>
 
 <body >
@@ -38,7 +40,6 @@
               </thead>
              
              
-             
             </table>
           </div>
         </div>
@@ -51,8 +52,14 @@
             style="justify-content: center;">
          </ul>
       </nav>
+  <div class="container">
+  	<div class="row">
+  		<div class="col-12"  style="padding-right: 100 px; margin-right: 20px;">
+  			<input type="button" style="float: right;" class="btn btn-primary" onclick="javascript:writeBbs('${login.myid}')" id="_writeBbs" value="글쓰기"><br>			
+  		</div>
+  	</div>
+  </div>
   
-  <input type="button" onclick="javascript:writeBbs('${login.myid}')" id="_writeBbs" value="글쓰기"><br>
 		
 
   
@@ -66,139 +73,7 @@
    
   <c:import url="/footer.jsp" charEncoding="utf-8"/> 
  
-  
-  
-  
- 
-  
-  
-<script type="text/javascript">
 
-getBbsListData(0);
-
-
-function writeBbs(myid) {
-	
-	if(myid == null){
-		alert('로그인해주세요');
-		location.href = "login";
-	}else{
-		location.href = "writeBbs?myid="+myid;
-	}
-	
-}
-
-
-//월세 리스트 가져오는 함수 
-function getBbsListData(pnum){
-
-	let search = "";
-	let title = "";
-   //alert('데이터취득');
-   $.ajax({
-      url : "./getBbsListData",
-      type : "get",
-      data: {"pnum" : pnum, "search" : search, "title" : title},
-      success:function(data){
-         //alert('success');
-         //alert(list);
-         
-          var count = data.count;
-          console.log(data);
-          console.log("총 카운트 : "+count);
-          
-          //페이지네이션 생성
-          loadPage(count);
-         
-          
-		$(".list_col").remove();
-         
-         for(var i in data.list) {
-        	 var newfilename = data.list[i].newfilename;
-        	 var bbsseq = data.list[i].hometaxbbs_seq;
-            console.log(bbsseq);
-            
-            let j = parseInt(i);
-            
-            let app = "<tr class= 'list_col'>"
-                     +"<th scope='row'>" + (j+1) +"</th>";
-                     
-                   if(data.list[i].del==0){
-                	 app +="<td>"+"<a href=detailBbs?seq="+data.list[i].hometaxbbs_seq+">"+data.list[i].title+"</a>"+"</td>"
-                	 	 +"<td>"+data.list[i].readcount+"</td>"
-                	 	 +"<td>"+data.list[i].downcount+"</td>"
-                	 	 +"<td><input type='button' name='btnDown' value='다운로드'  onclick="+"filedown('"+data.list[i].newfilename+"','"+data.list[i].seq+"','"+data.list[i].filename+"')> </td>";
-                	 
-                	}else{
-                	   app += "<td colspan='4'>"
-                			 +"<font color='#ff0000'>********* 이 글은 작성자에 의해서 삭제되었습니다</font>"
-                            +"</td>";
-                   }
-                     
-                app +="</tr>";
-                  
-			$("#table").append(app);
-   
-         }//for
-      }//success
-   });//ajax
-}//function
-  
-  
-//이렇게 하면 자바스크립트를 사용하면서도 post형태로 보낼수가 있다 
-function filedown(newfilename, seq, filename) {
-	alert('눌렸음');
-	let doc = document.file_Down;
-	doc.newfilename.value = newfilename; 
-	doc.filename.value = filename;
-	doc.seq.value = seq;
-	doc.submit();
-}
-
-//paging 처리
-function loadPage( totalCount ) {
-
-    //alert("토탈카운트"+totalCount);
-
-   let pageSize = 5;
-   let nowPage = 1;
-
-//   let totalCount = 51;      //글의 총수
-//   let pageSize = 10;         //페이지의 크기 [1]~[10]
-//   let nowPage = 1;         //현재페이지
-
-   let _totalPages = totalCount/pageSize;
-   if(totalCount % pageSize > 0 ){
-      _totalPages++;
-   }
-
-   //alert('몇개냐 :'+_totalPages);
-    
-  if($('#pagination').data('twbs-pagination')){
-   	$("#pagination").twbsPagination('destroy');
-   }
-
-   $("#pagination").twbsPagination({
-      startPage: 1,
-      totalPages : _totalPages,
-      visiblePages : 7,
-     /*  totalPages : 7,
-      visiblePages :_totalPages, */
-      first: '<span aria-hidden = "true">«</span>',
-      prev : "이전",
-      next : "다음",
-      last : '<span aria-hidden = "true">»</span>',
-      initiateStartPageClick:false,            //onPageClick 자동 실행되지 않도록 한다
-      onPageClick : function(event, page) {
-         nowPage = page;
-         //alert('nowPage:'+ page);
-         getBbsListData(page -1);
-      }
-   });
-}
-
-
-</script>
 
 </body>
 

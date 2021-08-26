@@ -5,15 +5,61 @@
 <!-- 문의사항글쓰기 -->
 <insert id="uploadBbs" parameterType="com.mkw.a.domain.BbsVo">
 	/*BbsMapper.uploadBbs*/
-	INSERT INTO HOMETAXBBS (HOMETAXBBS_SEQ, MYID,  TITLE, CONTENT, READCOUNT, DEL, DEPTH, REF, FILENAME, NEWFILENAME)
-	VALUES(HOMETAXBBS_SEQ.NEXTVAL, #{myid},  #{title}, #{content}, 0, 0, 0, HOMETAXBBS_SEQ.NEXTVAL, #{filename}, #{newfilename})
+	INSERT INTO HOMETAXBBS (
+		HOMETAXBBS_SEQ, 
+		MYID,  
+		TITLE, 
+		CONTENT, 
+		READCOUNT, 
+		DEL, 
+		DEPTH, 
+		REF, 
+		FILENAME, 
+		NEWFILENAME
+		)
+	VALUES(
+		HOMETAXBBS_SEQ.NEXTVAL, 
+		#{myid},  
+		#{title}, 
+		#{content}, 
+		0, 
+		0, 
+		0, 
+		HOMETAXBBS_SEQ.NEXTVAL, 
+		#{filename}, 
+		#{newfilename}
+		)
 </insert>
 
 <!-- 문의사항 글 가져오기 -->
 <select id="getBbsListData" parameterType="com.mkw.a.domain.BbsParam" resultType="com.mkw.a.domain.BbsVo">
 	/*BbsMapper.getBbsListData*/
-	SELECT RNUM, HOMETAXBBS_SEQ, MYID, TITLE, CONTENT, READCOUNT, DEL, DEPTH, REF, FILENAME, NEWFILENAME, DOWNCOUNT
-	FROM (SELECT ROW_NUMBER() OVER (ORDER BY HOMETAXBBS_SEQ) AS RNUM, MYID, HOMETAXBBS_SEQ, TITLE, CONTENT, READCOUNT, DEL, DEPTH, REF, FILENAME, NEWFILENAME, DOWNCOUNT
+	SELECT 
+		RNUM, 
+		HOMETAXBBS_SEQ, 
+		MYID, 
+		TITLE, 
+		CONTENT, 
+		READCOUNT, 
+		DEL, 
+		DEPTH, 
+		REF, 
+		FILENAME, 
+		NEWFILENAME, 
+		DOWNCOUNT
+	FROM (SELECT 
+			ROW_NUMBER() OVER (ORDER BY HOMETAXBBS_SEQ) AS RNUM, 
+			MYID, 
+			HOMETAXBBS_SEQ, 
+			TITLE, 
+			CONTENT, 
+			READCOUNT, 
+			DEL, 
+			DEPTH, 
+			REF, 
+			FILENAME, 
+			NEWFILENAME, 
+			DOWNCOUNT
       	  FROM HOMETAXBBS
       	  WHERE 1=1 
       	  <if test="title != null and title != ''">

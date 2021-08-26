@@ -38,66 +38,7 @@ public class HomeTaxController {
 	@RequestMapping(value = "createTax", method = RequestMethod.POST)
 	public String createTax(HomeTaxVo home) {
 		
-		int nomalLen = memberservice.getnomalLen();
-		int discountLen = memberservice.getdiscountLen(); 
-		
-		List<MemberVo> MemberList = memberservice.getMemberList();
-		
-		String getDay = home.getDay();
-		int water = home.getWater()/(nomalLen+discountLen);
-		int elec = home.getElec()/(nomalLen+discountLen);
-		int gas = home.getGas()/(nomalLen+discountLen);
-		int managerfee = home.getManagerfee()/(nomalLen+discountLen);
-		
-		
-		
-		for (MemberVo memberVo : MemberList) {
-			
-			if(memberVo.getAuth() != 3) {
-			
-				HomeTaxVo tax = new HomeTaxVo();
-				
-				tax.setMyid(memberVo.getMyid());
-				tax.setDay(getDay);
-				tax.setWater(water);
-				tax.setElec(elec);
-				tax.setGas(gas);
-				tax.setManagerfee(managerfee);
-				
-				int interfee = 0;
-				int monthfee = 0;
-				
-				if(Integer.parseInt(memberVo.getIssale()) == 0) {
-					interfee = home.getInter()/nomalLen;
-					tax.setInter(interfee);
-					monthfee = (home.getMonthfee()/(nomalLen+discountLen))+10000;
-					tax.setMonthfee(monthfee);
-				}else {
-					tax.setInter(interfee);
-					monthfee = (home.getMonthfee()/(nomalLen+discountLen))-(10000*nomalLen);
-					tax.setMonthfee(monthfee);
-				}
-				
-				int totalfee = water + elec + gas + managerfee + interfee + monthfee;
-				tax.setTotalfee(totalfee);
-				tax.setRestfee(totalfee);
-				
-			
-				boolean b = homeTaxService.createTax(tax);
-				
-				if(b) {
-					System.out.println(memberVo.getName()+"님의 월세정보 등록성공");
-				}else {
-					System.out.println(memberVo.getName()+"님의 월세정보 등록실패");
-				}
-			
-			}
-			
-			
-			
-		}
-		
-		
+		boolean b = homeTaxService.createTax(home);
 		
 		return "redirect:/home";
 	}

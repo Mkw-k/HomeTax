@@ -28,7 +28,7 @@
 	#{pwd}, 
 	0, 
 	#{myid}, 
-	1, 
+	9, 
 	#{filename}, 
 	#{newfilename}
 	)
@@ -65,7 +65,8 @@
 <delete id="memberDelete" parameterType="com.mkw.a.domain.MemberVo">
 	/*MemberMapper.memberDelete*/
 	DELETE FROM HOME_MEMBER
-	WHERE MYID=#{myid} AND PWD = #{pwd}
+	WHERE MYID=#{myid} 
+		AND PWD = #{pwd}
 </delete>
 
 <!-- 회원정보 수정 -->
@@ -102,6 +103,7 @@ WHERE MYID=#{myid}
 	SELECT COUNT(*)
 	FROM HOME_MEMBER
 	WHERE ISSALE = 0 
+	AND AUTH = 1
 </select>
 
 <!-- 할인회원수 -->
@@ -110,6 +112,7 @@ WHERE MYID=#{myid}
 	SELECT COUNT(*)
 	FROM HOME_MEMBER
 	WHERE ISSALE = 1
+	AND AUTH = 1
 </select>
 
 <!-- 모든 회원의 정보 가지고 오기 -->

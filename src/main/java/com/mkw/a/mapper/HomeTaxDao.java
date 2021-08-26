@@ -17,6 +17,8 @@ public interface HomeTaxDao {
 
 	HomeTaxVo getTotalData(String day);
 
-	List<HomeTaxVo> chkTax(HomeTaxVo home); 
+	List<HomeTaxVo> chkTax(HomeTaxVo home);
+
+	boolean insertTableInput(HomeTaxVo home);  
 
 }

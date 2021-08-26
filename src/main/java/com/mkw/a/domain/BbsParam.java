@@ -45,9 +45,11 @@ public class BbsParam implements Serializable{
 	public BbsParam() {
 		// TODO Auto-generated constructor stub
 	}
+	
 	@Override
 	public String toString() {
-		return "BbsParam [pnum=" + pnum + ", search=" + search + ", title=" + title + "]";
+		return "BbsParam [pnum=" + pnum + ", search=" + search + ", title=" + title + ", start=" + start + ", end="
+				+ end + "]";
 	}
 	public BbsParam(int pnum, String search, String title) {
 		super();

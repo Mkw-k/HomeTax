@@ -37,7 +37,6 @@
           			<button type="button" class="btn btn-primary" onclick="update()">수정하기</button>
           		</c:when>
           		<c:otherwise>
-		           <button type="button" class="btn btn-primary" onclick="write()">수정하기</button>
 		            <a href="javascript:write()" class="btn btn-primary">작성하기</a>
           		</c:otherwise>
           	</c:choose>

@@ -19,4 +19,6 @@ public interface HomeTaxService {
 
 	List<HomeTaxVo> chkTax(HomeTaxVo home);
 
+	boolean insertTableInput(HomeTaxVo home);
+
 }

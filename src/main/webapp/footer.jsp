@@ -14,19 +14,26 @@
         <div class="col-md-6 text-center align-self-center p-4">
           <p class="mb-5"> <strong>MK SOFT Inc.</strong> <br>1265 Ori-ro, Guro-gu <br>Seoul, Republic of Korea 08257 <br> <abbr title="Phone">P :</abbr> +82(010) 2607-4128 </p>
           <div class="row">  
-            <div class="col-md-12 d-flex align-items-center justify-content-around"> <a href="#">
+            <div class="col-md-12 d-flex align-items-center justify-content-around"> 
+            <a href="https://www.facebook.com/">
                 <i class="d-block fa fa-facebook-official text-light fa-lg mx-2"></i>
-              </a> <a href="#">
+              </a> 
+              <a href="https://www.instagram.com/">
                 <i class="d-block fa fa-instagram text-light fa-lg mx-2"></i>
-              </a> <a href="#">
+              </a> 
+              <a href="https://www.google.co.kr/">
                 <i class="d-block fa fa-google-plus-official text-light fa-lg mx-2"></i>
-              </a> <a href="#">
+              </a>
+               <a href="https://www.pinterest.co.kr/">
                 <i class="d-block fa fa-pinterest-p text-light fa-lg mx-2"></i>
-              </a> <a href="#">
+              </a>
+               <a href="https://www.reddit.com/">
                 <i class="d-block fa fa-reddit text-light fa-lg mx-2"></i>
-              </a> <a href="#">
+              </a>
+               <a href="https://twitter.com/?lang=ko">
                 <i class="d-block fa fa-twitter text-light fa-lg ml-2"></i>
-              </a> </div>
+              </a> 
+              </div>
           </div>
         </div>
         <div class="col-md-6 p-0"> <div id="map" style="width:100%;height:350px;"></div></div>

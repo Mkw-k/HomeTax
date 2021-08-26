@@ -35,6 +35,9 @@ import com.mkw.a.service.BoardService;
 import com.mkw.a.service.MemberService;
 import com.mkw.a.util.PdsUtil;
 
+/*
+ * 비즈니스 로직들 다 서비스로 이주시켜야함 
+ */
 @Controller
 public class maincontroller {
 	
@@ -103,7 +106,7 @@ public class maincontroller {
 		
 	    fw.write("입력시간 >>> " + yymmddhhmmss + "\r\n");
 		
-		PrintWriter out = response.getWriter();
+		
 		String filename = userPic.getOriginalFilename();
 		mem.setFilename(filename);
 		
@@ -124,19 +127,15 @@ public class maincontroller {
 		
 			if(b) {
 				logger.debug("가입성공");
-				
-				out.println("<script>alert('가입에 성공하였습니다'); " +
-						"location.href='home';</script>");
-
-				out.println("<script>alert('가입에 성공하였습니다'); </script>");
-				out.flush();
-
+				login(mem, req, response);
 				
 			}else {
 				logger.debug("가입실패");
-				out.println("<script>alert('가입에 실패하였습니다'); "
+				
+				PrintWriter pw = response.getWriter();
+				pw.println("<script>alert('가입에 실패하였습니다'); "
 						+ "location.href='home';</script>");
-				out.flush();
+				pw.flush();
 				throw new IOException();
 			}
 			
@@ -288,7 +287,7 @@ public class maincontroller {
 		
 		fw.write("입력시간 >>> " + yymmddhhmmss + "\r\n");
 		
-		PrintWriter out = response.getWriter();
+		
 		String filename = userPic.getOriginalFilename();
 		mem.setFilename(filename);
 		
@@ -310,18 +309,14 @@ public class maincontroller {
 		if(b) {
 			logger.debug("수정성공");
 			
-			out.println("<script>alert('수정에 성공하였습니다'); " +
-					"location.href='home';</script>");
-			
-			out.println("<script>alert('수정에 성공하였습니다'); </script>");
-			out.flush();
-			
+			login(mem, req, response);
 			
 		}else {
 			logger.debug("가입실패");
-			out.println("<script>alert('수정에 실패하였습니다'); "
+			PrintWriter pw = response.getWriter();
+			pw.println("<script>alert('수정에 실패하였습니다'); "
 					+ "location.href='home';</script>");
-			out.flush();
+			pw.flush();
 			throw new IOException();
 		}
 		

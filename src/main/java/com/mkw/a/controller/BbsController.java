@@ -86,26 +86,24 @@ public class BbsController {
 	@RequestMapping(value = "getBbsListData", method = RequestMethod.GET)
 	public Map<String, Object> getBbsListData(BbsParam param, Model model) {
 		
-		int count = 0; 
+		int count = 0;
+		//페이지에 뿌려질 글수 
+		int pagePost = 10;
 		
 		//paging 처리
-		if(param.getPnum() == 0) {
+		int nowPage = param.getPnum();
+		int start = nowPage * pagePost + 1; 	//1  11
+		int end = (nowPage + 1) * pagePost; 	//10 20
 
-			int sn = param.getPnum();
-			int start = sn * 5 + 1; 	//1  11
-			int end = (sn + 1) * 5; 	//10 20
+		System.out.println("nowPage ="+nowPage);
+		System.out.println("start ="+start);
+		System.out.println("end ="+end);
+ 
+		param.setStart(start);
+		param.setEnd(end);
 
-			//System.out.println("start ="+start);
-			//System.out.println("end ="+end);
-			param.setStart(start);
-			param.setEnd(end);
-
-		}
-		
 		List<BbsVo> list = bbsservice.getBbsListData(param);
-		
 		count = bbsservice.getBbsDataCount(param);
-		
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		map.put("list", list);
@@ -116,7 +114,6 @@ public class BbsController {
 	
 	@RequestMapping(value = "fileDownload", method = RequestMethod.POST)
 	public String fileDownload(String newfilename, String filename, int seq, Model model, HttpServletRequest req) {
-		
 		// 경로
 	      // server 경로일 경우
 	      String fupload = req.getServletContext().getRealPath("/upload");
@@ -136,8 +133,8 @@ public class BbsController {
 	
 	@RequestMapping(value = "detailBbs", method = RequestMethod.GET)
 	public String detailBbs(int seq, Model model) {
-		BbsVo vo = bbsservice.getDetailBbs(seq);
 		
+		BbsVo vo = bbsservice.getDetailBbs(seq);
 		model.addAttribute("vo", vo);
 		
 		return "board/detailBbs";
@@ -179,11 +176,9 @@ public class BbsController {
 		bbs.setFilename(filename);
 		
 		String fupload = req.getServletContext().getRealPath("/upload");
-		
 		System.out.println("fuload :"+fupload);
 		
 		String newfilename = PdsUtil.getNewFileName(bbs.getFilename());
-		
 		bbs.setNewfilename(newfilename);
 		
 		File file = new File(fupload + "/" +newfilename);

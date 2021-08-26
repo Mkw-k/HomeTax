@@ -17,9 +17,23 @@ public class HomeTaxVo implements Serializable{
 	private int inputfee;
 	private int del;
 	private String name;
+	private int SEQ;
+	private int OVERFEE;
 	
 	
 	
+	public int getSEQ() {
+		return SEQ;
+	}
+	public void setSEQ(int sEQ) {
+		SEQ = sEQ;
+	}
+	public int getOVERFEE() {
+		return OVERFEE;
+	}
+	public void setOVERFEE(int oVERFEE) {
+		OVERFEE = oVERFEE;
+	}
 	public String getName() {
 		return name;
 	}

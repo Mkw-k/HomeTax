@@ -126,6 +126,8 @@ public class BbsServiceImpl implements BbsService {
 
 	@Override
 	public List<BbsVo> getBbsListData(BbsParam param) {
+		System.out.println("*********************param******************");
+		System.out.println(param.toString());
 		return bbsdao.getBbsListData(param);
 	}
 
