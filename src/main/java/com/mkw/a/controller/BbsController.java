@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -87,29 +88,16 @@ public class BbsController {
 	public Map<String, Object> getBbsListData(BbsParam param, Model model) {
 		
 		int count = 0;
-		//페이지에 뿌려질 글수 
-		int pagePost = 10;
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
-		//paging 처리
-		int nowPage = param.getPnum();
-		int start = nowPage * pagePost + 1; 	//1  11
-		int end = (nowPage + 1) * pagePost; 	//10 20
-
-		System.out.println("nowPage ="+nowPage);
-		System.out.println("start ="+start);
-		System.out.println("end ="+end);
- 
-		param.setStart(start);
-		param.setEnd(end);
-
 		List<BbsVo> list = bbsservice.getBbsListData(param);
 		count = bbsservice.getBbsDataCount(param);
-		Map<String, Object> map = new HashMap<String, Object>();
 		
-		map.put("list", list);
-		map.put("count", count);
 		
-		return map;
+		resultMap.put("list", list);
+		resultMap.put("count", count);
+		
+		return resultMap;
 	}
 	
 	@RequestMapping(value = "fileDownload", method = RequestMethod.POST)
@@ -200,5 +188,11 @@ public class BbsController {
 		return "redirect:/bbs";
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "getAutocomIdTitle", method = RequestMethod.GET)
+	public ArrayList<HashMap<String, Object>> getAutocomIdTitle() {
+		
+		return bbsservice.getAutocomIdTitle();
+	}
 	
 }

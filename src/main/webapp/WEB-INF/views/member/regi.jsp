@@ -11,6 +11,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
   <link rel="stylesheet" href="https://static.pingendo.com/bootstrap/bootstrap-4.3.1.css">
   
+  <!-- 외부 css파일 -->	
+  <link href="./resources/content/css/regi_layer_pop.css" rel="stylesheet" type="text/css" />
+  
   <style type="text/css">
  	#image_container{
  		height: 250px;
@@ -83,9 +86,9 @@
 						</div>
 						<div class="form-group">
 							<div class="form-check">
-								<input class="form-check-input" type="checkbox" id="form21" value="on"> 
-									<label class="form-check-label" for="form21">
-									<a href="#">이용약관</a>에 동의합니다 
+								<input class="form-check-input" type="checkbox" id="terms"  value="#layer2"> 
+									<label class="form-check-label" for="#layer2">
+									<a href="#layer2" class="btn-example">이용약관</a>에 동의합니다 
 									</label>
 							</div>
 						</div>
@@ -104,13 +107,35 @@
 		</div>
 	</div>
 
+  <div class="dim-layer">
+    <div class="dimBg"></div>
+    <div id="layer2" class="pop-layer">
+        <div class="pop-container">
+            <div class="pop-conts">
+                <!--content //-->
+                <p class="ctxt mb20"><h2>Terms of Use</h2><br>
+                    This site is a website to efficiently share monthly rent management and basic inquiries and notices.<br>
+                    Therefore, please refrain from using your existing password when signing up.<br>
+                    In addition, the personal information provided when signing up for this site will not be used for any other purpose under any circumstances.<br><br>
+                    Hope to see you soon!	
+                </p>
+				<div class="btn-r">
+                    <a href="#" class="btn-layerClose">Close</a>
+                </div>
+                <!--// content-->
+            </div>
+        </div>
+    </div>
+</div>
+
   <c:import url="/footer.jsp" charEncoding="utf-8"/> 
 
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-
-
+ <!-- JQuery -->
+ <script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
+ 
 <script> 
 	//JSTL로 받아온 지역 정보의 대분류 네임이 서울이면 (일단 자바스크립트 변수로 변경) selected 조건을 줌 
 	var area1Name = '<c:out value="${login.newfilename}"/>';
@@ -254,7 +279,14 @@
 	
 	
 	$("#_regiBtn").click(function() {
-		$("form").attr("action", "regiAf").submit();
+		var isCheckTrue = $("#terms").prop('checked');
+		if(isCheckTrue){
+			$("form").attr("action", "regiAf").submit();	
+		}else{
+			alert('약관에 동의해주세요');
+			$('#terms').focus();
+		}
+		
 	});
 	
 	$("#_updateBtn").click(function() {
@@ -268,5 +300,6 @@
 
 
 </body>
-
+<!-- js파일 임포트 -->        
+  <script src="./resources/content/js/regi/regi.js"></script> 
 </html>

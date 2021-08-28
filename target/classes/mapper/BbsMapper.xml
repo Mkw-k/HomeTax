@@ -63,11 +63,14 @@
       	  FROM HOMETAXBBS
       	  WHERE 1=1 
       	  <if test="title != null and title != ''">
-      	  		<if test="title == '제목'">
+      	  		<if test="title == 'title'">
       	  			AND TITLE LIKE '%'||#{search}||'%'
       	  		</if>
-      	  		<if test="title == '작성자'">
+      	  		<if test="title == 'writer'">
       	  			AND MYID LIKE '%'||#{search}||'%'
+      	  		</if>
+      	  		<if test="title == 'content'">
+      	  			AND CONTENT LIKE '%'||#{search}||'%'
       	  		</if>
       	  </if>
       )
@@ -116,7 +119,17 @@ SELECT COUNT(*)
       	  			AND MYID LIKE '%'||#{search}||'%'
       	  		</if>
       	  </if>
+</select>
 
+<!-- 글작성자들과 타이틀을 가져오는 쿼리 (검색창 자동완성용) -->
+<select id="getAutocomIdTitle" resultType="hashmap">
+	select 
+		myid, 
+		title 
+	from hometaxbbs
+	GROUP BY 
+		myid, 
+		title
 </select>
 
 
