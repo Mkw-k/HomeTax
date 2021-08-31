@@ -34,3 +34,9 @@
 		console.log('교체된 day : ' + day);
 		return day;
 	}
+	
+	function threeAddComma(money){
+		money = money.toLocaleString('ko-KR');
+		//console.log('변경된 금액 문자열 : ' + money);
+		return money;
+	}

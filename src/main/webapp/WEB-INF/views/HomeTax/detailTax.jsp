@@ -98,37 +98,34 @@ request.setCharacterEncoding("UTF-8");
 <!-- js파일 임포트 -->        
  <script src="./resources/content/js/commons/commons.js"></script> 
 <script type="text/javascript">
-setYearMonth();
-var now = document.getElementById('_year').text + safeDate(document.getElementById('_month').text);
-console.log("불러오는 현재 날짜 : " + now);
 
 let day;
 
 day = '<c:out value="${vo.day}"/>';
 
-if( day == null || day == 0){
-	getDetailData(now);
-	
+console.log("day 체크 ::" + day);
+
+getDetailData(day);
+
+let month;
+let isZero = day.charAt(2);
+
+//alert("isZero : "+ isZero);
+if(isZero == 0){
+	month = day.substr(3, 3);
 }else{
-	getDetailData(day);
-	
-	let month;
-	let isZero = day.charAt(2);
-	
-	//alert("isZero : "+ isZero);
-	if(isZero == 0){
-		month = day.substr(3, 3);
-	}else{
-		month = day.substr(2, 3);
-	}
-	
-	//alert("이게달"+month);
-	$("#_month").text(month);
+	month = day.substr(2, 3);
 }
+
+//alert("이게달"+month);
+$("#_month").text(month);
+
   	 
 //월세 리스트 가져오는 함수 
 function getDetailData( day ){
 	var myid = '<c:out value="${login.myid}"/>';
+	
+	console.log('ajax day 확인 : '+day);
 	
    //alert('데이터취득');
    $.ajax({
@@ -148,15 +145,15 @@ function getDetailData( day ){
                      
                    if(vo.del==0){
                 	 app +="<td>"+vo.name+"</td>"
-                	 	 +"<td>"+vo.water+"원"+"</td>"
-                	 	 +"<td>"+vo.elec+"원"+"</td>"
-                	 	 +"<td>"+vo.gas+"원"+"</td>"
-                	 	 +"<td>"+vo.inter+"원"+"</td>"
-                	 	 +"<td>"+vo.managerfee+"원"+"</td>"
-                	 	 +"<td>"+vo.monthfee+"원"+"</td>"
-                	 	 +"<td>"+vo.totalfee+"원"+"</td>"
-                	 	 +"<td>"+vo.inputfee+"원"+"</td>"
-                	 	 +"<td id='_restfee'>"+vo.restfee+"원"+"</td>";
+                	 	 +"<td>"+threeAddComma(vo.water)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(vo.elec)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(vo.gas)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(vo.inter)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(vo.managerfee)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(vo.monthfee)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(vo.totalfee)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(vo.inputfee)+"원"+"</td>"
+                	 	 +"<td id='_restfee'>"+threeAddComma(vo.restfee)+"원"+"</td>";
                 	 	 
                 	   if(vo.restfee == 0 || vo.restfee < 0){
 	                	   app+= "<td>완납</td>";

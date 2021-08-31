@@ -12,7 +12,7 @@
           <b>HomeTax</b>
         </a>
         <ul class="navbar-nav mx-auto">
-          <li class="nav-item"> <a class="nav-link" href="detailTax?myid=${login.myid}&day=2106">상세요금확인/납부</a> </li>
+          <li class="nav-item"> <a class="nav-link"  href="#" onclick="location.href='detailTax?myid=${login.myid}&day='+ now; return false;">상세요금확인/납부</a> </li>
           <li class="nav-item"> <a class="nav-link" href="chkTax?myid=${login.myid}">납부내역</a> </li>
           <li class="nav-item"> <a class="nav-link" href="bbs">문의사항</a> </li>
 		<c:if test="${login.auth == 3}">

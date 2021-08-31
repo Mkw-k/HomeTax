@@ -32,7 +32,7 @@ request.setCharacterEncoding("UTF-8");
 <div class="py-5" >
     <div class="container-fluid">
       <div class="row">
-      <h1 class="title">전체 납부내역</h1>
+      <h1 class="title">전체 납부내역</h1><br> 
         <div class="col-md-12">
           <div class="table-responsive">
             <table class="table table-striped table-dark" id="taxtable">
@@ -71,6 +71,8 @@ request.setCharacterEncoding("UTF-8");
   
   <!-- JQuery -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
+<!-- js파일 임포트 -->        
+ <script src="./resources/content/js/commons/commons.js"></script> 
 
 <script type="text/javascript">
 getchkTax();
@@ -100,10 +102,10 @@ function getchkTax( ){
 		                     
 		                   if(vo.del==0){
 		                	 app +="<td>"+year+"년"+month+"월"+"</td>"
-		                	 	 +"<td>"+vo.name+"</td>"
-		                	 	 +"<td>"+vo.totalfee+"원"+"</td>"
-		                	 	 +"<td>"+vo.inputfee+"원"+"</td>"
-		                	 	 +"<td id='_restfee'>"+vo.restfee+"원"+"</td>";
+		                	 	 +"<td>"+threeAddComma(vo.name)+"</td>"
+		                	 	 +"<td>"+threeAddComma(vo.totalfee)+"원"+"</td>"
+		                	 	 +"<td>"+threeAddComma(vo.inputfee)+"원"+"</td>"
+		                	 	 +"<td id='_restfee'>"+threeAddComma(vo.restfee)+"원"+"</td>";
 		                	 	 
 			                   if(vo.restfee == 0 || vo.restfee < 0){
 			                	   app+= "<td>완납</td>";

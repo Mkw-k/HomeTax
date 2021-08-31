@@ -1,5 +1,6 @@
 package com.mkw.a.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -99,10 +100,12 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 	}
 
 	//U 월세 납부 
+	//로그 다 찍고 텍스트 파일 생성해야함 
 	@Override
-	public boolean inputTax(HomeTaxVo home) {
+	public HashMap<String, Object> inputTax(HomeTaxVo home) {
 		System.out.println("여기까지오다니");
 		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		boolean b = false;
 		
 		boolean b1 = hometaxdao.inputTax(home);
@@ -112,13 +115,20 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 		
 		System.out.println("데이터 확인 : " + seq + "//" + overfee);
 		
+		//납부내역 테이블에 납부 데이터 인서트 
 		boolean b2 = insertTableInput(home);
 		
 		if(b1 && b2) {
 			b = true;
 		}
 		
-		return b;
+		if(b) {
+			resultMap.put("resultMsg", "납부성공!");
+		}else {
+			resultMap.put("resultMsg", "납부실패!");
+		}
+		
+		return resultMap;
 	}
 
 	//R 전체 합산 데이터 가져오기 
@@ -133,6 +143,7 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 	}
 	
 	
+	//납부가 완료 될경우 추가로 납부내역 테이블에 납부데이터 인서트 
 	@Override
 	public boolean insertTableInput(HomeTaxVo home) {
 		return hometaxdao.insertTableInput(home);

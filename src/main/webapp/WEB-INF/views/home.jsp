@@ -10,8 +10,6 @@
 request.setCharacterEncoding("UTF-8");
 
 %>
-<!-- 파일의 위치와 존재여부를 확인하기 위해 인크루드 파일로 체크 해봄  -->
-<%-- <%@ include file="/resources/content/js/home.js" %> --%>
 
 
 <head> 
@@ -95,8 +93,9 @@ request.setCharacterEncoding("UTF-8");
   <!-- JQuery -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
 
-<!-- 못불러옴 ㅠ  -->
- <!-- <script type="text/javascript" src="/resources/content/js/home.js"/> -->
+<!-- js파일 임포트 -->        
+ <script src="./resources/content/js/commons/commons.js"></script> 
+
 
   <script type="text/javascript">
   setYearMonth();    
@@ -128,9 +127,9 @@ request.setCharacterEncoding("UTF-8");
   	                     
   	                   if(val.del==0){
   	                	 app +="<td>"+val.name+"</td>"
-  	                	 	 +"<td>"+val.totalfee+"원"+"</td>"
-  	                	 	 +"<td>"+val.inputfee+"원"+"</td>"
-  	                	 	 +"<td>"+val.restfee+"원"+"</td>";
+  	                	 	 +"<td>"+threeAddComma(val.totalfee)+"원"+"</td>"
+  	                	 	 +"<td>"+threeAddComma(val.inputfee)+"원"+"</td>"
+  	                	 	 +"<td>"+threeAddComma(val.restfee)+"원"+"</td>";
   	                		
   	                	 	if(val.restfee == 0 || val.restfee < 0){
 		                	   app+= "<td>완납</td>";
