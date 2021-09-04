@@ -132,5 +132,51 @@ SELECT COUNT(*)
 		title
 </select>
 
+<!-- 댓글작성 -->
+<insert id="commentRegi" parameterType="hashmap">
+	INSERT INTO HOMETAX_BBS_COMMENT 
+	(
+	    SEQ, 
+	    REF, 
+	    MAINBBSSEQ, 
+	    WRITER, 
+	    CONTENT,
+	    REGDATE, 
+	    UPDAY, 
+	    DEPTH, 
+	    STEP, 
+	    DEL 
+	)
+	values(
+	    HOMETAX_BBS_COMMENT_SEQ.NEXTVAL,
+	    HOMETAX_BBS_COMMENT_SEQ.NEXTVAL,
+	    1, 
+	    #{myid}, 
+	    #{content, jdbcType=VARCHAR},
+	    to_char(SYSDATE, 'YYYYMMDDHH24MISS'),
+	    '',
+	    0, 
+	    1,
+	    0
+	)
+</insert>
+
+<select id="loadComment" parameterType="hashmap">
+	SELECT 
+	    SEQ, 
+	    REF, 
+	    MAINBBSSEQ, 
+	    WRITER, 
+	    CONTENT,
+	    REGDATE, 
+	    UPDAY,
+	    DEPTH, 
+	    STEP, 
+	    DEL 
+	FROM HOMETAX_BBS_COMMENT
+	WHERE mainbbsseq = #{seq}
+	ORDER BY REF ASC, STEP ASC;
+</select>
+
 
 </mapper>

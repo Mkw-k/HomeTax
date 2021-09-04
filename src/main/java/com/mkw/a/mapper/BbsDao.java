@@ -24,5 +24,9 @@ public interface BbsDao {
 
 	ArrayList<HashMap<String, Object>> getAutocomIdTitle();
 
+	boolean commentRegi(HashMap<String, Object> param);
+
+	ArrayList<HashMap<String, Object>> loadComment(HashMap<String, Object> param);
+
 
 }

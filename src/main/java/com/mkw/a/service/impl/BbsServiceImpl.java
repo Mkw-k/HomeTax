@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mkw.a.controller.BbsController;
 import com.mkw.a.domain.BbsParam;
 import com.mkw.a.domain.BbsVo;
 import com.mkw.a.mapper.BbsDao;
@@ -181,6 +180,40 @@ public class BbsServiceImpl implements BbsService {
 		System.out.println("결과 확인 : " + resultMap.toString());
 		
 		return resultMap;
+	}
+
+
+	@Override
+	public HashMap<String, Object> commentRegi(HashMap<String, Object> param) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		System.out.println("**********commentRegi**********");
+		System.out.println("파라미터 확인 >>>");
+		System.out.println(param.toString());
+		
+		boolean b = bbsdao.commentRegi(param);
+		
+		if(b) {
+			resultMap.put("result", "success!");
+		}else {
+			resultMap.put("result", "fail!");
+		}
+		
+		return resultMap;
+	}
+
+
+	@Override
+	public HashMap<String, Object> loadComment(HashMap<String, Object> param) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		System.out.println("**********loadComment**********");
+		System.out.println("파라미터 확인 >>>");
+		System.out.println(param.toString());
+		
+		ArrayList<HashMap<String, Object>> resultList= bbsdao.loadComment(param);
+		
+		return null;
 	}
 
 	

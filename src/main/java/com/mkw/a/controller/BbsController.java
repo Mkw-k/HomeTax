@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -194,5 +195,19 @@ public class BbsController {
 		
 		return bbsservice.getAutocomIdTitle();
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "commentRegi", method = RequestMethod.POST)
+	public HashMap<String, Object> commentRegi(@RequestBody HashMap<String, Object> param) {
+		return bbsservice.commentRegi(param);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "loadComment", method = RequestMethod.GET)
+	public HashMap<String, Object> loadComment(@RequestBody HashMap<String, Object> param) {
+		return bbsservice.loadComment(param);
+	}
+	
+	
 	
 }

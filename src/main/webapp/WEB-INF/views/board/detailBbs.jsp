@@ -62,8 +62,94 @@
     </div>
   </div>
   
+  <div class="container">
+  	
+  	<div class="row">
+  		<div class="col-12">
+  			<div class="comment_cnt_box" style="margin-bottom: 5px;">
+  				<span id="comment_total_cnt">xx</span>개의 댓글 
+  			</div>
+  			<div class="comment_write_box" style="border: 1px solid black; width: 100%; height: 300px; padding: 5px;">
+  				<div class="id_box" style="padding-top: 5px; padding-left: 5px; padding-bottom: 5px;">
+  					<span style="margin-right: 3px;">
+  						<img style="width: 50px; height: 50px; margin: 0 auto; border-radius: 70%; " 
+        				onerror="this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgQICbknzB9ayaw3aI2J3RpPh2eeWIAL5-Bg&usqp=CAU'"
+        				 src="./upload/${login.newfilename}"/>
+  					</span>
+  					<span id="writerMyId">
+  					${login.myid}
+  					</span>	
+  				</div> 
+				<div class="text_box" style="padding-left: 10px; padding-right: 10px; overflow: auto; margin-top: 3px;">
+					<textarea rows="" cols="" id="comment_content" style="width: 100%; height: 150px;" placeholder="댓글을 입력하세요"></textarea>
+				</div>
+				<hr style="margin-top: 10px; margin-bottom: 5px;">
+				<div class="bottom_box" style="margin-top: 10px;">
+					<span class="text_number_box" style="float: left; padding-left: 5px; ">
+						0/300
+					</span>
+					<span class="register_btn_box" style="float: right; padding-right: 5px;">
+						<input type="button" value="등록" onclick="javascript:commentRegister();">
+					</span>
+				</div>
+  			</div>
+  		</div>
+  	</div>
+  	
+	<div class="row" style="margin-top: 30px;">
+		<div class="col-12" id="data_comment_input">
+ 			<div class="comment_output_box" style="border: 1px solid black; width: 100%; height: 100%; padding: 5px;">
+ 				<div class="id_box" style="padding-top: 5px; padding-left: 5px; padding-bottom: 5px;">
+  					<span style="margin-right: 3px;">
+  						<img style="width: 50px; height: 50px; margin: 0 auto; border-radius: 70%; " 
+        				onerror="this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgQICbknzB9ayaw3aI2J3RpPh2eeWIAL5-Bg&usqp=CAU'"
+        				 src="./upload/${login.newfilename}"/>
+  					</span>
+  					<span id="writerMyId" style="display: inline-grid;">
+ 							<span class="writer_detail_box" id="writer_myid" >
+ 							${login.myid}	
+ 							</span>
+ 							<span class="writer_detail_box" id="writer_regdate">
+						작성시간  						
+ 							</span>
+  					</span>	
+  				</div>
+  				<div class="text_box" style="padding-left: 10px; padding-right: 10px; overflow: auto; margin-top: 3px;">
+  					<div  style="width: 100%; height: 100%; padding: 5px;">
+  						text
+  					</div>
+  				</div>
+  				<hr style="margin-top: 10px; margin-bottom: 5px;">
+  				<div class="bottom_box" style="margin-top: 10px; height: 40px;">
+  					<span class="rerecomment_box" style="float: left; padding-left: 5px; ">
+  						<input type="button" value="답글" onclick="javascript:commentRe();return false;">
+	  					<span class="re_comment_box" id="commentReCnt">
+	  						30
+	  					</span>
+  					</span>
+  					<div class="recommed_box" style="float: right; padding-right: 5px;">
+  						<span class="good_box" >
+							<input type="button" value="추천">
+							<span id="goodRecommendCnt">
+								3
+							</span>	  						
+  						</span>
+  						<span class="bad_box">
+  							<input type="button" value="비추천">
+							<span id=" badRecommendCnt">
+								4
+							</span>
+  						</span>
+  					</div>	
+  				</div>
+  				
+  			</div>
+		</div>
+	</div>
+  </div>
   
-  <form name="file_Down" action="fileDownload" method="post">
+  <br><br>
+  <form name="file_Down" action="fileDownload" method="post" style="margin-top: 20px;">
  	<input type="hidden" name="newfilename" >
  	<input type="hidden" name="filename" >
  	<input type="hidden" name="seq"> 
@@ -77,11 +163,17 @@
   
   <!-- JQuery -->
   <script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
+  <!-- js파일 임포트 -->        
+ <script src="./resources/content/js/commons/commons.js"></script> 
 
   
   <pingendo onclick="window.open('https://pingendo.com/', '_blank')" style="cursor:pointer;position: fixed;bottom: 20px;right:20px;padding:4px;background-color: #00b0eb;border-radius: 8px; width:220px;display:flex;flex-direction:row;align-items:center;justify-content:center;font-size:14px;color:white">Made with Pingendo Free&nbsp;&nbsp;<img src="https://pingendo.com/site-assets/Pingendo_logo_big.png" class="d-block" alt="Pingendo logo" height="16"></pingendo>
   
   <script type="text/javascript">
+  var mainBbsSeq = "<c:out value="${vo.hometaxbbs_seq}"/>";
+  loadComment(mainBbsSeq);
+  
+  
 //이렇게 하면 자바스크립트를 사용하면서도 post형태로 보낼수가 있다 
   function filedown(newfilename, seq, filename) {
   	alert('눌렸음');
@@ -98,6 +190,50 @@
   
 function deleteBbs(seq) {
 	location.href = "deleteBbs?seq="+seq;
+}
+
+function commentRegister() {
+	//debugger;
+	
+	var myid = '<c:out value="${login.myid}"/>'
+	var content = $('#comment_content').val();
+	var url = "commentRegi";
+	var type = 'post';
+	var result;
+	
+	if(myid == null || myid == ""){
+		alert('로그인해주세요');
+		return;
+	}
+	
+	var param = {
+			myid : myid, 
+			content : content
+	};
+	
+	console.log(param)
+	
+	const obj = run_ajax(url, type, param);
+	
+	
+	if(result == 'success'){
+		$('#comment_content').val("");	
+	}
+	
+	return alert('결과 : 댓글작성'+result);
+}
+
+function loadComment(mainBbsSeq) {
+	console.log('댓글불러오기시작');
+	console.log('파라미터확인 : ' + mainBbsSeq);
+	var url = "loadComment";
+	var type = 'get';
+	var param = {seq : mainBbsSeq};
+	
+	const list = run_ajax(url, type, param);
+	
+	console.log(list);
+	
 }
   </script>
 </body>

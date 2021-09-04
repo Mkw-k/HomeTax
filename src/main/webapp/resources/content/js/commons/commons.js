@@ -40,3 +40,37 @@
 		//console.log('변경된 금액 문자열 : ' + money);
 		return money;
 	}
+	
+	
+	/*
+	 * AJAX 공통함수 <br>
+	 * JSON 형식으로 가고 JSON 형식으로 받음 <br>
+	 * @author K  <br>
+	 * @param : url(action), type(get/post), param(parameter) <br>
+	 * @return data.result (맵.result)	
+	 */
+	function run_ajax(url, type, param){
+			var data = {};
+			
+		
+			$.ajax({
+			url: url,
+			type: type,
+			//cache: ,		//요청 페이지의 캐시 여부. false 또는 true
+			dataType: "json",	//서버에서 받아올 데이터를 어떤 형태로 해석할 것인지. xml, json, html, script를 선택할 수 있다.
+			data: JSON.stringify(param),
+			contentType: 'application/json; charset=utf-8',
+			success: function(data) {
+				console.log("결과 : ");
+				console.log(data);
+				return data;
+			},
+			error: function(request, status, error) {
+				alert('error occured!');
+				return data;
+			}
+		});
+		
+
+		//출처: https://shxrecord.tistory.com/108 [첫 발]
+	};

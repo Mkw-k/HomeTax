@@ -194,6 +194,7 @@ function prev() {
 	
 	let year;
 	year = $("#_year").text();
+	
 	year = parseInt(year);
 	
 	if(month == 0){
@@ -208,16 +209,16 @@ function prev() {
 	yearLength = year.toString().length;
 	if(yearLength==1){
 		year = year.toString();
-		year = 0 + year;
+		year = '0' + year;
 	}
 	
 	monthLength = month.toString().length;
 	if(monthLength==1){
 		month = month.toString();
-		month = 0 + month;
+		month = '0' + month;
 	}
 	
-	day = year + month;
+	day = year.toString() + month.toString();
 	getDetailData(day);
 }
  	
@@ -258,7 +259,7 @@ function next() {
 		month = 0 + month;
 	}
 	
-	day = year + month;
+	day = year.toString() + month.toString();
 	getDetailData(day);
 }
 
@@ -327,7 +328,10 @@ function inputTax() {
 		month = 0 + month;
 	}
 	
-	day = year + month;
+	//210831 K 
+	//이쪽 부분도 숫자로 더해질 가능성 있으므로 투스트링 추가했음 
+	//day = year + month;
+	day = year.toString() + month.toString();
 	//alert('진행2');
 	
 	var inputfee; 

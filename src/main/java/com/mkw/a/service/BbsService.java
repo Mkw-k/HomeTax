@@ -28,4 +28,8 @@ public interface BbsService {
 
 	ArrayList<HashMap<String, Object>> getAutocomIdTitle();
 
+	HashMap<String, Object> commentRegi(HashMap<String, Object> param);
+
+	HashMap<String, Object> loadComment(HashMap<String, Object> param);
+
 }
