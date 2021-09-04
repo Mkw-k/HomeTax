@@ -161,7 +161,7 @@ SELECT COUNT(*)
 	)
 </insert>
 
-<select id="loadComment" parameterType="hashmap">
+<select id="loadComment" parameterType="String" resultType="hashmap">
 	SELECT 
 	    SEQ, 
 	    REF, 
@@ -172,10 +172,12 @@ SELECT COUNT(*)
 	    UPDAY,
 	    DEPTH, 
 	    STEP, 
-	    DEL 
-	FROM HOMETAX_BBS_COMMENT
-	WHERE mainbbsseq = #{seq}
-	ORDER BY REF ASC, STEP ASC;
+	    DEL,  
+	    b.newfilename
+	FROM HOMETAX_BBS_COMMENT a, home_member b
+	WHERE a.writer = b.myid
+	and mainbbsseq = #{seq}
+	ORDER BY REF ASC, STEP ASC
 </select>
 
 

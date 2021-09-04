@@ -204,16 +204,16 @@ public class BbsServiceImpl implements BbsService {
 
 
 	@Override
-	public HashMap<String, Object> loadComment(HashMap<String, Object> param) {
+	public ArrayList<HashMap<String, Object>> loadComment(String seq) {
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		System.out.println("**********loadComment**********");
 		System.out.println("파라미터 확인 >>>");
-		System.out.println(param.toString());
+		System.out.println(seq);
 		
-		ArrayList<HashMap<String, Object>> resultList= bbsdao.loadComment(param);
+		ArrayList<HashMap<String, Object>> resultList= bbsdao.loadComment(seq);
 		
-		return null;
+		return resultList;
 	}
 
 	

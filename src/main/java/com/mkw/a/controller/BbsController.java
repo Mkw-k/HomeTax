@@ -204,8 +204,8 @@ public class BbsController {
 	
 	@ResponseBody
 	@RequestMapping(value = "loadComment", method = RequestMethod.GET)
-	public HashMap<String, Object> loadComment(@RequestBody HashMap<String, Object> param) {
-		return bbsservice.loadComment(param);
+	public ArrayList<HashMap<String, Object>> loadComment(String seq) {
+		return bbsservice.loadComment(seq);
 	}
 	
 	

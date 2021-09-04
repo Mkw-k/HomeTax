@@ -30,6 +30,6 @@ public interface BbsService {
 
 	HashMap<String, Object> commentRegi(HashMap<String, Object> param);
 
-	HashMap<String, Object> loadComment(HashMap<String, Object> param);
+	ArrayList<HashMap<String, Object>> loadComment(String seq);
 
 }
