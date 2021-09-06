@@ -10,8 +10,6 @@
 request.setCharacterEncoding("UTF-8");
 
 %>
-<!-- 파일의 위치와 존재여부를 확인하기 위해 인크루드 파일로 체크 해봄  -->
-<%-- <%@ include file="/resources/content/js/home.js" %> --%>
 
 
 <head> 
@@ -54,7 +52,7 @@ request.setCharacterEncoding("UTF-8");
     <div class="container-fluid">
       <div class="row">
       <h1 class="title"><a href="javascript:prev()"><img alt="" class="arrow" src="./resources/images/왼쪽화살표.png"></a>
-      <span id="_year">21</span>년 <span id="_month">06</span>월 내역
+      <span id="_year">21</span>년 <span id="_month">08</span>월 내역
       	<a href="javascript:next()"><img alt="" class="arrow" src="./resources/images/오른쪽화살표.png"></a>
       </h1>
         <div class="col-md-12">
@@ -81,7 +79,7 @@ request.setCharacterEncoding("UTF-8");
   <div class="container">
   	<div class="row">
 	  	<%-- <img style="width: 200px; height: 200px; margin: 0 auto" src="resources/upload/'${login.newfilename}'" onerror="this.src='https://e7.pngegg.com/pngimages/342/260/png-clipart-computer-icons-blog-people-shadow-silhouette-tomcat.png'" /> --%>
-	  	<img style="width: 200px; height: 200px; margin: 0 auto" src="./upload/${login.newfilename}"/>
+	  	<%-- <img style="width: 200px; height: 200px; margin: 0 auto" src="./upload/${login.newfilename}"/> --%>
 	  	
   	</div>
   </div>
@@ -95,17 +93,34 @@ request.setCharacterEncoding("UTF-8");
   <!-- JQuery -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
 
-<!-- 못불러옴 ㅠ  -->
- <!-- <script type="text/javascript" src="/resources/content/js/home.js"/> -->
+<!-- js파일 임포트 -->        
+ <script src="./resources/content/js/commons/commons.js"></script> 
+
 
   <script type="text/javascript">
-  		
-  getTaxListData('2106');
+  setYearMonth();    
+  
+  
+  var now = document.getElementById('_year').text + safeDate(document.getElementById('_month').text);
+  console.log("불러오는 현재 날짜 : " + now);
+  
+  getTaxListData(now);
   	 
   	//월세 리스트 가져오는 함수 
   	function getTaxListData( day ){
 
   	   //alert('데이터취득');
+  	   var url =  "./getTaxListData";
+  	   var type = 'get';
+  	   var param = {day : day};
+  	   
+  	   /*
+  	   var result = run_ajax(url, type, param);
+  	   
+  	   console.log(result);
+  	   */
+  	   
+  	   
   	   $.ajax({
   	      url : "./getTaxListData",
   	      type : "get",
@@ -115,8 +130,11 @@ request.setCharacterEncoding("UTF-8");
   	         //alert(list);
 
   	         $(".list_col").remove();
-
-  	         $.each(list, function(i, val){
+  	         
+  	        var reformattedList = object_threeAddComma(list);
+  	       	console.log(reformattedList);
+  	        
+  	      	 $.each(reformattedList, function(i, val){
   	            //alert(val.jobSeq);
   	            let app = "<tr class= 'list_col'>"
   	                     +"<th scope='row'>" + (i+1) +"</th>";
@@ -149,6 +167,7 @@ request.setCharacterEncoding("UTF-8");
   	      }
 
   	   });
+  	   
 
   	  }
   	
@@ -293,6 +312,39 @@ request.setCharacterEncoding("UTF-8");
             
   	  		
         });
+    
+     
+    //현재 년 월을 불러와서 셋팅 
+    function setYearMonth() {
+    	var date = new Date();
+    	
+    	var year = date.getFullYear();
+    	year = year + "";
+    	var twoYear = year.substr(2,2);
+    	var $year = document.getElementById('_year');
+    	$year.text = twoYear;
+    	console.log('년도 확인');
+    	console.log($year.text);
+    	
+    	var month = date.getMonth();
+    	var nowMonth = month +1;
+    	var $month = document.getElementById('_month');
+    	$month.text = nowMonth;
+    	console.log('월 확인');
+    	console.log($month.text);
+	} 
+    
+    //08월이 8월로 찍히는거 방지 그럴경우 앞에 0을 붙여주고 리턴 
+    function safeDate(day) {
+    	console.log('safe작동');
+    	console.log(day);
+		if(day.toString().length == 1){
+			day = '0' + day.toString();
+		}
+		console.log('교체된 day : ' + day);
+		return day;
+	}
+      
   </script>
   
   

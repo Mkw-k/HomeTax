@@ -4,22 +4,73 @@
 
 <!-- 문의사항글쓰기 -->
 <insert id="uploadBbs" parameterType="com.mkw.a.domain.BbsVo">
-	INSERT INTO HOMETAXBBS (HOMETAXBBS_SEQ, MYID,  TITLE, CONTENT, READCOUNT, DEL, DEPTH, REF, FILENAME, NEWFILENAME)
-	VALUES(HOMETAXBBS_SEQ.NEXTVAL, #{myid},  #{title}, #{content}, 0, 0, 0, HOMETAXBBS_SEQ.NEXTVAL, #{filename}, #{newfilename})
+	/*BbsMapper.uploadBbs*/
+	INSERT INTO HOMETAXBBS (
+		HOMETAXBBS_SEQ, 
+		MYID,  
+		TITLE, 
+		CONTENT, 
+		READCOUNT, 
+		DEL, 
+		DEPTH, 
+		REF, 
+		FILENAME, 
+		NEWFILENAME
+		)
+	VALUES(
+		HOMETAXBBS_SEQ.NEXTVAL, 
+		#{myid},  
+		#{title}, 
+		#{content}, 
+		0, 
+		0, 
+		0, 
+		HOMETAXBBS_SEQ.NEXTVAL, 
+		#{filename}, 
+		#{newfilename}
+		)
 </insert>
 
 <!-- 문의사항 글 가져오기 -->
 <select id="getBbsListData" parameterType="com.mkw.a.domain.BbsParam" resultType="com.mkw.a.domain.BbsVo">
-	SELECT RNUM, HOMETAXBBS_SEQ, MYID, TITLE, CONTENT, READCOUNT, DEL, DEPTH, REF, FILENAME, NEWFILENAME, DOWNCOUNT
-	FROM (SELECT ROW_NUMBER() OVER (ORDER BY HOMETAXBBS_SEQ) AS RNUM, MYID, HOMETAXBBS_SEQ, TITLE, CONTENT, READCOUNT, DEL, DEPTH, REF, FILENAME, NEWFILENAME, DOWNCOUNT
+	/*BbsMapper.getBbsListData*/
+	SELECT 
+		RNUM, 
+		HOMETAXBBS_SEQ, 
+		MYID, 
+		TITLE, 
+		CONTENT, 
+		READCOUNT, 
+		DEL, 
+		DEPTH, 
+		REF, 
+		FILENAME, 
+		NEWFILENAME, 
+		DOWNCOUNT
+	FROM (SELECT 
+			ROW_NUMBER() OVER (ORDER BY HOMETAXBBS_SEQ) AS RNUM, 
+			MYID, 
+			HOMETAXBBS_SEQ, 
+			TITLE, 
+			CONTENT, 
+			READCOUNT, 
+			DEL, 
+			DEPTH, 
+			REF, 
+			FILENAME, 
+			NEWFILENAME, 
+			DOWNCOUNT
       	  FROM HOMETAXBBS
       	  WHERE 1=1 
       	  <if test="title != null and title != ''">
-      	  		<if test="title == '제목'">
+      	  		<if test="title == 'title'">
       	  			AND TITLE LIKE '%'||#{search}||'%'
       	  		</if>
-      	  		<if test="title == '작성자'">
+      	  		<if test="title == 'writer'">
       	  			AND MYID LIKE '%'||#{search}||'%'
+      	  		</if>
+      	  		<if test="title == 'content'">
+      	  			AND CONTENT LIKE '%'||#{search}||'%'
       	  		</if>
       	  </if>
       )
@@ -28,6 +79,7 @@
 
 <!-- 문의사항 디테일 페이지 -->
 <select id="getDetailBbs" parameterType="Integer" resultType="com.mkw.a.domain.BbsVo">
+	/*BbsMapper.getDetailBbs*/
 	SELECT * 
 	FROM HOMETAXBBS
 	WHERE HOMETAXBBS_SEQ = #{seq}
@@ -36,6 +88,7 @@
 
 <!-- 문의사항 글삭제 -->
 <update id="deleteBbs" parameterType="Integer">
+	/*BbsMapper.deleteBbs*/
 	UPDATE HOMETAXBBS
 	SET DEL = 1 
 	WHERE HOMETAXBBS_SEQ = #{seq}
@@ -43,6 +96,7 @@
 
 <!-- 문의사항 글 업데이트 -->
 <update id="updateBbs" parameterType="com.mkw.a.domain.BbsVo">
+	/*BbsMapper.updateBbs*/
 	UPDATE HOMETAXBBS 
 	SET TITLE = #{title}, CONTENT = #{content}
 	<if test="title != null and title != ''">
@@ -53,6 +107,7 @@
 
 <!-- 총데이터수 가져오기 -->
 <select id="getBbsDataCount" resultType="Integer" parameterType="com.mkw.a.domain.BbsParam">
+/*BbsMapper.getBbsDataCount*/
 SELECT COUNT(*)
       	  FROM HOMETAXBBS
       	  WHERE 1=1 
@@ -64,7 +119,65 @@ SELECT COUNT(*)
       	  			AND MYID LIKE '%'||#{search}||'%'
       	  		</if>
       	  </if>
+</select>
 
+<!-- 글작성자들과 타이틀을 가져오는 쿼리 (검색창 자동완성용) -->
+<select id="getAutocomIdTitle" resultType="hashmap">
+	select 
+		myid, 
+		title 
+	from hometaxbbs
+	GROUP BY 
+		myid, 
+		title
+</select>
+
+<!-- 댓글작성 -->
+<insert id="commentRegi" parameterType="hashmap">
+	INSERT INTO HOMETAX_BBS_COMMENT 
+	(
+	    SEQ, 
+	    REF, 
+	    MAINBBSSEQ, 
+	    WRITER, 
+	    CONTENT,
+	    REGDATE, 
+	    UPDAY, 
+	    DEPTH, 
+	    STEP, 
+	    DEL 
+	)
+	values(
+	    HOMETAX_BBS_COMMENT_SEQ.NEXTVAL,
+	    HOMETAX_BBS_COMMENT_SEQ.NEXTVAL,
+	    1, 
+	    #{myid}, 
+	    #{content, jdbcType=VARCHAR},
+	    to_char(SYSDATE, 'YYYYMMDDHH24MISS'),
+	    '',
+	    0, 
+	    1,
+	    0
+	)
+</insert>
+
+<select id="loadComment" parameterType="String" resultType="hashmap">
+	SELECT 
+	    SEQ, 
+	    REF, 
+	    MAINBBSSEQ, 
+	    WRITER, 
+	    CONTENT,
+	    REGDATE, 
+	    UPDAY,
+	    DEPTH, 
+	    STEP, 
+	    DEL,  
+	    b.newfilename
+	FROM HOMETAX_BBS_COMMENT a, home_member b
+	WHERE a.writer = b.myid
+	and mainbbsseq = #{seq}
+	ORDER BY REF ASC, STEP ASC
 </select>
 
 

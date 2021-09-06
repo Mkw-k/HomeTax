@@ -4,20 +4,70 @@
 
 <!-- 월세 입력 -->
 <insert id="createTax">
-	INSERT INTO HOMETAX (SEQ, MYID, DAY, WATER, ELEC, GAS, INTER, MANAGERFEE, MONTHFEE, TOTALFEE, RESTFEE, INPUTFEE, DEL)
-	VALUES(SEQ_HOMETAX.NEXTVAL, #{myid}, #{day}, #{water}, #{elec}, #{gas}, #{inter}, #{managerfee}, #{monthfee}, #{totalfee}, #{restfee}, 0, 0)
+	/*HomeTaxMapper.createTax*/
+	INSERT INTO HOMETAX (
+		SEQ, 
+		MYID, 
+		DAY, 
+		WATER, 
+		ELEC, 
+		GAS, 
+		INTER, 
+		MANAGERFEE, 
+		MONTHFEE, 
+		TOTALFEE, 
+		RESTFEE, 
+		INPUTFEE, 
+		DEL
+		)
+	VALUES(
+		SEQ_HOMETAX.NEXTVAL, 
+		#{myid}, 
+		#{day}, 
+		#{water}, 
+		#{elec}, 
+		#{gas}, 
+		#{inter}, 
+		#{managerfee}, 
+		#{monthfee}, 
+		#{totalfee}, 
+		#{restfee}, 
+		0, 
+		0
+		)
 </insert>
 
 <!-- 모든 월세 리스트 가지고 오기 : 메인페이지용 -->
 <select id="getAllTaxList" parameterType="String" resultType="com.mkw.a.domain.HomeTaxVo">
-	SELECT H.DAY, H.TOTALFEE, H.RESTFEE, H.INPUTFEE , M.NAME
+	/*HomeTaxMapper.getAllTaxList*/
+	SELECT 
+		H.DAY, 
+		H.TOTALFEE, 
+		H.RESTFEE, 
+		H.INPUTFEE , 
+		M.NAME
 	FROM HOMETAX H , HOME_MEMBER M 
-	WHERE H.MYID = M.MYID AND H.DAY= #{day}
+	WHERE H.MYID = M.MYID 
+		AND H.DAY= #{day}
 </select>
 
 <!-- 개인 월세 상세 내역 보기 -->
 <select id="detailTax" parameterType="com.mkw.a.domain.HomeTaxVo" resultType="com.mkw.a.domain.HomeTaxVo">
-	SELECT H.MYID, H.DAY, H.WATER, H.ELEC, H.GAS, H.INTER, H.MANAGERFEE, H.MONTHFEE, H.TOTALFEE, H.RESTFEE, H.INPUTFEE, H.DEL, M.NAME
+	/*HomeTaxMapper.detailTax*/
+	SELECT 
+	H.MYID, 
+	H.DAY, 
+	H.WATER, 
+	H.ELEC, 
+	H.GAS, 
+	H.INTER, 
+	H.MANAGERFEE, 
+	H.MONTHFEE, 
+	H.TOTALFEE, 
+	H.RESTFEE, 
+	H.INPUTFEE, 
+	H.DEL, 
+	M.NAME
 	FROM HOMETAX H , HOME_MEMBER M 
 	WHERE H.MYID = M.MYID 
 		AND H.MYID = #{myid} 
@@ -25,14 +75,31 @@
 </select>
 
 <!-- 월세 납부 : 업데이트 -->
-<update id="inputTax" parameterType="com.mkw.a.domain.HomeTaxVo">
+<insert id="inputTax" parameterType="com.mkw.a.domain.HomeTaxVo">
+/*HomeTaxMapper.inputTax*/ 
+
 UPDATE HOMETAX 
-SET INPUTFEE = INPUTFEE + #{inputfee}, RESTFEE = RESTFEE - #{inputfee}
+<set>
+INPUTFEE = INPUTFEE + #{inputfee}, 
+RESTFEE = RESTFEE - #{inputfee}, 
+OVERFEE = (INPUTFEE + #{inputfee}) - (RESTFEE - #{inputfee}) 
 WHERE DAY = #{day} AND MYID = #{myid} 
-</update>
+</set>
+<selectKey keyProperty="SEQ, OVERFEE" resultType="com.mkw.a.domain.HomeTaxVo" order="AFTER">
+	select SEQ, OVERFEE FROM HOMETAX WHERE DAY = #{day} AND MYID = #{myid} 
+</selectKey>
+</insert>
 
 <select id="getTotalData" parameterType="String" resultType="com.mkw.a.domain.HomeTaxVo">
-SELECT SUM(WATER), SUM(ELEC), SUM(GAS), SUM(INTER), SUM(MANAGERFEE), SUM(MONTHFEE), SUM(TOTALFEE)
+/*HomeTaxMapper.getTotalData*/
+SELECT 
+	SUM(WATER), 
+	SUM(ELEC), 
+	SUM(GAS), 
+	SUM(INTER), 
+	SUM(MANAGERFEE), 
+	SUM(MONTHFEE), 
+	SUM(TOTALFEE)
 FROM HOMETAX 
 GROUP BY DAY
 HAVING DAY = #{day}
@@ -40,11 +107,37 @@ HAVING DAY = #{day}
 
 <!-- 납부내역확인 -->
 <select id="chkTax" parameterType="com.mkw.a.domain.HomeTaxVo" resultType="com.mkw.a.domain.HomeTaxVo">
-	SELECT M.NAME, H.DAY, H.TOTALFEE, H.RESTFEE, H.INPUTFEE, H.DEL
+	/*HomeTaxMapper.chkTax*/
+	SELECT 
+		M.NAME, 
+		H.DAY, 
+		H.TOTALFEE, 
+		H.RESTFEE, 
+		H.INPUTFEE, 
+		H.DEL
 	FROM HOMETAX H , HOME_MEMBER M 
 	WHERE H.MYID = M.MYID
     AND M.MYID = #{myid}
     AND H.INPUTFEE > 0
+    ORDER BY H.DAY ASC
 </select>
+
+<!-- 납부내역 테이블 인서트 -->
+<insert id="insertTableInput">
+	/*HomeTaxMapper.insertTableInput*/
+	INSERT INTO HOMETAX_INSERT 
+	(
+	TAXSEQ,
+	MYID,
+	INPUTFEE,
+	DAY
+	)
+	VALUES(
+	#{seq},
+	#{myid}, 
+	#{inputfee}, 
+	#{day} 
+	)
+</insert>
 
 </mapper>

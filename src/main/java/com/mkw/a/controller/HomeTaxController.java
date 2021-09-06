@@ -1,8 +1,12 @@
 package com.mkw.a.controller;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,66 +42,7 @@ public class HomeTaxController {
 	@RequestMapping(value = "createTax", method = RequestMethod.POST)
 	public String createTax(HomeTaxVo home) {
 		
-		int nomalLen = memberservice.getnomalLen();
-		int discountLen = memberservice.getdiscountLen(); 
-		
-		List<MemberVo> MemberList = memberservice.getMemberList();
-		
-		String getDay = home.getDay();
-		int water = home.getWater()/(nomalLen+discountLen);
-		int elec = home.getElec()/(nomalLen+discountLen);
-		int gas = home.getGas()/(nomalLen+discountLen);
-		int managerfee = home.getManagerfee()/(nomalLen+discountLen);
-		
-		
-		
-		for (MemberVo memberVo : MemberList) {
-			
-			if(memberVo.getAuth() != 3) {
-			
-				HomeTaxVo tax = new HomeTaxVo();
-				
-				tax.setMyid(memberVo.getMyid());
-				tax.setDay(getDay);
-				tax.setWater(water);
-				tax.setElec(elec);
-				tax.setGas(gas);
-				tax.setManagerfee(managerfee);
-				
-				int interfee = 0;
-				int monthfee = 0;
-				
-				if(Integer.parseInt(memberVo.getIssale()) == 0) {
-					interfee = home.getInter()/nomalLen;
-					tax.setInter(interfee);
-					monthfee = (home.getMonthfee()/(nomalLen+discountLen))+10000;
-					tax.setMonthfee(monthfee);
-				}else {
-					tax.setInter(interfee);
-					monthfee = (home.getMonthfee()/(nomalLen+discountLen))-(10000*nomalLen);
-					tax.setMonthfee(monthfee);
-				}
-				
-				int totalfee = water + elec + gas + managerfee + interfee + monthfee;
-				tax.setTotalfee(totalfee);
-				tax.setRestfee(totalfee);
-				
-			
-				boolean b = homeTaxService.createTax(tax);
-				
-				if(b) {
-					System.out.println(memberVo.getName()+"님의 월세정보 등록성공");
-				}else {
-					System.out.println(memberVo.getName()+"님의 월세정보 등록실패");
-				}
-			
-			}
-			
-			
-			
-		}
-		
-		
+		boolean b = homeTaxService.createTax(home);
 		
 		return "redirect:/home";
 	}
@@ -113,7 +58,13 @@ public class HomeTaxController {
 	}
 	
 	
-	
+
+	/**
+	 * 요금상세 및 납부로 이동
+	 * @author K
+	 * @param myid 
+	 * @return HomeTaxVo (해당 월의 월세 디테일 데이터) 
+	 */
 	@RequestMapping(value = "detailTax", method = RequestMethod.GET)
 	public String detailTax(HomeTaxVo home, Model model) {
 		System.out.println("이게 아이디:"+home.getMyid());
@@ -125,44 +76,34 @@ public class HomeTaxController {
 		return "HomeTax/detailTax";
 	}
 	
+	
 	@ResponseBody
 	@RequestMapping(value = "detailData", method = RequestMethod.GET)
 	public HomeTaxVo detailData(HomeTaxVo home, Model model) {
 		
-		HomeTaxVo vo = homeTaxService.detailTax(home);
-		
-		return vo;
+		return homeTaxService.detailTax(home);
 	}
 	
 	
+	//별로 안좋은 기술인거 같음 추후 flush로 수정 예정임 
 	@RequestMapping(value = "inputTax", method = RequestMethod.GET)
-	public String inputTax(HomeTaxVo home, Model model) {
+	public void inputTax(HomeTaxVo home, HttpServletResponse response) throws IOException {
 		
-		System.out.println("넘어온 데이터 : "+ home.toString());
+		//System.out.println("넘어온 데이터 : "+ home.toString());
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
-		
-		
-	    boolean b = homeTaxService.inputTax(home);
+		resultMap = homeTaxService.inputTax(home);
 		
 		System.out.println("진행됐음");
 		
-		String msg = "";
-		if (b) {
-			System.out.println("납부성공!");
-			msg = "납부성공!";
-		} else {
-			System.out.println("납부실패!");
-			msg = "납부실패!";
-		}
-		
 		String myid = home.getMyid();
 		String day = home.getDay();
+		String url = "detailTax?myid="+myid+"&day="+day;
 		
-		
-		model.addAttribute("msg", msg);
-		model.addAttribute("url", "detailTax?myid="+myid+"&day="+day);
-		
-		return "commons/alert";
+		PrintWriter pw = response.getWriter();
+		pw.println("<script>alert('"+resultMap.get("resultMsg").toString()+"'); "
+				+ "location.href='"+url+"';</script>");
+		pw.flush();
 	}
 	
 

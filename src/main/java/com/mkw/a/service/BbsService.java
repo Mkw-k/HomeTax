@@ -1,6 +1,8 @@
 package com.mkw.a.service;
 
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,5 +25,11 @@ public interface BbsService {
 	boolean updateBbs(BbsVo vo);
 
 	int getBbsDataCount(BbsParam param);
+
+	ArrayList<HashMap<String, Object>> getAutocomIdTitle();
+
+	HashMap<String, Object> commentRegi(HashMap<String, Object> param);
+
+	ArrayList<HashMap<String, Object>> loadComment(String seq);
 
 }

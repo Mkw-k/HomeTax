@@ -35,6 +35,9 @@ import com.mkw.a.service.BoardService;
 import com.mkw.a.service.MemberService;
 import com.mkw.a.util.PdsUtil;
 
+/*
+ * 비즈니스 로직들 다 서비스로 이주시켜야함 
+ */
 @Controller
 public class maincontroller {
 	
@@ -103,7 +106,7 @@ public class maincontroller {
 		
 	    fw.write("입력시간 >>> " + yymmddhhmmss + "\r\n");
 		
-		PrintWriter out = response.getWriter();
+		
 		String filename = userPic.getOriginalFilename();
 		mem.setFilename(filename);
 		
@@ -124,19 +127,15 @@ public class maincontroller {
 		
 			if(b) {
 				logger.debug("가입성공");
-				
-				out.println("<script>alert('가입에 성공하였습니다'); " +
-						"location.href='home';</script>");
-
-				out.println("<script>alert('가입에 성공하였습니다'); </script>");
-				out.flush();
-
+				login(mem, req, response);
 				
 			}else {
 				logger.debug("가입실패");
-				out.println("<script>alert('가입에 실패하였습니다'); "
+				
+				PrintWriter pw = response.getWriter();
+				pw.println("<script>alert('가입에 실패하였습니다'); "
 						+ "location.href='home';</script>");
-				out.flush();
+				pw.flush();
 				throw new IOException();
 			}
 			
@@ -163,23 +162,35 @@ public class maincontroller {
 	}
 	
 	@RequestMapping(value = "/loginAf", method = RequestMethod.POST)
-	public String login(MemberVo mem, HttpServletRequest req
-						, HttpServletResponse write)throws Exception {
+	public void login(MemberVo mem, HttpServletRequest req
+						, HttpServletResponse resp)throws Exception {
 		
 		MemberVo login = memberService.login(mem);
 		
-		System.out.println(login.toString());
-		
 		if(login != null) {
 			req.getSession().setAttribute("login", login);
+			System.out.println(login.toString());
+			
+			PrintWriter pw = resp.getWriter();
+			resp.setCharacterEncoding("UTF-8"); 
+			resp.setContentType("text/html; charset=UTF-8");
+
+			pw.println("<script>alert('로그인성공'); " +
+					"location.href='home';</script>");
+			pw.flush();
 			
 		}else {
 			
 			System.out.println("로그인실패");
+			PrintWriter pw = resp.getWriter();
+			
+			pw.println("<script>alert('로그인실패'); " +
+					"location.href='home';</script>");
+			pw.flush();
 			
 		}
 		
-		return "redirect:/home";
+		
 	}
 	
 	
@@ -227,7 +238,102 @@ public class maincontroller {
 	          
 	        }catch(Exception e){System.out.println(e);}  
 	        return new ModelAndView("/testpage/upload-success","filename",path+"/"+filename);  
-	    }  
+	    }
+	
+	@RequestMapping(value = "/memberUpdate", method = RequestMethod.GET)
+	public String memberUpdate(HttpSession session, Model model, HttpServletRequest req) {
+		
+		MemberVo login = (MemberVo)req.getSession().getAttribute("login");
+		
+		model.addAttribute("isUpdate", "YES");
+		model.addAttribute("login", login);
+		
+		return "member/regi";
+	}
+	
+	@RequestMapping(value = "/updateAf", method = RequestMethod.POST)
+	public void updateAf(Model model, MemberVo mem, 
+		@RequestParam(value = "userPic", required = false)MultipartFile userPic, 
+		HttpServletRequest req, HttpServletResponse response) throws IOException {
+		/*
+		String pattern = "yyyyMMdd";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+		String yymmdd = simpleDateFormat.format(new Date());
+		logger.debug("폴더명 >>> " + yymmdd);
+		*/
+		
+		String patter2 = "yyyyMMddHHmmss";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(patter2);
+		String yymmddhhmmss = simpleDateFormat.format(new Date());
+		logger.debug("현재시간 >>> " + yymmddhhmmss);
+		
+		String dirStr = "D:/Temp/MemberLog";
+		
+		File loggerfile = new File(dirStr+ "/" + yymmddhhmmss +".txt");
+		logger.debug("경로 및 파일명 확인 >>> "+ dirStr+ "/" + yymmddhhmmss +".txt");
+		
+		FileWriter fw = new FileWriter(loggerfile, true);
+		
+		/*
+		//경로를 문자열로 받을 수도 있다
+		File newFile = new File(dirStr);
+		
+		if(newFile.mkdir()){   //만드려는 디렉토리가 하나일 경우
+		logger.debug(" <<<< 디렉토리를 생성했습니다. >>>> ");
+		}else{
+		logger.debug(" <<<< 디렉토리를 생성하지 못했습니다. >>>> ");
+		}
+		*/
+		
+		fw.write("입력시간 >>> " + yymmddhhmmss + "\r\n");
+		
+		
+		String filename = userPic.getOriginalFilename();
+		mem.setFilename(filename);
+		
+		String fupload = req.getServletContext().getRealPath("/upload");
+		
+		String newfilename = PdsUtil.getNewFileName(mem.getFilename());
+		mem.setNewfilename(newfilename);
+		
+		File file = new File(fupload + "/" +newfilename);
+		fw.write(">>> 업로드 경로 및 파일네임 : " + fupload + "/" +newfilename);
+		
+		try {
+		FileUtils.writeByteArrayToFile(file, userPic.getBytes());
+		
+		boolean b = memberService.updateMember(mem);
+		
+		response.setContentType("text/html; charset=euc-kr");
+		
+		if(b) {
+			logger.debug("수정성공");
+			
+			login(mem, req, response);
+			
+		}else {
+			logger.debug("가입실패");
+			PrintWriter pw = response.getWriter();
+			pw.println("<script>alert('수정에 실패하였습니다'); "
+					+ "location.href='home';</script>");
+			pw.flush();
+			throw new IOException();
+		}
+		
+		} catch (IOException e) {
+		logger.debug("IO익셉션 발생 : 가입에 실패하였거나 다른 익셉션이 발생하였을수 있습니다");
+		logger.debug(e.toString());
+		
+		}catch (Exception e) {
+		logger.debug(e.toString());
+		}
+		finally {
+		fw.close();
+		}
+		
+
+		
+	}
 	
 	
 	@ResponseBody

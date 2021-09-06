@@ -33,7 +33,7 @@ request.setCharacterEncoding("UTF-8");
     <div class="container-fluid">
       <div class="row">
       <h1 class="title"><a href="javascript:prev()"><img alt="" class="arrow" src="./resources/images/왼쪽화살표.png"></a>
-      <span id="_year">21</span>년 <span id="_month">06</span>월 내역
+      <span id="_year">21</span>년 <span id="_month">08</span>월 내역
       	<a href="javascript:next()"><img alt="" class="arrow" src="./resources/images/오른쪽화살표.png"></a>
       </h1>
         <div class="col-md-12">
@@ -91,38 +91,41 @@ request.setCharacterEncoding("UTF-8");
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
   
   <!-- JQuery -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
-
+<!-- js파일 임포트 -->        
+ <script src="./resources/content/js/commons/commons.js"></script> 
 <script type="text/javascript">
+
 let day;
 
 day = '<c:out value="${vo.day}"/>';
 
-if( day == null || day == 0){
-	getDetailData('2106');
-	
+console.log("day 체크 ::" + day);
+
+getDetailData(day);
+
+let month;
+let isZero = day.charAt(2);
+
+//alert("isZero : "+ isZero);
+if(isZero == 0){
+	month = day.substr(3, 3);
 }else{
-	getDetailData(day);
-	
-	let month;
-	let isZero = day.charAt(2);
-	
-	//alert("isZero : "+ isZero);
-	if(isZero == 0){
-		month = day.substr(3, 3);
-	}else{
-		month = day.substr(2, 3);
-	}
-	
-	//alert("이게달"+month);
-	$("#_month").text(month);
+	month = day.substr(2, 3);
 }
+
+//alert("이게달"+month);
+$("#_month").text(month);
+
   	 
 //월세 리스트 가져오는 함수 
 function getDetailData( day ){
 	var myid = '<c:out value="${login.myid}"/>';
+	
+	console.log('ajax day 확인 : '+day);
 	
    //alert('데이터취득');
    $.ajax({
@@ -142,15 +145,15 @@ function getDetailData( day ){
                      
                    if(vo.del==0){
                 	 app +="<td>"+vo.name+"</td>"
-                	 	 +"<td>"+vo.water+"원"+"</td>"
-                	 	 +"<td>"+vo.elec+"원"+"</td>"
-                	 	 +"<td>"+vo.gas+"원"+"</td>"
-                	 	 +"<td>"+vo.inter+"원"+"</td>"
-                	 	 +"<td>"+vo.managerfee+"원"+"</td>"
-                	 	 +"<td>"+vo.monthfee+"원"+"</td>"
-                	 	 +"<td>"+vo.totalfee+"원"+"</td>"
-                	 	 +"<td>"+vo.inputfee+"원"+"</td>"
-                	 	 +"<td id='_restfee'>"+vo.restfee+"원"+"</td>";
+                	 	 +"<td>"+threeAddComma(vo.water)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(vo.elec)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(vo.gas)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(vo.inter)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(vo.managerfee)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(vo.monthfee)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(vo.totalfee)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(vo.inputfee)+"원"+"</td>"
+                	 	 +"<td id='_restfee'>"+threeAddComma(vo.restfee)+"원"+"</td>";
                 	 	 
                 	   if(vo.restfee == 0 || vo.restfee < 0){
 	                	   app+= "<td>완납</td>";
@@ -191,6 +194,7 @@ function prev() {
 	
 	let year;
 	year = $("#_year").text();
+	
 	year = parseInt(year);
 	
 	if(month == 0){
@@ -205,16 +209,16 @@ function prev() {
 	yearLength = year.toString().length;
 	if(yearLength==1){
 		year = year.toString();
-		year = 0 + year;
+		year = '0' + year;
 	}
 	
 	monthLength = month.toString().length;
 	if(monthLength==1){
 		month = month.toString();
-		month = 0 + month;
+		month = '0' + month;
 	}
 	
-	day = year + month;
+	day = year.toString() + month.toString();
 	getDetailData(day);
 }
  	
@@ -255,7 +259,7 @@ function next() {
 		month = 0 + month;
 	}
 	
-	day = year + month;
+	day = year.toString() + month.toString();
 	getDetailData(day);
 }
 
@@ -324,7 +328,10 @@ function inputTax() {
 		month = 0 + month;
 	}
 	
-	day = year + month;
+	//210831 K 
+	//이쪽 부분도 숫자로 더해질 가능성 있으므로 투스트링 추가했음 
+	//day = year + month;
+	day = year.toString() + month.toString();
 	//alert('진행2');
 	
 	var inputfee; 
@@ -347,5 +354,7 @@ location.href = "inputTax?day="+day+"&myid="+myid+"&inputfee="+inputfee;
 </script>
   
 
-</body>
+
+
+
 </html>

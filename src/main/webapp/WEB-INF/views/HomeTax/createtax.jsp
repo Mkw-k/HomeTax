@@ -42,7 +42,7 @@
             <div class="form-group"> <input type="text" class="form-control" id="form38" name="elec" placeholder="전기세"> </div>
             <div class="form-group"> <input type="number" class="form-control" id="form39" name="gas" placeholder="가스비"> </div>
             <div class="form-row">
-              <div class="form-group col-md-6"> <input type="number" class="form-control" id="form40" name="inter" placeholder="인터넷비"> </div>
+              <div class="form-group col-md-6"> <input type="number" class="form-control" id="form40" name="inter" placeholder="인터넷비 32670"> </div>
               <div class="form-group col-md-6"> <input type="text" class="form-control" id="form41" name="managerfee" placeholder="관리비"> </div>
             </div>
             <div class="form-group"> <input type="text" class="form-control" id="form42" name="monthfee" placeholder="월세"> </div>

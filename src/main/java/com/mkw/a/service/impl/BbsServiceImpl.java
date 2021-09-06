@@ -5,7 +5,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.mkw.a.controller.BbsController;
 import com.mkw.a.domain.BbsParam;
 import com.mkw.a.domain.BbsVo;
 import com.mkw.a.mapper.BbsDao;
@@ -126,6 +127,25 @@ public class BbsServiceImpl implements BbsService {
 
 	@Override
 	public List<BbsVo> getBbsListData(BbsParam param) {
+
+		//페이지에 뿌려질 글수 
+		int pagePost = 10;
+		
+		//paging 처리
+		int nowPage = param.getPnum();
+		int start = nowPage * pagePost + 1; 	//1  11
+		int end = (nowPage + 1) * pagePost; 	//10 20
+
+		System.out.println("nowPage ="+nowPage);
+		System.out.println("start ="+start);
+		System.out.println("end ="+end);
+ 
+		param.setStart(start);
+		param.setEnd(end);
+		
+		System.out.println("*********************param******************");
+		System.out.println(param.toString());
+		
 		return bbsdao.getBbsListData(param);
 	}
 
@@ -147,6 +167,53 @@ public class BbsServiceImpl implements BbsService {
 	@Override
 	public int getBbsDataCount(BbsParam param) {
 		return bbsdao.getBbsDataCount(param);
+	}
+
+
+	@Override
+	public ArrayList<HashMap<String, Object>> getAutocomIdTitle() {
+		
+		ArrayList<HashMap<String, Object>> resultMap = new ArrayList<HashMap<String, Object>>();
+		
+		resultMap = bbsdao.getAutocomIdTitle(); 
+		
+		System.out.println("결과 확인 : " + resultMap.toString());
+		
+		return resultMap;
+	}
+
+
+	@Override
+	public HashMap<String, Object> commentRegi(HashMap<String, Object> param) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		System.out.println("**********commentRegi**********");
+		System.out.println("파라미터 확인 >>>");
+		System.out.println(param.toString());
+		
+		boolean b = bbsdao.commentRegi(param);
+		
+		if(b) {
+			resultMap.put("result", "success!");
+		}else {
+			resultMap.put("result", "fail!");
+		}
+		
+		return resultMap;
+	}
+
+
+	@Override
+	public ArrayList<HashMap<String, Object>> loadComment(String seq) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		System.out.println("**********loadComment**********");
+		System.out.println("파라미터 확인 >>>");
+		System.out.println(seq);
+		
+		ArrayList<HashMap<String, Object>> resultList= bbsdao.loadComment(seq);
+		
+		return resultList;
 	}
 
 	

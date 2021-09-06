@@ -13,16 +13,32 @@
 
 
 <!-- DB셋팅 -->
-<bean class="org.springframework.jdbc.datasource.DriverManagerDataSource" id="dataSource">
+<bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSourceSpied">
   <property value="${db.driver}" name="driverClassName" />
   <property value="${db.url}" name="url" />
   <!-- 오라클 사용자 이름 -->
   <property value="${db.username}" name="username" />
   <!-- 오라클 사용자 비밀번호 -->
   <property value="${db.password}" name="password" />
+   <property name="initialSize" value="${db.initialSize}"/>
+   <property name="maxActive" value="${db.maxActive}"/>
+   <property name="minIdle" value="${db.initialSize}"/>
+   <property name="maxWait" value="3000"/>
+   <property name="poolPreparedStatements" value="true"/>
+   <property name="maxOpenPreparedStatements" value="50"/>
 </bean>
 
-
+<!-- 쿼리문 -->
+<bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource"> 
+   <constructor-arg ref="dataSourceSpied" /> 
+   
+    <property name="logFormatter"> 
+        <bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter"> 
+            <property name="loggingType" value="MULTI_LINE" /> 
+            <property name="sqlPrefix" value="SQL : "/> 
+        </bean> 
+    </property> 
+</bean>
 	
 <!-- 마이바티스 설정 -->
 <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="SqlSessionFactory">
@@ -30,6 +46,8 @@
   <property value="classpath:mybatis-config.xml" name="configLocation" />
   <property value="classpath:/mapper/*Mapper.xml" name="mapperLocations" />
 </bean>
+
+
 
 <mybatis-spring:scan base-package="com.mkw.a.mapper" />
 

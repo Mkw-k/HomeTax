@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -86,37 +88,21 @@ public class BbsController {
 	@RequestMapping(value = "getBbsListData", method = RequestMethod.GET)
 	public Map<String, Object> getBbsListData(BbsParam param, Model model) {
 		
-		int count = 0; 
-		
-		//paging 처리
-		if(param.getPnum() == 0) {
-
-			int sn = param.getPnum();
-			int start = sn * 5 + 1; 	//1  11
-			int end = (sn + 1) * 5; 	//10 20
-
-			//System.out.println("start ="+start);
-			//System.out.println("end ="+end);
-			param.setStart(start);
-			param.setEnd(end);
-
-		}
+		int count = 0;
+		Map<String, Object> resultMap = new HashMap<String, Object>();
 		
 		List<BbsVo> list = bbsservice.getBbsListData(param);
-		
 		count = bbsservice.getBbsDataCount(param);
 		
-		Map<String, Object> map = new HashMap<String, Object>();
 		
-		map.put("list", list);
-		map.put("count", count);
+		resultMap.put("list", list);
+		resultMap.put("count", count);
 		
-		return map;
+		return resultMap;
 	}
 	
 	@RequestMapping(value = "fileDownload", method = RequestMethod.POST)
 	public String fileDownload(String newfilename, String filename, int seq, Model model, HttpServletRequest req) {
-		
 		// 경로
 	      // server 경로일 경우
 	      String fupload = req.getServletContext().getRealPath("/upload");
@@ -136,8 +122,8 @@ public class BbsController {
 	
 	@RequestMapping(value = "detailBbs", method = RequestMethod.GET)
 	public String detailBbs(int seq, Model model) {
-		BbsVo vo = bbsservice.getDetailBbs(seq);
 		
+		BbsVo vo = bbsservice.getDetailBbs(seq);
 		model.addAttribute("vo", vo);
 		
 		return "board/detailBbs";
@@ -179,11 +165,9 @@ public class BbsController {
 		bbs.setFilename(filename);
 		
 		String fupload = req.getServletContext().getRealPath("/upload");
-		
 		System.out.println("fuload :"+fupload);
 		
 		String newfilename = PdsUtil.getNewFileName(bbs.getFilename());
-		
 		bbs.setNewfilename(newfilename);
 		
 		File file = new File(fupload + "/" +newfilename);
@@ -204,6 +188,26 @@ public class BbsController {
 		}
 		return "redirect:/bbs";
 	}
+	
+	@ResponseBody
+	@RequestMapping(value = "getAutocomIdTitle", method = RequestMethod.GET)
+	public ArrayList<HashMap<String, Object>> getAutocomIdTitle() {
+		
+		return bbsservice.getAutocomIdTitle();
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "commentRegi", method = RequestMethod.POST)
+	public HashMap<String, Object> commentRegi(@RequestBody HashMap<String, Object> param) {
+		return bbsservice.commentRegi(param);
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "loadComment", method = RequestMethod.GET)
+	public ArrayList<HashMap<String, Object>> loadComment(String seq) {
+		return bbsservice.loadComment(seq);
+	}
+	
 	
 	
 }
