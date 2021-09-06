@@ -160,8 +160,8 @@
 			</div>	                                                                                                               
 		</div>                                                                                                                     
 		<hr style='margin-top: 10px; margin-bottom: 5px;'> 
-		<!-- <div class="coment_re_box" id="comment_re_box_3" style="width: 90%; margin: 0 auto; display:none"> -->
-		<div class="coment_re_box" id="comment_re_box_3" style="width: 90%; margin: 0 auto;">
+		<div class="coment_re_box" id="comment_re_box_3" style="width: 90%; margin: 0 auto; display:none">
+		<!-- <div class="coment_re_box" id="comment_re_box_3" style="width: 90%; margin: 0 auto;"> -->
 			
 			<div class="comment_write_box" style="border: 1px solid black; width: 100%; height: 300px; padding: 5px;">
   				<div class="id_box" style="padding-top: 5px; padding-left: 5px; padding-bottom: 5px;">

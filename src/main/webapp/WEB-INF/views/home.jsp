@@ -110,6 +110,17 @@ request.setCharacterEncoding("UTF-8");
   	function getTaxListData( day ){
 
   	   //alert('데이터취득');
+  	   var url =  "./getTaxListData";
+  	   var type = 'get';
+  	   var param = {day : day};
+  	   
+  	   /*
+  	   var result = run_ajax(url, type, param);
+  	   
+  	   console.log(result);
+  	   */
+  	   
+  	   
   	   $.ajax({
   	      url : "./getTaxListData",
   	      type : "get",
@@ -119,17 +130,20 @@ request.setCharacterEncoding("UTF-8");
   	         //alert(list);
 
   	         $(".list_col").remove();
-
-  	         $.each(list, function(i, val){
+  	         
+  	        var reformattedList = object_threeAddComma(list);
+  	       	console.log(reformattedList);
+  	        
+  	      	 $.each(reformattedList, function(i, val){
   	            //alert(val.jobSeq);
   	            let app = "<tr class= 'list_col'>"
   	                     +"<th scope='row'>" + (i+1) +"</th>";
   	                     
   	                   if(val.del==0){
   	                	 app +="<td>"+val.name+"</td>"
-  	                	 	 +"<td>"+threeAddComma(val.totalfee)+"원"+"</td>"
-  	                	 	 +"<td>"+threeAddComma(val.inputfee)+"원"+"</td>"
-  	                	 	 +"<td>"+threeAddComma(val.restfee)+"원"+"</td>";
+  	                	 	 +"<td>"+val.totalfee+"원"+"</td>"
+  	                	 	 +"<td>"+val.inputfee+"원"+"</td>"
+  	                	 	 +"<td>"+val.restfee+"원"+"</td>";
   	                		
   	                	 	if(val.restfee == 0 || val.restfee < 0){
 		                	   app+= "<td>완납</td>";
@@ -153,6 +167,7 @@ request.setCharacterEncoding("UTF-8");
   	      }
 
   	   });
+  	   
 
   	  }
   	
