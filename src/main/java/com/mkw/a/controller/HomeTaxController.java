@@ -2,9 +2,9 @@ package com.mkw.a.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mkw.a.domain.HomeTaxVo;
-import com.mkw.a.domain.MemberVo;
 import com.mkw.a.service.HomeTaxService;
 import com.mkw.a.service.MemberService;
 
@@ -71,7 +70,24 @@ public class HomeTaxController {
 		
 		HomeTaxVo vo = homeTaxService.detailTax(home);
 		
-		model.addAttribute("vo", vo);
+		if(vo == null) {
+			// 현재 날짜 구하기 (시스템 시계, 시스템 타임존)
+			LocalDate now = LocalDate.now();
+			String year = now.getYear() + "";
+			String month = now.getMonthValue() + "";
+			
+			if(month.length() == 1) {
+				month = "0" + month;
+			}
+			
+			String day = year.substring(2, 4) + month;
+			HomeTaxVo tax = new HomeTaxVo();
+			tax.setDay(day);
+			model.addAttribute("vo", tax);
+
+		}else {
+			model.addAttribute("vo", vo);
+		}
 		
 		return "HomeTax/detailTax";
 	}
@@ -80,6 +96,8 @@ public class HomeTaxController {
 	@ResponseBody
 	@RequestMapping(value = "detailData", method = RequestMethod.GET)
 	public HomeTaxVo detailData(HomeTaxVo home, Model model) {
+		
+		System.out.println(home.toString());
 		
 		return homeTaxService.detailTax(home);
 	}

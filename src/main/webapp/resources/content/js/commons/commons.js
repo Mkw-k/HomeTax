@@ -143,3 +143,24 @@
 	  	    
 	  return reformattedList;
 	}
+
+
+function getGeoData(position){
+	const lat = position.coords.latitude;
+	const lon = position.coords.longitude;
+	//console.log("You live in", lat, lon);
+	const url = "https://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&appid=fa4393e1052b7e6c525e9debabc64d8d&units=metric";
+	fetch(url).then(response => response.json()).then(data => {
+		//console.log(data);
+		const weatherContainer = document.querySelector("#weather span:first-child");
+		const cityContainer = document.querySelector("#weather span:last-child");
+		cityContainer.innerText = data.name;
+		weatherContainer.innerText = data.weather[0].main + " / " + Math.round(data.main.temp) + " °C";
+	});
+}
+function getGeoDataError(){
+	alert("Can't find you. No weather for you.");
+}
+
+navigator.geolocation.getCurrentPosition(getGeoData, getGeoDataError);
+
