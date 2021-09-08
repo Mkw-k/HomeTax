@@ -3,6 +3,7 @@ package com.mkw.a.controller;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -67,10 +68,11 @@ public class HomeTaxController {
 	@RequestMapping(value = "detailTax", method = RequestMethod.GET)
 	public String detailTax(HomeTaxVo home, Model model) {
 		System.out.println("이게 아이디:"+home.getMyid());
+		System.out.println("이게 날짜:"+home.getDay());
 		
-		HomeTaxVo vo = homeTaxService.detailTax(home);
+		ArrayList<HomeTaxVo> voList = homeTaxService.detailTax(home);
 		
-		if(vo == null) {
+		if(voList.isEmpty()) {
 			// 현재 날짜 구하기 (시스템 시계, 시스템 타임존)
 			LocalDate now = LocalDate.now();
 			String year = now.getYear() + "";
@@ -79,14 +81,16 @@ public class HomeTaxController {
 			if(month.length() == 1) {
 				month = "0" + month;
 			}
-			
+			ArrayList<HomeTaxVo> createVoList = new ArrayList<HomeTaxVo>();
 			String day = year.substring(2, 4) + month;
 			HomeTaxVo tax = new HomeTaxVo();
 			tax.setDay(day);
-			model.addAttribute("vo", tax);
+			
+			createVoList.add(tax);
+			model.addAttribute("voList", createVoList);
 
 		}else {
-			model.addAttribute("vo", vo);
+			model.addAttribute("voList", voList);
 		}
 		
 		return "HomeTax/detailTax";
@@ -95,7 +99,7 @@ public class HomeTaxController {
 	
 	@ResponseBody
 	@RequestMapping(value = "detailData", method = RequestMethod.GET)
-	public HomeTaxVo detailData(HomeTaxVo home, Model model) {
+	public ArrayList<HomeTaxVo> detailData(HomeTaxVo home, Model model) {
 		
 		System.out.println(home.toString());
 		

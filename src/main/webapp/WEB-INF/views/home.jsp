@@ -102,7 +102,7 @@ request.setCharacterEncoding("UTF-8");
   setYearMonth();    
   
   
-  var now = document.getElementById('_year').text + safeDate(document.getElementById('_month').text);
+  var now = document.getElementById('_year').innerText + safeDate(document.getElementById('_month').innerText);
   console.log("불러오는 현재 날짜 : " + now);
   
   getTaxListData(now);

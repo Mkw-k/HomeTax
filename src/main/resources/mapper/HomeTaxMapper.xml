@@ -70,8 +70,24 @@
 	M.NAME
 	FROM HOMETAX H , HOME_MEMBER M 
 	WHERE H.MYID = M.MYID 
-		AND H.MYID = #{myid} 
-		AND H.DAY = #{day} 
+		<choose>
+			<when test='myid == "admin" and myid != null and myid != ""'>
+				AND H.MYID in (select myid from home_member where auth = '1')
+			</when>
+			<otherwise>
+				AND H.MYID = #{myid}
+			</otherwise>
+		</choose>
+		<!-- <choose>
+			<when test='(auth == 1 and auth != null and auth != "") 
+						or (auth == 3 and auth != null and auth != "")'>
+				AND EXISTS (SELECT 1 FROM HOME_MEMBER M WHERE M.AUTH = '1')
+			</when>
+			<otherwise>
+				AND NOT EXISTS (SELECT 1 FROM HOME_MEMBER M WHERE M.AUTH = '1')
+			</otherwise>
+		</choose> -->
+		AND H.DAY = #{day}
 </select>
 
 <!-- 월세 납부 : 업데이트 -->

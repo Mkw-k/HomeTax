@@ -1,5 +1,6 @@
 package com.mkw.a.mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +12,7 @@ public interface HomeTaxDao {
 
 	List<HomeTaxVo> getAllTaxList(String day);
 
-	HomeTaxVo detailTax(HomeTaxVo home);
+	ArrayList<HomeTaxVo> detailTax(HomeTaxVo home);
 
 	boolean inputTax(HomeTaxVo home);
 

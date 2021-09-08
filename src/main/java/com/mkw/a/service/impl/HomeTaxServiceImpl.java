@@ -1,5 +1,6 @@
 package com.mkw.a.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,7 +96,7 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 	
 	//R 개인 월세 내역 불러오기
 	@Override
-	public HomeTaxVo detailTax(HomeTaxVo home) {
+	public ArrayList<HomeTaxVo> detailTax(HomeTaxVo home) {
 		return hometaxdao.detailTax(home);
 	}
 
