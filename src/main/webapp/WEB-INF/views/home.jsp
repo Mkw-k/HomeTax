@@ -115,13 +115,13 @@ request.setCharacterEncoding("UTF-8");
   	   var type = 'get';
   	   var param = {day : day};
   	   
-  	   /*
+  	   
   	   var result = run_ajax(url, type, param);
   	   
   	   console.log(result);
-  	   */
   	   
   	   
+  	   /*
   	   $.ajax({
   	      url : "./getTaxListData",
   	      type : "get",
@@ -168,7 +168,7 @@ request.setCharacterEncoding("UTF-8");
   	      }
 
   	   });
-  	   
+  	   */
 
   	  }
   	

@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -50,7 +52,12 @@ public class HomeTaxController {
 	
 	@ResponseBody
 	@RequestMapping(value = "getTaxListData", method = RequestMethod.GET)
-	public List<HomeTaxVo> toCreateTax(String day) {
+	public List<HomeTaxVo> toCreateTax(@RequestBody HashMap<String, Object> param) {
+		
+		//utils 클래스에 safe 관련 함수 만들어야함 
+		String day = param.get("day").toString();
+		
+		System.out.println("day = " + day);
 		
 		List<HomeTaxVo> list = homeTaxService.getAllTaxList(day);
 		

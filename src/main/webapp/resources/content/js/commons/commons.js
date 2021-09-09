@@ -52,6 +52,7 @@
 	 * @return data.result (맵.result)
 	 * </pre>	
 	 */
+	 /*
 	function run_ajax(url, type, param){
 			var deferred = $.Deferred();
 			
@@ -115,6 +116,31 @@
 		
 		return data;
 	}
+	*/
+function run_ajax(url, type, data){
+	var return_data;
+	$.ajax({
+		url : url,
+		data : JSON.stringify(data),
+		type : type,
+		aysnc : false,
+		ContentType : 'application/json; charset="utf-8"',
+		Traditional : true, 
+		success:function(data){
+			console.log('내부확인');
+			console.log(data);
+			return_data = data;
+		}, 
+		error:function(){
+			alert('에러발생');
+			return;
+		} 
+		});
+		
+	return return_data;
+} 
+
+	
 	
 	//YYYYMMDDHHMMSS 년 월 일 시 분 초 추가
 	function date_remodelling(time){
