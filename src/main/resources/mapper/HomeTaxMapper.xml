@@ -18,7 +18,10 @@
 		TOTALFEE, 
 		RESTFEE, 
 		INPUTFEE, 
-		DEL
+		DEL 
+		<if test='htcustome != null and htcustome != ""'>
+			,HTCUSTOME
+		</if>
 		)
 	VALUES(
 		SEQ_HOMETAX.NEXTVAL, 
@@ -34,6 +37,9 @@
 		#{restfee}, 
 		0, 
 		0
+		<if test='htcustome != null and htcustome != ""'>
+			,#{HTCUSTOME, jdbcType=VARCHAR}
+		</if>
 		)
 </insert>
 
@@ -70,8 +76,24 @@
 	M.NAME
 	FROM HOMETAX H , HOME_MEMBER M 
 	WHERE H.MYID = M.MYID 
-		AND H.MYID = #{myid} 
-		AND H.DAY = #{day} 
+		<choose>
+			<when test='myid == "admin" and myid != null and myid != ""'>
+				AND H.MYID in (select myid from home_member where auth = '1')
+			</when>
+			<otherwise>
+				AND H.MYID = #{myid}
+			</otherwise>
+		</choose>
+		<!-- <choose>
+			<when test='(auth == 1 and auth != null and auth != "") 
+						or (auth == 3 and auth != null and auth != "")'>
+				AND EXISTS (SELECT 1 FROM HOME_MEMBER M WHERE M.AUTH = '1')
+			</when>
+			<otherwise>
+				AND NOT EXISTS (SELECT 1 FROM HOME_MEMBER M WHERE M.AUTH = '1')
+			</otherwise>
+		</choose> -->
+		AND H.DAY = #{day}
 </select>
 
 <!-- 월세 납부 : 업데이트 -->
@@ -85,7 +107,7 @@ RESTFEE = RESTFEE - #{inputfee},
 OVERFEE = (INPUTFEE + #{inputfee}) - (RESTFEE - #{inputfee}) 
 WHERE DAY = #{day} AND MYID = #{myid} 
 </set>
-<selectKey keyProperty="SEQ, OVERFEE" resultType="com.mkw.a.domain.HomeTaxVo" order="AFTER">
+<selectKey keyProperty="seq,overfee" resultType="com.mkw.a.domain.HomeTaxVo" order="AFTER">
 	select SEQ, OVERFEE FROM HOMETAX WHERE DAY = #{day} AND MYID = #{myid} 
 </selectKey>
 </insert>
@@ -93,13 +115,19 @@ WHERE DAY = #{day} AND MYID = #{myid}
 <select id="getTotalData" parameterType="String" resultType="com.mkw.a.domain.HomeTaxVo">
 /*HomeTaxMapper.getTotalData*/
 SELECT 
-	SUM(WATER), 
-	SUM(ELEC), 
-	SUM(GAS), 
-	SUM(INTER), 
-	SUM(MANAGERFEE), 
-	SUM(MONTHFEE), 
-	SUM(TOTALFEE)
+	SUM(WATER) as WATER, 
+	SUM(ELEC) as ELEC, 
+	SUM(GAS) as GAS, 
+	SUM(INTER) as INTER, 
+	SUM(MANAGERFEE) as MANAGERFEE, 
+	SUM(MONTHFEE) as MONTHFEE, 
+	SUM(TOTALFEE) as TOTALFEE, 
+	'0' as DEL, 
+	'총합' as myid, 
+	'0' as RESTFEE, 
+	'0' as INPUTFEE, 
+	day, 
+	'총합' as name
 FROM HOMETAX 
 GROUP BY DAY
 HAVING DAY = #{day}

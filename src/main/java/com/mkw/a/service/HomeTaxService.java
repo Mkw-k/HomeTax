@@ -1,5 +1,6 @@
 package com.mkw.a.service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,7 @@ public interface HomeTaxService {
 
 	List<HomeTaxVo> getAllTaxList(String day);
 
-	HomeTaxVo detailTax(HomeTaxVo home);
+	ArrayList<HomeTaxVo> detailTax(HomeTaxVo home);
 
 	HashMap<String, Object> inputTax(HomeTaxVo home);
 

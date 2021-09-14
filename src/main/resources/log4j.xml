@@ -6,13 +6,15 @@
 	<appender name="console" class="org.apache.log4j.ConsoleAppender">
 		<param name="Target" value="System.out" />
 		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
+			<!-- <param name="ConversionPattern" value="[%-5p]: %c - %m%n" /> -->
+			<param name="ConversionPattern" value="[%d{yyyy-MM-dd HH:mm:ss}] %p (%C{5}.%M() : %L) - %m%n" />
 		</layout>
 	</appender>
 	
-	<!-- Application Loggers -->
+	<!-- Application Loggers 로그 레벨 설정 :: 개발시 디버그 // 운영시 인포-->
 	<logger name="com.mkw.a">
-		<level value="info" />
+		<level value="debug" />
+		<!-- <level value="info" /> -->
 	</logger>
 	
 	<!-- 3rdparty Loggers -->

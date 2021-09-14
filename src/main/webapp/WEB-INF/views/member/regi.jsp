@@ -76,22 +76,43 @@
 						<div class="form-row">
 							<div class="form-group col-md-6">
 								<label for="form19">비밀번호</label> 
-								<input type="password" name="pwd" value="${login.pwd}" class="form-control" oninput="handleOnInput(this, 'pw')" id="_pw" placeholder="비밀번호">
+								<c:choose>
+									<c:when test="${isUpdate == 'YES'}">
+										<input type="password" name="pwd" value="${login.pwd}" class="form-control" oninput="handleOnInput(this, 'pw')" id="_pw" placeholder="변경하지 않으려면 공백">
+									</c:when>
+									<c:otherwise>
+										<input type="password" name="pwd" value="${login.pwd}" class="form-control" oninput="handleOnInput(this, 'pw')" id="_pw" placeholder="비밀번호">
+									</c:otherwise>	
+								</c:choose>
 							</div>
 							<div class="form-group col-md-6">
 								<label for="form20">비밀번호 확인</label> 
-								<input type="password" class="form-control" value="${login.pwd}"  id="_pwcheck" oninput="handleOnInput(this, 'pwCheck')" placeholder="비밀번호체크">
+								<c:choose>
+									<c:when test="${isUpdate == 'YES'}">
+										<input type="password" class="form-control" value="${login.pwd}"  id="_pwcheck" oninput="handleOnInput(this, 'pwCheck')" placeholder="변경하지 않으려면 공백">
+									</c:when>
+									<c:otherwise>
+										<input type="password" class="form-control" value="${login.pwd}"  id="_pwcheck" oninput="handleOnInput(this, 'pwCheck')" placeholder="비밀번호체크">
+									</c:otherwise>	
+								</c:choose>
 								<span id="comparePw" ></span>
 							</div>
 						</div>
-						<div class="form-group">
-							<div class="form-check">
-								<input class="form-check-input" type="checkbox" id="terms"  value="#layer2"> 
-									<label class="form-check-label" for="#layer2">
-									<a href="#layer2" class="btn-example">이용약관</a>에 동의합니다 
-									</label>
-							</div>
-						</div>
+						<c:choose>
+								<c:when test="${isUpdate == 'YES'}">
+								</c:when>
+								<c:otherwise>
+									<div class="form-group">
+										<div class="form-check">
+											<input class="form-check-input" type="checkbox" id="terms"  value="#layer2"> 
+												<label class="form-check-label" for="#layer2">
+												<a href="#layer2" class="btn-example">이용약관</a>에 동의합니다 
+												</label>
+										</div>
+									</div>
+								</c:otherwise>	
+						</c:choose>
+						
 						<c:choose>
 							<c:when test="${isUpdate == 'YES'}">
 								<button type="button" id="_updateBtn" class="btn btn-primary">Update</button>

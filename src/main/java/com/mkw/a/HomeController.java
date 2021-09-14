@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.mkw.a.domain.HomeTaxVo;
 import com.mkw.a.service.HomeTaxService;
+import com.mkw.a.service.impl.HomeTaxServiceImpl;
 
 /**
  * Handles requests for the application home page.
@@ -23,7 +24,7 @@ import com.mkw.a.service.HomeTaxService;
 public class HomeController {
 	
 	@Autowired
-	private HomeTaxService homeTaxService;
+	private HomeTaxServiceImpl homeTaxService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
@@ -41,19 +42,7 @@ public class HomeController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
-		String day = "2106";
-		
-		List<HomeTaxVo> list = homeTaxService.getAllTaxList(day);
-		
-		HomeTaxVo vo = homeTaxService.getTotalData(day);
-		
-		if(vo != null) {
-			vo.setName("총합");
-		}
-		
-		list.add(vo);
-		
-		model.addAttribute("taxlist", list);
+		//HomeTaxVo vo = homeTaxService.getTotalData(day);
 		
 		return "home";
 	}

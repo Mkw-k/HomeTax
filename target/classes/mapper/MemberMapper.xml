@@ -115,6 +115,24 @@ WHERE MYID=#{myid}
 	AND AUTH = 1
 </select>
 
+<!-- 할인회원 및 일반회원수 가져오기 -->
+<select id="getDiscountNomalLen" resultType="hashmap">
+/*getDiscountNomalLen*/
+	WITH A AS (
+	SELECT 
+		COUNT(*) AS SALECNT
+		FROM HOME_MEMBER
+		WHERE ISSALE = 1
+		AND AUTH = 1)
+	,B AS(
+	SELECT 
+		COUNT(*) AS NOMALCNT
+		FROM HOME_MEMBER
+		WHERE ISSALE = 0 
+		AND AUTH = 1)
+	SELECT A.SALECNT, B.NOMALCNT FROM A, B;
+</select>
+
 <!-- 모든 회원의 정보 가지고 오기 -->
 <select id="getMemberList" resultType="com.mkw.a.domain.MemberVo">
 	/*MemberMapper.getMemberList*/

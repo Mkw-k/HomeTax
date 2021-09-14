@@ -1,3 +1,5 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.mkw.a.domain.HomeTaxVo"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -7,6 +9,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%
 request.setCharacterEncoding("UTF-8");
+ArrayList<HomeTaxVo> voList = (ArrayList<HomeTaxVo>)request.getAttribute("voList");
+HomeTaxVo vo = voList.get(0);
+String day = vo.getDay();
+
 %>
 
 <head>
@@ -99,9 +105,9 @@ request.setCharacterEncoding("UTF-8");
  <script src="./resources/content/js/commons/commons.js"></script> 
 <script type="text/javascript">
 
-let day;
+var day;
 
-day = '<c:out value="${vo.day}"/>';
+day = "<%=day%>"; 
 
 console.log("day 체크 ::" + day);
 
@@ -132,30 +138,39 @@ function getDetailData( day ){
       url : "./detailData",
       type : "get",
       data: {"day" : day, "myid" : myid },
-      success:function(vo){
+      success:function(voList){
          //alert('success');
          //alert(vo);
 
          $(".list_col").remove();
-
          
-            //alert(val.jobSeq);
+         if(voList.length === 0){
+        	 var app;
+        	 app += "<tr class='list_col'><td colspan=12 style='color:red;'>";
+        	 app += "해당 월의 월세 내역이 아직 입력되지 않았거나 없습니다. 자세한 사항은 운영자에게 문의하세요.";
+        	 app += "</td></tr>";
+        	 $("#taxtable").append(app);
+         }
+         	 
+				
+         for (var i = 0; i < voList.length; i++) {
+			//alert(val.jobSeq);
             let app = "<tr class= 'list_col'>"
                      +"<th scope='row'>" + 1 +"</th>";
                      
-                   if(vo.del==0){
-                	 app +="<td>"+vo.name+"</td>"
-                	 	 +"<td>"+threeAddComma(vo.water)+"원"+"</td>"
-                	 	 +"<td>"+threeAddComma(vo.elec)+"원"+"</td>"
-                	 	 +"<td>"+threeAddComma(vo.gas)+"원"+"</td>"
-                	 	 +"<td>"+threeAddComma(vo.inter)+"원"+"</td>"
-                	 	 +"<td>"+threeAddComma(vo.managerfee)+"원"+"</td>"
-                	 	 +"<td>"+threeAddComma(vo.monthfee)+"원"+"</td>"
-                	 	 +"<td>"+threeAddComma(vo.totalfee)+"원"+"</td>"
-                	 	 +"<td>"+threeAddComma(vo.inputfee)+"원"+"</td>"
-                	 	 +"<td id='_restfee'>"+threeAddComma(vo.restfee)+"원"+"</td>";
+                   if(voList[i].del==0){
+                	 app +="<td>"+voList[i].name+"</td>"
+                	 	 +"<td>"+threeAddComma(voList[i].water)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(voList[i].elec)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(voList[i].gas)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(voList[i].inter)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(voList[i].managerfee)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(voList[i].monthfee)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(voList[i].totalfee)+"원"+"</td>"
+                	 	 +"<td>"+threeAddComma(voList[i].inputfee)+"원"+"</td>"
+                	 	 +"<td id='_restfee'>"+threeAddComma(voList[i].restfee)+"원"+"</td>";
                 	 	 
-                	   if(vo.restfee == 0 || vo.restfee < 0){
+                	   if(voList[i].restfee == 0 || voList[i].restfee < 0){
 	                	   app+= "<td>완납</td>";
 	                   }else{
 	                	   app+= "<td>미납</td>";
@@ -169,7 +184,8 @@ function getDetailData( day ){
                      
                 app +="</tr>";
                   
-	$("#taxtable").append(app);
+			$("#taxtable").append(app);
+         	}
          
       },
       error:function(){
@@ -262,6 +278,7 @@ function next() {
 	day = year.toString() + month.toString();
 	getDetailData(day);
 }
+
 
 function inputModal() {
 	$("#_inputBtn").show();

@@ -74,12 +74,6 @@ public class maincontroller {
 	public void regiAf(Model model, MemberVo mem, 
 						@RequestParam(value = "userPic", required = false)MultipartFile userPic, 
 						HttpServletRequest req, HttpServletResponse response) throws IOException {
-		/*
-		String pattern = "yyyyMMdd";
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-		String yymmdd = simpleDateFormat.format(new Date());
-		logger.debug("폴더명 >>> " + yymmdd);
-		*/
 		
 		String patter2 = "yyyyMMddHHmmss";
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(patter2);
@@ -93,16 +87,6 @@ public class maincontroller {
 	    
 		FileWriter fw = new FileWriter(loggerfile, true);
 		
-		/*
-		//경로를 문자열로 받을 수도 있다
-	    File newFile = new File(dirStr);
-	   
-	    if(newFile.mkdir()){   //만드려는 디렉토리가 하나일 경우
-	    	logger.debug(" <<<< 디렉토리를 생성했습니다. >>>> ");
-	    }else{
-	    	logger.debug(" <<<< 디렉토리를 생성하지 못했습니다. >>>> ");
-	    }
-	    */
 		
 	    fw.write("입력시간 >>> " + yymmddhhmmss + "\r\n");
 		
@@ -308,8 +292,10 @@ public class maincontroller {
 		
 		if(b) {
 			logger.debug("수정성공");
-			
-			login(mem, req, response);
+			PrintWriter pw = response.getWriter();
+			pw.println("<script>alert('수정에 성공하였습니다'); "
+					+ "location.href='home';</script>");
+			pw.flush();
 			
 		}else {
 			logger.debug("가입실패");

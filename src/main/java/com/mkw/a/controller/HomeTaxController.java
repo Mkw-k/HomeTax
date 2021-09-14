@@ -2,9 +2,10 @@ package com.mkw.a.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,9 +19,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mkw.a.domain.HomeTaxVo;
-import com.mkw.a.domain.MemberVo;
-import com.mkw.a.service.HomeTaxService;
 import com.mkw.a.service.MemberService;
+import com.mkw.a.service.impl.HomeTaxServiceImpl;
 
 @Controller
 public class HomeTaxController {
@@ -28,7 +28,7 @@ public class HomeTaxController {
 	private static final Logger logger = LoggerFactory.getLogger(HomeTaxController.class);
 
 	@Autowired
-	private HomeTaxService homeTaxService;
+	private HomeTaxServiceImpl homeTaxService;
 	
 	@Autowired
 	private MemberService memberservice;
@@ -44,17 +44,33 @@ public class HomeTaxController {
 		
 		boolean b = homeTaxService.createTax(home);
 		
+		if(b) {
+			
+		}else {
+			
+		}
+		
 		return "redirect:/home";
 	}
 	
 	
+	/**
+	 * 메인 페이지에 모든 회원 월세 리스트와 토탈 월세 데이터를 월별로 뿌려주는 코드
+	 * 
+	 * @author K
+	 * @param String day 
+	 * @return List<HomeTaxVo> list
+	 * @exception NullPointerException
+	 * 
+	 */
 	@ResponseBody
 	@RequestMapping(value = "getTaxListData", method = RequestMethod.GET)
 	public List<HomeTaxVo> toCreateTax(String day) {
 		
-		List<HomeTaxVo> list = homeTaxService.getAllTaxList(day);
+		//utils 클래스에 safe 관련 함수 만들어야함 
+		logger.debug("day = " + day);
 		
-		return list;
+		return homeTaxService.getAllTaxList(day);
 	}
 	
 	
@@ -68,10 +84,30 @@ public class HomeTaxController {
 	@RequestMapping(value = "detailTax", method = RequestMethod.GET)
 	public String detailTax(HomeTaxVo home, Model model) {
 		System.out.println("이게 아이디:"+home.getMyid());
+		System.out.println("이게 날짜:"+home.getDay());
 		
-		HomeTaxVo vo = homeTaxService.detailTax(home);
+		ArrayList<HomeTaxVo> voList = homeTaxService.detailTax(home);
 		
-		model.addAttribute("vo", vo);
+		if(voList.isEmpty()) {
+			// 현재 날짜 구하기 (시스템 시계, 시스템 타임존)
+			LocalDate now = LocalDate.now();
+			String year = now.getYear() + "";
+			String month = now.getMonthValue() + "";
+			
+			if(month.length() == 1) {
+				month = "0" + month;
+			}
+			ArrayList<HomeTaxVo> createVoList = new ArrayList<HomeTaxVo>();
+			String day = year.substring(2, 4) + month;
+			HomeTaxVo tax = new HomeTaxVo();
+			tax.setDay(day);
+			
+			createVoList.add(tax);
+			model.addAttribute("voList", createVoList);
+
+		}else {
+			model.addAttribute("voList", voList);
+		}
 		
 		return "HomeTax/detailTax";
 	}
@@ -79,7 +115,9 @@ public class HomeTaxController {
 	
 	@ResponseBody
 	@RequestMapping(value = "detailData", method = RequestMethod.GET)
-	public HomeTaxVo detailData(HomeTaxVo home, Model model) {
+	public ArrayList<HomeTaxVo> detailData(HomeTaxVo home, Model model) {
+		
+		System.out.println(home.toString());
 		
 		return homeTaxService.detailTax(home);
 	}
@@ -112,6 +150,7 @@ public class HomeTaxController {
 		
 		return "HomeTax/chkTax";
 	}
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "chkTaxAf", method = RequestMethod.GET)
