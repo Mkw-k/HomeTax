@@ -115,29 +115,29 @@ request.setCharacterEncoding("UTF-8");
   	   var type = 'get';
   	   var param = {day : day};
   	   
-  	   
+  	   /*
   	   var result = run_ajax(url, type, param);
   	   
   	   console.log(result);
+  	   */
   	   
-  	   
-  	   /*
   	   $.ajax({
   	      url : "./getTaxListData",
   	      type : "get",
-  	      data: {"day" : day},
+  	      data: {day : day},
   	      success:function(list){
   	         //alert('success');
   	         //alert(list);
 
-  	         $(".list_col").remove();
+  	         $(".tax_data_col").remove();
   	         
   	        var reformattedList = object_threeAddComma(list);
+  	        
   	       	console.log(reformattedList);
   	        
   	      	 $.each(reformattedList, function(i, val){
   	            //alert(val.jobSeq);
-  	            let app = "<tr class= 'list_col'>"
+  	            let app = "<tr class= 'tax_data_col'>"
   	                     +"<th scope='row'>" + (i+1) +"</th>";
   	                     
   	                   if(val.del==0){
@@ -168,9 +168,10 @@ request.setCharacterEncoding("UTF-8");
   	      }
 
   	   });
-  	   */
+  	   
 
-  	  }
+  	}
+  	
   	
   	function prev() {
 		let month;

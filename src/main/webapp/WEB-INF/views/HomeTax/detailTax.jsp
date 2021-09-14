@@ -143,7 +143,14 @@ function getDetailData( day ){
          //alert(vo);
 
          $(".list_col").remove();
-
+         
+         if(voList.length === 0){
+        	 var app;
+        	 app += "<tr class='list_col'><td colspan=12 style='color:red;'>";
+        	 app += "해당 월의 월세 내역이 아직 입력되지 않았거나 없습니다. 자세한 사항은 운영자에게 문의하세요.";
+        	 app += "</td></tr>";
+        	 $("#taxtable").append(app);
+         }
          	 
 				
          for (var i = 0; i < voList.length; i++) {
@@ -271,6 +278,7 @@ function next() {
 	day = year.toString() + month.toString();
 	getDetailData(day);
 }
+
 
 function inputModal() {
 	$("#_inputBtn").show();

@@ -28,7 +28,7 @@
     function safeDate(day) {
     	console.log('safe작동');
     	console.log(day);
-		if(day.toString().length == 1){
+		if(day.toString().length === 1){
 			day = '0' + day.toString();
 		}
 		console.log('교체된 day : ' + day);
@@ -56,7 +56,7 @@
 	function run_ajax(url, type, param){
 			var deferred = $.Deferred();
 			
-			if(type == 'post'){
+			if(type === 'post'){
 				param = JSON.stringify(param);
 			}
 			
@@ -80,7 +80,7 @@
 				}
 				//data = JSON.parse(result.sJsonData);
 			
-				data = ( result.sJsonData == null || result.sJsonData == "" ) ? null : JSON.parse(result.sJsonData);
+				data = ( result.sJsonData === null || result.sJsonData === "" ) ? null : JSON.parse(result.sJsonData);
 		
 				deferred.resolve(result, data);
 
@@ -150,21 +150,35 @@ function run_ajax(url, type, data){
 	
 	
 	//객체째로 필요한 데이터만 콤마 추가 
+	//추후 수정은 키값으로 비교가 아닌 typeof의 형태로 비교하는 방식으로 리팩토링이 필요함 
 	function object_threeAddComma(listObj){
+		
 		var reformattedList = listObj.map(function(obj){
 		  	    var rObj = {};
 		  	    
-		  	    for (const key in obj){ 
-		  	    	if(key == 'day' || key == 'inputfee' || key == 'totalfee' || key == 'restfee' || key == 'name'|| key == 'del'){
+		  	  /*  for (const key in obj){ 
+		  	    	if(key === 'day' || key === 'inputfee' || key === 'totalfee' || key === 'restfee' || key === 'name'|| key === 'del'){
 					  //console.log(key + ' : ' + obj[key]);
-						  if(key != 'name' || key != 'day' || key != 'del'){
+						  if(key !== 'name' || key !== 'day' || key !== 'del'){
 							  rObj[key] = threeAddComma(obj[key]);
 						  }else{
 							  rObj[key] = obj[key];  
 						  }
 				 }
 	  	    	}
-	  	   	return rObj;
+	  	    	*/
+	  	    	for (const key in obj){ 
+		
+					if(key === 'day' || key === 'inputfee' || key === 'totalfee' || key === 'restfee' || key === 'name'|| key === 'del'){
+					  //console.log(key + ' : ' + obj[key]);
+						  if(key !== 'name' || key !== 'day' || key !== 'del'){
+							  rObj[key] = threeAddComma(obj[key]);
+						  }else{
+							  rObj[key] = obj[key];  
+						  }
+				 }
+	  	    	}
+	  	   		return rObj;
 	  	    });
 	  	    
 	  return reformattedList;

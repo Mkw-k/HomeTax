@@ -13,7 +13,7 @@
 
 
 <!-- DB셋팅 -->
-<bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSourceSpied">
+<bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource">
   <property value="${db.driver}" name="driverClassName" />
   <property value="${db.url}" name="url" />
   <!-- 오라클 사용자 이름 -->
@@ -28,17 +28,6 @@
    <property name="maxOpenPreparedStatements" value="50"/>
 </bean>
 
-<!-- 쿼리문 -->
-<bean id="dataSource" class="net.sf.log4jdbc.Log4jdbcProxyDataSource"> 
-   <constructor-arg ref="dataSourceSpied" /> 
-   
-    <property name="logFormatter"> 
-        <bean class="net.sf.log4jdbc.tools.Log4JdbcCustomFormatter"> 
-            <property name="loggingType" value="MULTI_LINE" /> 
-            <property name="sqlPrefix" value="SQL : "/> 
-        </bean> 
-    </property> 
-</bean>
 	
 <!-- 마이바티스 설정 -->
 <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="SqlSessionFactory">

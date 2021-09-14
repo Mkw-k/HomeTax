@@ -17,22 +17,28 @@ public class HomeTaxVo implements Serializable{
 	private int inputfee;
 	private int del;
 	private String name;
-	private int SEQ;
-	private int OVERFEE;
+	private int seq;
+	private int overfee;
+	private String htcustome;
 	
 	
-	
+	public String getHtcustome() {
+		return htcustome;
+	}
+	public void setHtcustome(String htcustome) {
+		this.htcustome = htcustome;
+	}
 	public int getSEQ() {
-		return SEQ;
+		return seq;
 	}
 	public void setSEQ(int sEQ) {
-		SEQ = sEQ;
+		seq = sEQ;
 	}
 	public int getOVERFEE() {
-		return OVERFEE;
+		return overfee;
 	}
 	public void setOVERFEE(int oVERFEE) {
-		OVERFEE = oVERFEE;
+		overfee = oVERFEE;
 	}
 	public String getName() {
 		return name;

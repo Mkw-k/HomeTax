@@ -46,7 +46,7 @@
               <div class="form-group col-md-6"> <input type="text" class="form-control" id="form41" name="managerfee" placeholder="관리비"> </div>
             </div>
             <div class="form-group"> <input type="text" class="form-control" id="form42" name="monthfee" placeholder="월세"> </div>
-            <div class="form-group"> <textarea class="form-control" id="form43" rows="3" placeholder="Your message"></textarea> </div> <button type="submit" class="btn btn-primary">Send</button>
+            <div class="form-group"> <textarea class="form-control" id="form43" name="htcustome" rows="3" placeholder="Your message"></textarea> </div> <button type="submit" class="btn btn-primary">Send</button>
           </form>
         </div>
       </div>
