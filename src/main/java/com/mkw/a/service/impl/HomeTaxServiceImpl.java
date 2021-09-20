@@ -22,18 +22,21 @@ import com.mkw.a.service.MemberService;
 @Service
 public class HomeTaxServiceImpl implements HomeTaxService{
 	
-
+	
+	private final DiscountService discountService;
 	@Autowired
 	private HomeTaxDao hometaxdao;
-	
 	@Autowired
 	private MemberService memberservice;
 	
+	public HomeTaxServiceImpl(DiscountService discountService) {
+		this.discountService = discountService;
+	}
+	
 
 	//C 월세 등록
-	@Override
+	@Override 
 	public boolean createTax(HomeTaxVo home) {
-		
 		
 		boolean b = false;
 		
@@ -41,60 +44,37 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 		int nomalLen = memberservice.getnomalLen();
 		//할인회원의 수 가져오기
 		int discountLen = memberservice.getdiscountLen(); 
+		
 		//모든 회원정보를 리스트로 가져오기
 		List<MemberVo> MemberList = memberservice.getMemberList();
-		
-		String getDay = home.getDay();
-		int water = home.getWater()/(nomalLen+discountLen);
-		int elec = home.getElec()/(nomalLen+discountLen);
-		int gas = home.getGas()/(nomalLen+discountLen);
-		int managerfee = home.getManagerfee()/(nomalLen+discountLen);
-		
-		
 		
 		for (MemberVo memberVo : MemberList) {
 			
 			if(memberVo.getAuth() != 3 && memberVo.getAuth() != 9) {
+		
+			HomeTaxVo tax = new HomeTaxVo();
 			
-				HomeTaxVo tax = new HomeTaxVo();
-				
-				tax.setMyid(memberVo.getMyid());
-				tax.setDay(getDay);
-				tax.setWater(water);
-				tax.setElec(elec);
-				tax.setGas(gas);
-				tax.setManagerfee(managerfee);
-				
-				int interfee = 0;
-				int monthfee = 0;
-				
-				if(Integer.parseInt(memberVo.getIssale()) == 0) {
-					interfee = home.getInter()/nomalLen;
-					tax.setInter(interfee);
-					monthfee = (home.getMonthfee()/(nomalLen+discountLen))+10000;
-					tax.setMonthfee(monthfee);
-				}else {
-					tax.setInter(interfee);
-					monthfee = (home.getMonthfee()/(nomalLen+discountLen))-(10000*nomalLen);
-					tax.setMonthfee(monthfee);
-				}
-				
-				int totalfee = water + elec + gas + managerfee + interfee + monthfee;
-				tax.setTotalfee(totalfee);
-				tax.setRestfee(totalfee);
+			//맨앞자리가 소문자가 되는거 주의할것 원래 대문자여도 소문자로 변형됨 
+			if(memberVo.getAuth() == 1 && memberVo.getIssale().equals("1")) {
+				tax = discountService.discount(memberVo, "fixDiscountService", home, nomalLen, discountLen);
+			}
+			else if(memberVo.getAuth() == 1 && memberVo.getIssale().equals("0")) {
+				tax = discountService.discount(memberVo, "noDiscountService", home, nomalLen, discountLen);
+			}
 			
-					
-					
-				b = hometaxdao.createTax(tax);
+			
+			b = hometaxdao.createTax(tax);
+			
+			if(b) {
+				System.out.println(memberVo.getName()+"님의 월세정보 등록성공");
 				
-				if(b) {
-					System.out.println(memberVo.getName()+"님의 월세정보 등록성공");
-					
-				}else {
-					System.out.println(memberVo.getName()+"님의 월세정보 등록실패");
-				}
+			}else {
+				System.out.println(memberVo.getName()+"님의 월세정보 등록실패");
+			}
+			
 			
 			}
+			
 		}
 		
 		return b;
