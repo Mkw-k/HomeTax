@@ -5,11 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import com.mkw.a.domain.HomeTaxVo;
 
 public interface HomeTaxService {
 
-	boolean createTax(HomeTaxVo tax);
+	void createTax(HomeTaxVo tax, HttpServletResponse response) throws Exception;
 
 	List<HomeTaxVo> getAllTaxList(String day);
 

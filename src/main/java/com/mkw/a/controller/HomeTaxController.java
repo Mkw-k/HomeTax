@@ -40,17 +40,10 @@ public class HomeTaxController {
 	}
 	
 	@RequestMapping(value = "createTax", method = RequestMethod.POST)
-	public String createTax(HomeTaxVo home) {
+	public void createTax(HomeTaxVo home, HttpServletResponse response) throws Exception {
 		
-		boolean b = homeTaxService.createTax(home);
+		homeTaxService.createTax(home, response);
 		
-		if(b) {
-			
-		}else {
-			
-		}
-		
-		return "redirect:/home";
 	}
 	
 	

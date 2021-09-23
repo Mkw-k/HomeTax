@@ -19,26 +19,28 @@ public class NoDiscountService implements DiscountInterface{
 		int gas = tax.getGas()/(nomalLen+discountLen);
 		int managerfee = tax.getManagerfee()/(nomalLen+discountLen);
 		
-		tax.setMyid(member.getMyid());
-		tax.setDay(getDay);
-		tax.setWater(water);
-		tax.setElec(elec);
-		tax.setGas(gas);
-		tax.setManagerfee(managerfee);
+		HomeTaxVo newTax = new HomeTaxVo();
+		
+		newTax.setMyid(member.getMyid());
+		newTax.setDay(getDay);
+		newTax.setWater(water);
+		newTax.setElec(elec);
+		newTax.setGas(gas);
+		newTax.setManagerfee(managerfee);
 		
 		int interfee = 0;
 		int monthfee = 0;
 		
 		interfee = tax.getInter()/nomalLen;
-		tax.setInter(interfee);
+		newTax.setInter(interfee);
 		monthfee = (tax.getMonthfee()/(nomalLen+discountLen))+10000;
-		tax.setMonthfee(monthfee);
+		newTax.setMonthfee(monthfee);
 		
 		int totalfee = water + elec + gas + managerfee + interfee + monthfee;
-		tax.setTotalfee(totalfee);
-		tax.setRestfee(totalfee);
+		newTax.setTotalfee(totalfee);
+		newTax.setRestfee(totalfee);
 		
-		return tax;
+		return newTax;
 	}
 
 }

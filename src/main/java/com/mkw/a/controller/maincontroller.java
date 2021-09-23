@@ -284,28 +284,28 @@ public class maincontroller {
 		fw.write(">>> 업로드 경로 및 파일네임 : " + fupload + "/" +newfilename);
 		
 		try {
-		FileUtils.writeByteArrayToFile(file, userPic.getBytes());
-		
-		boolean b = memberService.updateMember(mem);
-		
-		response.setContentType("text/html; charset=euc-kr");
-		
-		if(b) {
-			logger.debug("수정성공");
-			PrintWriter pw = response.getWriter();
-			pw.println("<script>alert('수정에 성공하였습니다'); "
-					+ "location.href='home';</script>");
-			pw.flush();
+			FileUtils.writeByteArrayToFile(file, userPic.getBytes());
 			
-		}else {
-			logger.debug("가입실패");
-			PrintWriter pw = response.getWriter();
-			pw.println("<script>alert('수정에 실패하였습니다'); "
-					+ "location.href='home';</script>");
-			pw.flush();
-			throw new IOException();
-		}
-		
+			boolean b = memberService.updateMember(mem);
+			
+			response.setContentType("text/html; charset=euc-kr");
+			
+			if(b) {
+				logger.debug("수정성공");
+				PrintWriter pw = response.getWriter();
+				pw.println("<script>alert('수정에 성공하였습니다'); "
+						+ "location.href='home';</script>");
+				pw.flush();
+				
+			}else {
+				logger.debug("가입실패");
+				PrintWriter pw = response.getWriter();
+				pw.println("<script>alert('수정에 실패하였습니다'); "
+						+ "location.href='home';</script>");
+				pw.flush();
+				throw new IOException();
+			}
+			
 		} catch (IOException e) {
 		logger.debug("IO익셉션 발생 : 가입에 실패하였거나 다른 익셉션이 발생하였을수 있습니다");
 		logger.debug(e.toString());
