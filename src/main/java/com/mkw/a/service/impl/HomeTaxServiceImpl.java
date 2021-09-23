@@ -1,14 +1,19 @@
 package com.mkw.a.service.impl;
 
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
@@ -20,84 +25,83 @@ import com.mkw.a.service.HomeTaxService;
 import com.mkw.a.service.MemberService;
 
 @Service
+@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public class HomeTaxServiceImpl implements HomeTaxService{
 	
-
+	
+	private final DiscountService discountService;
 	@Autowired
 	private HomeTaxDao hometaxdao;
-	
 	@Autowired
 	private MemberService memberservice;
 	
+	public HomeTaxServiceImpl(DiscountService discountService) {
+		this.discountService = discountService;
+	}
+	
 
 	//C 월세 등록
-	@Override
-	public boolean createTax(HomeTaxVo home) {
-		
+	//한개라도 오류가 발생하면 전체 롤백으로 되도록 해야함 
+	@Override 
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 10)
+	public void createTax(HomeTaxVo homeTax, HttpServletResponse response) throws Exception {
 		
 		boolean b = false;
-		
+		response.setCharacterEncoding("UTF-8"); 
+		response.setContentType("text/html; charset=UTF-8");
+		 
 		//일반회원의 수 가져오기 
 		int nomalLen = memberservice.getnomalLen();
 		//할인회원의 수 가져오기
 		int discountLen = memberservice.getdiscountLen(); 
+		
 		//모든 회원정보를 리스트로 가져오기
 		List<MemberVo> MemberList = memberservice.getMemberList();
 		
-		String getDay = home.getDay();
-		int water = home.getWater()/(nomalLen+discountLen);
-		int elec = home.getElec()/(nomalLen+discountLen);
-		int gas = home.getGas()/(nomalLen+discountLen);
-		int managerfee = home.getManagerfee()/(nomalLen+discountLen);
+		try {
 		
-		
-		
-		for (MemberVo memberVo : MemberList) {
+			for (MemberVo memberVo : MemberList) {
+				
+				if(memberVo.getAuth() != 3 && memberVo.getAuth() != 9) {
 			
-			if(memberVo.getAuth() != 3 && memberVo.getAuth() != 9) {
-			
-				HomeTaxVo tax = new HomeTaxVo();
+					HomeTaxVo resultTax = new HomeTaxVo();
+							
+					//맨앞자리가 소문자가 되는거 주의할것 원래 대문자여도 소문자로 변형됨 fixDiscountService noDiscountService
+					if(memberVo.getAuth() == 1 && memberVo.getIssale().equals("1")) {
+						resultTax = discountService.discount(memberVo, "fixDiscountService", homeTax, nomalLen, discountLen);
+					}
+					else if(memberVo.getAuth() == 1 && memberVo.getIssale().equals("0")) {
+						resultTax = discountService.discount(memberVo, "noDiscountService", homeTax, nomalLen, discountLen);
+					}
+					
+					b = hometaxdao.createTax(resultTax);
+					
+					if(b) {
+						System.out.println(memberVo.getName()+"님의 월세정보 등록성공");
+					}else {
+						System.out.println(memberVo.getName()+"님의 월세정보 등록실패");
+					}
 				
-				tax.setMyid(memberVo.getMyid());
-				tax.setDay(getDay);
-				tax.setWater(water);
-				tax.setElec(elec);
-				tax.setGas(gas);
-				tax.setManagerfee(managerfee);
-				
-				int interfee = 0;
-				int monthfee = 0;
-				
-				if(Integer.parseInt(memberVo.getIssale()) == 0) {
-					interfee = home.getInter()/nomalLen;
-					tax.setInter(interfee);
-					monthfee = (home.getMonthfee()/(nomalLen+discountLen))+10000;
-					tax.setMonthfee(monthfee);
-				}else {
-					tax.setInter(interfee);
-					monthfee = (home.getMonthfee()/(nomalLen+discountLen))-(10000*nomalLen);
-					tax.setMonthfee(monthfee);
 				}
-				
-				int totalfee = water + elec + gas + managerfee + interfee + monthfee;
-				tax.setTotalfee(totalfee);
-				tax.setRestfee(totalfee);
-			
 					
-					
-				b = hometaxdao.createTax(tax);
-				
-				if(b) {
-					System.out.println(memberVo.getName()+"님의 월세정보 등록성공");
-					
-				}else {
-					System.out.println(memberVo.getName()+"님의 월세정보 등록실패");
-				}
-			
 			}
-		}
+			System.out.println("**********************");
+			System.out.println("등록 성공 DB 커밋!");
+			PrintWriter pw = response.getWriter();
+			pw.println("<script>alert('월세 등록 성공'); "
+					+ "location.href='home';</script>");
+			pw.flush();
 		
-		return b;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+			System.out.println("**********************");
+			System.out.println("예외발생 롤백처리진행!");
+			PrintWriter pw = response.getWriter();
+			pw.println("<script>alert('월세 등록 실패'); "
+					+ "location.href='home';</script>");
+			pw.flush();
+		}
 		
 	}
 	

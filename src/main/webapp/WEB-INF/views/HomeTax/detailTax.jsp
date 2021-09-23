@@ -82,7 +82,16 @@ String day = vo.getDay();
           <h5 class="modal-title">납부하기</h5> <button type="button" class="close" data-dismiss="modal" onclick="closeModal()" > <span>×</span> </button>
         </div>
         <div class="modal-body">
-          <p><span id="_inputYear"></span>년 <span id="_inputMonth"></span>월 납부 - 금액 : <span id="_fee"></span>원</p>
+          <c:if test="${login.auth == 3}">
+          	<p>
+          		<select id="memberSelector" onchange="inputMemberSelector()">
+          			<option value="0">박남준</option>
+          			<option value="1">뀨뀨까까</option>
+          			<option value="2">고명우</option>
+          		</select>
+          	</p>
+          </c:if>
+          <p><span id="_inputYear"></span>년 <span id="_inputMonth"></span>월 납부 - 금액 : <span id="_fee"></span></p>
           <P><input type="number" placeholder="납부할금액입력" id="_inputfee" size="20"></P>
           <p id="_alertMsg"></p>
         </div>
@@ -156,10 +165,10 @@ function getDetailData( day ){
          for (var i = 0; i < voList.length; i++) {
 			//alert(val.jobSeq);
             let app = "<tr class= 'list_col'>"
-                     +"<th scope='row'>" + 1 +"</th>";
+                     +"<th scope='row'>" + i +"</th>";
                      
                    if(voList[i].del==0){
-                	 app +="<td>"+voList[i].name+"</td>"
+                	 app +="<td id='_name"+i+"'>"+voList[i].name+"</td>"
                 	 	 +"<td>"+threeAddComma(voList[i].water)+"원"+"</td>"
                 	 	 +"<td>"+threeAddComma(voList[i].elec)+"원"+"</td>"
                 	 	 +"<td>"+threeAddComma(voList[i].gas)+"원"+"</td>"
@@ -168,7 +177,7 @@ function getDetailData( day ){
                 	 	 +"<td>"+threeAddComma(voList[i].monthfee)+"원"+"</td>"
                 	 	 +"<td>"+threeAddComma(voList[i].totalfee)+"원"+"</td>"
                 	 	 +"<td>"+threeAddComma(voList[i].inputfee)+"원"+"</td>"
-                	 	 +"<td id='_restfee'>"+threeAddComma(voList[i].restfee)+"원"+"</td>";
+                	 	 +"<td id='_restfee"+i+"'>"+threeAddComma(voList[i].restfee)+"원"+"</td>";
                 	 	 
                 	   if(voList[i].restfee == 0 || voList[i].restfee < 0){
 	                	   app+= "<td>완납</td>";
@@ -290,7 +299,7 @@ function inputModal() {
 	
 	year = $("#_year").text();
 	month = $("#_month").text();
-	restfee = $("#_restfee").text();
+	restfee = $("#_restfee0").text();
 	
 	$("#_inputYear").text(year);
 	$("#_inputMonth").text(month);
@@ -308,6 +317,12 @@ function inputModal() {
 	}
 	
 	$("#_inputModal").show();
+}
+
+//관리자 전용
+//모달창에서 멤버를 셀렉트 박스에서 선택할경우 그 선택된 해당 멤버의 월세를 대신 납부 입력해줄수 있는 기능(관리자기능)
+function inputMemberSelector() {
+	
 }
 
 function closeModal() {
@@ -368,6 +383,8 @@ function inputAf(day, myid, inputfee) {
 location.href = "inputTax?day="+day+"&myid="+myid+"&inputfee="+inputfee;
 	
 }
+
+
 </script>
   
 

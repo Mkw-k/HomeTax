@@ -346,6 +346,8 @@ request.setCharacterEncoding("UTF-8");
 		//console.log('교체된 day : ' + day);
 		return day;
 	}
+    
+    
       
   </script>
   
