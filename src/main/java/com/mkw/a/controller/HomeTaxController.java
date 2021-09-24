@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mkw.a.domain.HomeTaxVo;
+import com.mkw.a.domain.MemberVo;
 import com.mkw.a.service.MemberService;
 import com.mkw.a.service.impl.HomeTaxServiceImpl;
 
@@ -118,7 +120,12 @@ public class HomeTaxController {
 	
 	//별로 안좋은 기술인거 같음 추후 flush로 수정 예정임 
 	@RequestMapping(value = "inputTax", method = RequestMethod.GET)
-	public void inputTax(HomeTaxVo home, HttpServletResponse response) throws IOException {
+	public void inputTax(HomeTaxVo home, HttpServletResponse response, HttpServletRequest req) throws IOException {
+		
+		//현재 로그인 되어있는 아이디로 반환하기 위한 조건 
+		MemberVo login = new MemberVo();
+		req.getSession().setAttribute("login", login);
+		System.out.println(login.toString());
 		
 		//System.out.println("넘어온 데이터 : "+ home.toString());
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
@@ -127,7 +134,8 @@ public class HomeTaxController {
 		
 		System.out.println("진행됐음");
 		
-		String myid = home.getMyid();
+		//현재 로그인 되어있는(세션존재하는) 아이디로 설정 
+		String myid = login.getMyid();
 		String day = home.getDay();
 		String url = "detailTax?myid="+myid+"&day="+day;
 		

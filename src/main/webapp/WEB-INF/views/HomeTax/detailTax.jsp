@@ -85,9 +85,9 @@ String day = vo.getDay();
           <c:if test="${login.auth == 3}">
           	<p>
           		<select id="memberSelector" onchange="inputMemberSelector()">
-          			<option value="0">박남준</option>
-          			<option value="1">뀨뀨까까</option>
-          			<option value="2">고명우</option>
+          			<option value="0">고명우</option>
+          			<option value="1">박남준</option>
+          			<option value="2">뀨뀨까까</option>
           		</select>
           	</p>
           </c:if>
@@ -322,6 +322,30 @@ function inputModal() {
 //관리자 전용
 //모달창에서 멤버를 셀렉트 박스에서 선택할경우 그 선택된 해당 멤버의 월세를 대신 납부 입력해줄수 있는 기능(관리자기능)
 function inputMemberSelector() {
+	$("#_inputBtn").show();
+	$("#_alertMsg").hide();
+	
+	var selector = $("#memberSelector").val();
+	var SELECTID = "_restfee" + selector;
+	console.log("이게 선택된 아이디값 = " + SELECTID);
+	
+	year = $("#_year").text();
+	month = $("#_month").text();
+	restfee = $("#" + SELECTID).text().replace('원','');
+	
+	console.log('나온 값 = ' + restfee);
+	
+	restfee = parseInt(restfee.replace(',', ''));
+	console.log('변형된 값 = ' + restfee);
+	$("#_fee").text(threeAddComma(restfee) + '원');
+	$("#_inputfee").val(restfee);
+	
+	if(restfee == 0 || restfee < 0){
+		$("#_inputBtn").hide();
+		$("#_alertMsg").css('color', 'red');
+		$("#_alertMsg").show();
+		$("#_alertMsg").text("이미 전액납부가 완료되었습니다.");
+	}
 	
 }
 
@@ -337,11 +361,27 @@ function inputTax() {
 	var month;
 	var fee;
 	var myid;
+	var auth;
+	//아이디가 없고 이름만 있을 경우
+	var name;
+	var param;
 	
 	year = $("#_inputYear").text();
 	month = $("#_inputMonth").text();
 	fee = $("#_fee").text();
-	myid = '<c:out value="${login.myid}"/>';
+	auth = '<c:out value="${login.auth}"/>';
+	console.log('관리자 확인 : ' + auth);
+	
+	//관리자 일경우에는 이름만 넘김 
+	//관리자가 아닐경우에는 아이디가 바로 넘어감 
+	if(auth == '3'){
+		name = $('#memberSelector option:selected').text();
+		
+	}else{
+		myid = '<c:out value="${login.myid}"/>';	
+		
+	}
+	
 	
 	//alert('진행1');
 	
@@ -372,15 +412,16 @@ function inputTax() {
 	//alert(inputfee);
 	//alert("이게날짜:"+day);
 	
-	inputAf(day, myid, inputfee);
+	//param은 아이디 또는 네임으로 넘어감 
+	inputAf(day, myid, inputfee, name);
 	
 	
 	
 }
 
-function inputAf(day, myid, inputfee) {
+function inputAf(day, myid, inputfee, name) {
 	
-location.href = "inputTax?day="+day+"&myid="+myid+"&inputfee="+inputfee;
+location.href = "inputTax?day="+day+"&myid="+myid+"&inputfee="+inputfee + "&name=" + name;
 	
 }
 

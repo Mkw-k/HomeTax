@@ -97,18 +97,36 @@
 </select>
 
 <!-- 월세 납부 : 업데이트 -->
+<!-- 21.09.24 관리자가 대신 납부 처리해줄경우 위하여 조건 추가 @author K -->
 <insert id="inputTax" parameterType="com.mkw.a.domain.HomeTaxVo">
 /*HomeTaxMapper.inputTax*/ 
-
 UPDATE HOMETAX 
 <set>
 INPUTFEE = INPUTFEE + #{inputfee}, 
 RESTFEE = RESTFEE - #{inputfee}, 
 OVERFEE = (INPUTFEE + #{inputfee}) - (RESTFEE - #{inputfee}) 
-WHERE DAY = #{day} AND MYID = #{myid} 
+<choose>
+	<when test='myid != null and myid != ""'>
+		WHERE DAY = #{day} AND MYID = #{myid}
+	</when>
+	<otherwise>
+		WHERE DAY = #{day} AND MYID = (SELECT MYID FROM HOME_MEMBER WHERE NAME = #{name})
+	</otherwise>
+</choose>
 </set>
+
 <selectKey keyProperty="seq,overfee" resultType="com.mkw.a.domain.HomeTaxVo" order="AFTER">
-	select SEQ, OVERFEE FROM HOMETAX WHERE DAY = #{day} AND MYID = #{myid} 
+	select SEQ, OVERFEE 
+	FROM HOMETAX
+	<!-- 아이디가 admin일 경우 --> 
+	<choose>
+		<when test='myid != null and myid != ""'>
+			WHERE DAY = #{day} AND MYID = #{myid}
+		</when>
+		<otherwise>
+			WHERE DAY = #{day} AND MYID = (SELECT MYID FROM HOME_MEMBER WHERE NAME = #{name})
+		</otherwise>
+	</choose> 
 </selectKey>
 </insert>
 
@@ -156,12 +174,20 @@ HAVING DAY = #{day}
 	INSERT INTO HOMETAX_INSERT 
 	(
 	TAXSEQ,
-	MYID,
+	MYID,	
 	INPUTFEE,
 	DAY
 	)
 	VALUES(
 	#{seq},
+	<choose>
+		<when test='myid != null and myid != ""'>
+			#{myid}, 
+		</when>
+		<otherwise>
+			(SELECT MYID FROM HOME_MEMBER WHERE NAME = #{name}),
+		</otherwise>
+	</choose>
 	#{myid}, 
 	#{inputfee}, 
 	#{day} 

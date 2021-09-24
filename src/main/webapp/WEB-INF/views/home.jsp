@@ -347,8 +347,7 @@ request.setCharacterEncoding("UTF-8");
 		return day;
 	}
     
-    
-      
+	  
   </script>
   
   
