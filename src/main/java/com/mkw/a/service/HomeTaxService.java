@@ -24,5 +24,7 @@ public interface HomeTaxService {
 	List<HomeTaxVo> chkTax(HomeTaxVo home);
 
 	boolean insertTableInput(HomeTaxVo home);
+	
+	public List<HashMap<String, Object>> getMonthInputListData(HashMap<String, Object> param);
 
 }

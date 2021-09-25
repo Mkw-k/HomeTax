@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -81,9 +82,9 @@ public class HomeTaxController {
 		System.out.println("이게 아이디:"+home.getMyid());
 		System.out.println("이게 날짜:"+home.getDay());
 		
-		ArrayList<HomeTaxVo> voList = homeTaxService.detailTax(home);
+		ArrayList<HomeTaxVo> taxVoList = homeTaxService.detailTax(home);
 		
-		if(voList.isEmpty()) {
+		if(taxVoList.isEmpty()) {
 			// 현재 날짜 구하기 (시스템 시계, 시스템 타임존)
 			LocalDate now = LocalDate.now();
 			String year = now.getYear() + "";
@@ -101,7 +102,7 @@ public class HomeTaxController {
 			model.addAttribute("voList", createVoList);
 
 		}else {
-			model.addAttribute("voList", voList);
+			model.addAttribute("voList", taxVoList);
 		}
 		
 		return "HomeTax/detailTax";
@@ -122,9 +123,13 @@ public class HomeTaxController {
 	@RequestMapping(value = "inputTax", method = RequestMethod.GET)
 	public void inputTax(HomeTaxVo home, HttpServletResponse response, HttpServletRequest req) throws IOException {
 		
+		logger.debug("tax parameter 확인 >>>>>>>>>>>>>>>");
+		logger.debug(home.toString());
+		
+		response.setCharacterEncoding("UTF-8"); 
+		response.setContentType("text/html; charset=UTF-8");
 		//현재 로그인 되어있는 아이디로 반환하기 위한 조건 
-		MemberVo login = new MemberVo();
-		req.getSession().setAttribute("login", login);
+		MemberVo login = (MemberVo)req.getSession().getAttribute("login");
 		System.out.println(login.toString());
 		
 		//System.out.println("넘어온 데이터 : "+ home.toString());
@@ -158,6 +163,18 @@ public class HomeTaxController {
 	public List<HomeTaxVo> chkTaxAf(HomeTaxVo home, Model model) {
 		
 		List<HomeTaxVo> list = homeTaxService.chkTax(home);
+		
+		return list;
+	}
+	
+	@ResponseBody    
+	@RequestMapping(value = "getMonthInputListData", method = RequestMethod.GET)
+	public List<HashMap<String, Object>> getMonthInputListData(@RequestBody HashMap<String, Object> param) {
+		
+		System.out.println("*************파라미터 확인");
+		System.out.println(param.toString());
+		
+		List<HashMap<String, Object>> list = homeTaxService.getMonthInputListData(param);
 		
 		return list;
 	}

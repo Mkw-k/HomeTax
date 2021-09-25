@@ -122,11 +122,13 @@ public class HomeTaxVo implements Serializable{
 	public HomeTaxVo() {
 		// TODO Auto-generated constructor stub
 	}
+	
 	@Override
 	public String toString() {
 		return "HomeTaxVo [myid=" + myid + ", day=" + day + ", water=" + water + ", elec=" + elec + ", gas=" + gas
 				+ ", inter=" + inter + ", managerfee=" + managerfee + ", monthfee=" + monthfee + ", totalfee="
-				+ totalfee + ", restfee=" + restfee + ", inputfee=" + inputfee + "]";
+				+ totalfee + ", restfee=" + restfee + ", inputfee=" + inputfee + ", del=" + del + ", name=" + name
+				+ ", seq=" + seq + ", overfee=" + overfee + ", htcustome=" + htcustome + "]";
 	}
 	public HomeTaxVo(String myid, String day, int water, int elec, int gas, int inter, int managerfee, int monthfee,
 			int totalfee, int restfee, int inputfee) {

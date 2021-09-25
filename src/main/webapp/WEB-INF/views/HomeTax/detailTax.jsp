@@ -85,9 +85,9 @@ String day = vo.getDay();
           <c:if test="${login.auth == 3}">
           	<p>
           		<select id="memberSelector" onchange="inputMemberSelector()">
-          			<option value="0">고명우</option>
-          			<option value="1">박남준</option>
-          			<option value="2">뀨뀨까까</option>
+          			<option value="0" id="member1">고명우</option>
+          			<option value="1" id="member2">박남준</option>
+          			<option value="2" id="member3">뀨뀨꺄꺄</option>
           		</select>
           	</p>
           </c:if>
@@ -123,19 +123,33 @@ console.log("day 체크 ::" + day);
 getDetailData(day);
 
 let month;
-let isZero = day.charAt(2);
+let monthIsZero = day.charAt(2);
+let year; 
+let yearIsZero = day.charAt(0);
 
 //alert("isZero : "+ isZero);
-if(isZero == 0){
+//해당월이 0으로 시작할경우 2번째 1글자만 표시되도록 
+if(monthIsZero == 0){
 	month = day.substr(3, 3);
 }else{
 	month = day.substr(2, 3);
 }
+//해당 년이 0으로 시작할경우 2번째 1글자만 표시되도록 
+if(yearIsZero == 0){
+	year = day.substr(1, 1);
+}else{
+	year = day.substr(0, 2);
+}
 
-//alert("이게달"+month);
+//넘어온 년 월을 유저가 확인할수 있게 셋팅해줌 (21년 12월)
 $("#_month").text(month);
+$("#_year").text(year);
 
-  	 
+//모달창 셀렉트 박스 내용 셋팅 (관리자용)
+function set_admin_modal_selectbox_data() {
+	
+}
+
 //월세 리스트 가져오는 함수 
 function getDetailData( day ){
 	var myid = '<c:out value="${login.myid}"/>';
@@ -299,7 +313,8 @@ function inputModal() {
 	
 	year = $("#_year").text();
 	month = $("#_month").text();
-	restfee = $("#_restfee0").text();
+	//중간에 콤마가 끼어있으면 콤마 뒤에 숫자들이 다 날라가버림 (방지용)
+	restfee = $("#_restfee0").text().replace(',', '');
 	
 	$("#_inputYear").text(year);
 	$("#_inputMonth").text(month);
@@ -376,7 +391,7 @@ function inputTax() {
 	//관리자가 아닐경우에는 아이디가 바로 넘어감 
 	if(auth == '3'){
 		name = $('#memberSelector option:selected').text();
-		
+		myid = '<c:out value="${login.myid}"/>';
 	}else{
 		myid = '<c:out value="${login.myid}"/>';	
 		

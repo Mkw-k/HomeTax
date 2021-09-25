@@ -38,7 +38,7 @@
 		0, 
 		0
 		<if test='htcustome != null and htcustome != ""'>
-			,#{HTCUSTOME, jdbcType=VARCHAR}
+			,#{htcustome, jdbcType=VARCHAR}
 		</if>
 		)
 </insert>
@@ -102,15 +102,23 @@
 /*HomeTaxMapper.inputTax*/ 
 UPDATE HOMETAX 
 <set>
+
 INPUTFEE = INPUTFEE + #{inputfee}, 
-RESTFEE = RESTFEE - #{inputfee}, 
-OVERFEE = (INPUTFEE + #{inputfee}) - (RESTFEE - #{inputfee}) 
+RESTFEE = case 
+               when (  RESTFEE - #{inputfee} )>=0 then RESTFEE - #{inputfee}
+      <![CDATA[when (  RESTFEE - #{inputfee} )<0 then 0	]]>
+             end,
+OVERFEE = case 
+            when (  #{inputfee} - RESTFEE )>=0 then (#{inputfee} - RESTFEE)
+      <![CDATA[when (  #{inputfee} - RESTFEE )<0 then 0 ]]>
+          end
+
 <choose>
-	<when test='myid != null and myid != ""'>
-		WHERE DAY = #{day} AND MYID = #{myid}
+	<when test='myid == "admin" and myid != "" and myid != null'>
+		WHERE DAY = #{day} AND MYID = (SELECT MYID FROM HOME_MEMBER WHERE NAME = #{name})
 	</when>
 	<otherwise>
-		WHERE DAY = #{day} AND MYID = (SELECT MYID FROM HOME_MEMBER WHERE NAME = #{name})
+		WHERE DAY = #{day} AND MYID = #{myid}
 	</otherwise>
 </choose>
 </set>
@@ -120,11 +128,11 @@ OVERFEE = (INPUTFEE + #{inputfee}) - (RESTFEE - #{inputfee})
 	FROM HOMETAX
 	<!-- 아이디가 admin일 경우 --> 
 	<choose>
-		<when test='myid != null and myid != ""'>
-			WHERE DAY = #{day} AND MYID = #{myid}
+		<when test='myid == "admin" and myid != "" and myid != null'>
+			WHERE DAY = #{day} AND MYID = (SELECT MYID FROM HOME_MEMBER WHERE NAME = #{name})
 		</when>
 		<otherwise>
-			WHERE DAY = #{day} AND MYID = (SELECT MYID FROM HOME_MEMBER WHERE NAME = #{name})
+			WHERE DAY = #{day} AND MYID = #{myid}
 		</otherwise>
 	</choose> 
 </selectKey>
@@ -163,7 +171,15 @@ HAVING DAY = #{day}
 		H.DEL
 	FROM HOMETAX H , HOME_MEMBER M 
 	WHERE H.MYID = M.MYID
-    AND M.MYID = #{myid}
+	<choose>
+		<when test='myid == "admin" and myid != null and myid != ""'>
+			AND M.MYID IN (select myid from HOME_MEMBER where auth = 1)	
+		</when>
+		<otherwise>
+			AND M.MYID = #{myid}
+		</otherwise>
+	</choose>
+    
     AND H.INPUTFEE > 0
     ORDER BY H.DAY ASC
 </select>
@@ -175,23 +191,32 @@ HAVING DAY = #{day}
 	(
 	TAXSEQ,
 	MYID,	
+	HTCUSTOMER1,
 	INPUTFEE,
 	DAY
 	)
 	VALUES(
 	#{seq},
 	<choose>
-		<when test='myid != null and myid != ""'>
-			#{myid}, 
+		<when test='myid=="admin" and myid != null and myid != ""'>
+			(SELECT MYID FROM HOME_MEMBER WHERE NAME = #{name}),
+			'관리자대행납부',
 		</when>
 		<otherwise>
-			(SELECT MYID FROM HOME_MEMBER WHERE NAME = #{name}),
+			#{myid}, 
+			'',
 		</otherwise>
 	</choose>
-	#{myid}, 
 	#{inputfee}, 
 	#{day} 
 	)
 </insert>
+
+<select id="getMonthInputListData" parameterType="hashmap" resultType="hashmap">
+	select * 
+    from HOMETAX_INSERT 
+    where myid = (select myid from HOME_MEMBER where name = #{name}) 
+    and day = #{day}
+</select>
 
 </mapper>

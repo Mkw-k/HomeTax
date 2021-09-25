@@ -74,6 +74,7 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 						resultTax = discountService.discount(memberVo, "noDiscountService", homeTax, nomalLen, discountLen);
 					}
 					
+					//System.out.println(resultTax.toString());
 					b = hometaxdao.createTax(resultTax);
 					
 					if(b) {
@@ -172,6 +173,11 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 	@Override
 	public boolean insertTableInput(HomeTaxVo home) {
 		return hometaxdao.insertTableInput(home);
+	}
+
+	//납부 상세내역에서 해당월을 클릭할 경우 해당월의 모든 납부내역을 레이어팝업창에서 확일할수 있는 기능 
+	public List<HashMap<String, Object>> getMonthInputListData(HashMap<String, Object> param) {
+		return hometaxdao.getMonthInputListData(param);
 	}
 	
 	

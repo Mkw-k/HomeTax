@@ -62,7 +62,7 @@ request.setCharacterEncoding("UTF-8");
    
    
   
-  
+
   
   
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -98,10 +98,10 @@ function getchkTax( ){
 		         
 		            //alert(val.jobSeq);
 		            let app = "<tr class= 'list_col'>"
-		                     +"<th scope='row'>" + 1 +"</th>";
+		                     +"<th scope='row'>" + (i+1) +"</th>";
 		                     
 		                   if(vo.del==0){
-		                	 app +="<td>"+year+"년"+month+"월"+"</td>"
+		                	 app +="<td><a href='#' onclick='getMonthInputListPop()'>"+year+"년"+month+"월"+"</a></td>"
 		                	 	 +"<td>"+threeAddComma(vo.name)+"</td>"
 		                	 	 +"<td>"+threeAddComma(vo.totalfee)+"원"+"</td>"
 		                	 	 +"<td>"+threeAddComma(vo.inputfee)+"원"+"</td>"
@@ -129,6 +129,37 @@ function getchkTax( ){
 
 	   });
   	
+}
+
+//해당월의 앵커 태그 클릭스 그 해당하는 월의 납부 상세 내역을 가지고 오는 함수 
+function getMonthInputListPop() {
+	console.log(event);
+	console.log(event.target.innerText);
+	//var day = deleteYearNMonthText(event.target.innerText);
+	var day = event.target.innerText;
+	day = day.replace(/[^0-9]/ig, '');
+	console.log(day);
+	var name = event.path[2].cells[2].innerText;
+	
+	var param = {
+				"day" : day,
+				"name" : name	 
+				};
+	
+	 $.ajax({
+	      url : "./getMonthInputListData",
+	      type : "get",
+	      data : JSON.stringify(param),
+	      contentType : 'application/json; charset="utf-8"', 
+	      dataType : "json",
+	      success:function(list){
+	         console.log(list);
+	      },//success
+	      error : function(){
+			alert('error');
+			}
+	   });//ajax
+
 }
 
 

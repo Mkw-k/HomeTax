@@ -1,6 +1,7 @@
 package com.mkw.a.mapper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +21,8 @@ public interface HomeTaxDao {
 
 	List<HomeTaxVo> chkTax(HomeTaxVo home);
 
-	boolean insertTableInput(HomeTaxVo home);  
+	boolean insertTableInput(HomeTaxVo home);
+
+	List<HashMap<String, Object>> getMonthInputListData(HashMap<String, Object> param);  
 
 }

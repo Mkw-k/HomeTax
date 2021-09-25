@@ -42,6 +42,14 @@
 	}
 	
 	
+//21년09월 => 2109 숫자로 변경해줌 
+function deleteYearNMonthText(day){
+	day = day.replace(/[^0-9]/ig, '');
+	console.log(day);
+	return day;
+}
+	
+	
 	/** <pre>
 	 * AJAX 공통함수 
 	 * JSON 형식으로 가고 JSON 형식으로 받음
@@ -135,7 +143,7 @@ function run_ajax(url, type, data){
 			alert('에러발생');
 			return;
 		} 
-		});
+		}); 
 		
 	return return_data;
 } 
@@ -203,4 +211,5 @@ function getGeoDataError(){
 }
 
 navigator.geolocation.getCurrentPosition(getGeoData, getGeoDataError);
+
 

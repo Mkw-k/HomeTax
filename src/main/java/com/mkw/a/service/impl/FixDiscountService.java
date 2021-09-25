@@ -18,6 +18,7 @@ public class FixDiscountService implements DiscountInterface{
 		int elec = tax.getElec()/(nomalLen+discountLen);
 		int gas = tax.getGas()/(nomalLen+discountLen);
 		int managerfee = tax.getManagerfee()/(nomalLen+discountLen);
+		String htCustome = tax.getHtcustome();
 		
 		HomeTaxVo newTax = new HomeTaxVo();
 		
@@ -27,6 +28,7 @@ public class FixDiscountService implements DiscountInterface{
 		newTax.setElec(elec);
 		newTax.setGas(gas);
 		newTax.setManagerfee(managerfee);
+		newTax.setHtcustome(htCustome);
 		
 		int interfee = 0;
 		int monthfee = 0;

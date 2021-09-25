@@ -149,15 +149,17 @@ public class maincontroller {
 	public void login(MemberVo mem, HttpServletRequest req
 						, HttpServletResponse resp)throws Exception {
 		
+		resp.setCharacterEncoding("UTF-8"); 
+		resp.setContentType("text/html; charset=UTF-8");
 		MemberVo login = memberService.login(mem);
+		
 		
 		if(login != null) {
 			req.getSession().setAttribute("login", login);
 			System.out.println(login.toString());
 			
 			PrintWriter pw = resp.getWriter();
-			resp.setCharacterEncoding("UTF-8"); 
-			resp.setContentType("text/html; charset=UTF-8");
+			
 
 			pw.println("<script>alert('로그인성공'); " +
 					"location.href='home';</script>");
@@ -167,7 +169,6 @@ public class maincontroller {
 			
 			System.out.println("로그인실패");
 			PrintWriter pw = resp.getWriter();
-			
 			pw.println("<script>alert('로그인실패'); " +
 					"location.href='home';</script>");
 			pw.flush();
