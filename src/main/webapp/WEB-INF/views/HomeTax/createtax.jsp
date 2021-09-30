@@ -36,7 +36,7 @@
           <h3 class="mb-3">월세입력</h3>
           <form action="createTax" method="post">
             <div class="form-row">
-              <div class="form-group col-md-6"> <input type="text" class="form-control" name="day" id="form36" placeholder="yymm"> </div>
+              <div class="form-group col-md-6"> <input type="month" class="form-control" name="day" id="form36"> </div>
               <div class="form-group col-md-6"> <input type="text" class="form-control" id="form37" name="water" placeholder="수도세"> </div>
             </div>
             <div class="form-group"> <input type="text" class="form-control" id="form38" name="elec" placeholder="전기세"> </div>

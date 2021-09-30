@@ -33,21 +33,23 @@ import org.springframework.web.servlet.ModelAndView;
 import com.mkw.a.domain.MemberVo;
 import com.mkw.a.service.BoardService;
 import com.mkw.a.service.MemberService;
+import com.mkw.a.service.impl.BoardServiceImpl;
+import com.mkw.a.service.impl.MemberServiceImpl;
 import com.mkw.a.util.PdsUtil;
+
+import lombok.RequiredArgsConstructor;
 
 /*
  * 비즈니스 로직들 다 서비스로 이주시켜야함 
  */
 @Controller
+@RequiredArgsConstructor
 public class maincontroller {
 	
 	private static final Logger logger = LoggerFactory.getLogger(maincontroller.class);
+	private final BoardServiceImpl boardService;
+	private final MemberServiceImpl memberService;
 
-	@Autowired
-	private BoardService boardService;
-	
-	@Autowired
-	private MemberService memberService;
 	
 	@RequestMapping("test")
 	public String test(Model model) {

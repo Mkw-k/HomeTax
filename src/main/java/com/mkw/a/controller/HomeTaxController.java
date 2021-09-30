@@ -168,7 +168,7 @@ public class HomeTaxController {
 	}
 	
 	@ResponseBody    
-	@RequestMapping(value = "getMonthInputListData", method = RequestMethod.GET)
+	@RequestMapping(value = "getMonthInputListData", method = RequestMethod.POST)
 	public List<HashMap<String, Object>> getMonthInputListData(@RequestBody HashMap<String, Object> param) {
 		
 		System.out.println("*************파라미터 확인");

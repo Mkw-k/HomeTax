@@ -25,14 +25,16 @@ import com.mkw.a.mapper.BbsDao;
 import com.mkw.a.service.BbsService;
 import com.mkw.a.util.PdsUtil;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class BbsServiceImpl implements BbsService {
 	
 	private static final Logger logger = LoggerFactory.getLogger(BbsServiceImpl.class);
-
-	@Autowired
-	BbsDao bbsdao;
-
+	
+	private final BbsDao bbsdao;
+	
 	@Override
 	public boolean uploadBbs(BbsVo bbs, MultipartFile fileload, HttpServletRequest req) {
 		

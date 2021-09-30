@@ -9,6 +9,8 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -18,6 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import com.mkw.a.controller.HomeTaxController;
 import com.mkw.a.domain.HomeTaxVo;
 import com.mkw.a.domain.MemberVo;
 import com.mkw.a.mapper.HomeTaxDao;
@@ -28,6 +31,7 @@ import com.mkw.a.service.MemberService;
 @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
 public class HomeTaxServiceImpl implements HomeTaxService{
 	
+	private static final Logger logger = LoggerFactory.getLogger(HomeTaxServiceImpl.class);
 	
 	private final DiscountService discountService;
 	@Autowired
@@ -49,6 +53,15 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 		boolean b = false;
 		response.setCharacterEncoding("UTF-8"); 
 		response.setContentType("text/html; charset=UTF-8");
+		
+		//input 타입 month로 들어오는 데이터 가공 
+		//2021-09 => 2109
+		String day = homeTax.getDay();
+		day = day.substring(2,4) + day.substring(5,7);
+		homeTax.setDay(day);
+		
+		logger.debug("데이터확인");
+		logger.debug(homeTax.toString());
 		 
 		//일반회원의 수 가져오기 
 		int nomalLen = memberservice.getnomalLen();

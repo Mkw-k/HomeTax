@@ -9,11 +9,13 @@ import com.mkw.a.domain.MemberVo;
 import com.mkw.a.mapper.MemberDao;
 import com.mkw.a.service.MemberService;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService{
 	
-	@Autowired
-	MemberDao memberdao;
+	private final MemberDao memberdao;
 
 	@Override
 	public boolean regiAf(MemberVo mem) {

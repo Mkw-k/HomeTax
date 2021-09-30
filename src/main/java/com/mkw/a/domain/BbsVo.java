@@ -15,8 +15,6 @@ public class BbsVo {
 	private int downcount;
 	
 	
-	
-	
 	public int getDowncount() {
 		return downcount;
 	}

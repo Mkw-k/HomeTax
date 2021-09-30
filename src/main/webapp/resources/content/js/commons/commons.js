@@ -35,6 +35,13 @@
 		return day;
 	}
 	
+	/**
+	*<pre>숫자 3자리 마다 콤마를 찍어주는 함수</pre>
+	*1000 => 1,000 <br>
+	*@author K <br>
+	*@param money <br>
+	*@returns money <br>
+	*/
 	function threeAddComma(money){
 		money = money.toLocaleString('ko-KR');
 		//console.log('변경된 금액 문자열 : ' + money);

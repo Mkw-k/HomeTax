@@ -29,17 +29,19 @@ import org.springframework.web.multipart.MultipartFile;
 import com.mkw.a.domain.BbsParam;
 import com.mkw.a.domain.BbsVo;
 import com.mkw.a.service.BbsService;
+import com.mkw.a.service.impl.BbsServiceImpl;
 import com.mkw.a.util.PdsUtil;
+
+import lombok.RequiredArgsConstructor;
 
 
 
 @Controller
+@RequiredArgsConstructor
 public class BbsController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(BbsController.class);
-	
-	@Autowired
-	BbsService bbsservice;
+	private final BbsServiceImpl bbsservice;
 	
 	@RequestMapping(value = "bbs", method = RequestMethod.GET)
 	public String bbs() {

@@ -21,7 +21,94 @@ request.setCharacterEncoding("UTF-8");
 	margin: auto;
 }
 
+/* 레이어팝업 */
+/* reset */
+button {
+  padding:0;
+  background:none;
+  border:0;
+  cursor:pointer;
+}
 
+/* 버튼 영역 */
+.btnBox {
+  text-align:center;
+}
+
+.popOpenBtnCmmn {
+  width:200px; 
+  height:60px; 
+  background:#000; 
+  color:#fff; 
+  font-size:16px;
+  opacity:0.7;
+  transition:all 0.3s;
+}
+
+.popOpenBtnCmmn:hover {
+  opacity:1;
+}
+
+/* 팝업 영역 */
+.popCmmn {
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+}
+
+.popBg {
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.7);
+}
+
+.popInnerBox {
+  display:flex;
+  justify-content:space-between;
+  flex-direction:column;
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:400px;
+  height:250px;
+  margin:-125px 0 0 -200px;
+  text-align:center;
+  background:#fff;
+  border-radius:5px;
+}
+
+.popHead {
+  padding:15px;
+  background:#000;
+  color:#fff;
+  font-size:18px;
+}
+
+.popBody {
+  padding:10px;
+  box-sizing:border-box;
+  font-size:14px;
+}
+
+.popCloseBtnCmmn {
+  width:30%;
+  margin:10px;
+  padding:10px;
+  font-size:16px;
+  background:#999;
+  color:#fff;
+  transition:all 0.3s;
+}
+
+.popCloseBtnCmmn:hover {
+  background:#666;
+}
 
 </style>
 
@@ -57,12 +144,38 @@ request.setCharacterEncoding("UTF-8");
     </div>
   </div>
   
+  <!-- 레이어팝업 --> 
+   <div id="popUp_1" class="popCmmn" style="overflow : auto;">
+    <div class="popBg" data-num="1"></div>
+    <div class="popInnerBox">
+      <div class="popHead">
+      	<span id="pop_tax_year" style='color:white;'></span>
+      	<span id="pop_tax_month" style='color:white;'></span>
+      </div>
+      <div class="popBody" id="pop_tax_list" style="margin: 0 auto; text-align: center;">
+      	<table style="border-spacing: 5px; border-collapse: separate;">
+      		<thead>
+				<tr>
+					<th>아이디</th>
+					<th>납부시간</th>
+					<th>납부금액</th>
+					<th>비고</th>
+				</tr>
+      		</thead>
+      		<tbody id="pop_tax_table_body">
+      		</tbody>
+      	</table>
+      </div>
+      <div class="popFoot">
+        <button class="popCloseBtnCmmn" type="button" data-num="1">확인</button>
+      </div>
+    </div>
+  </div>
+  
+
    <c:import url="/footer.jsp" charEncoding="utf-8"/> 
    
    
-   
-  
-
   
   
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -101,7 +214,7 @@ function getchkTax( ){
 		                     +"<th scope='row'>" + (i+1) +"</th>";
 		                     
 		                   if(vo.del==0){
-		                	 app +="<td><a href='#' onclick='getMonthInputListPop()'>"+year+"년"+month+"월"+"</a></td>"
+		                	 app +="<td><a href='#' class='pop_tax_href' data-num='1' onclick='getMonthInputListPop()'>"+year+"년"+month+"월"+"</a></td>"
 		                	 	 +"<td>"+threeAddComma(vo.name)+"</td>"
 		                	 	 +"<td>"+threeAddComma(vo.totalfee)+"원"+"</td>"
 		                	 	 +"<td>"+threeAddComma(vo.inputfee)+"원"+"</td>"
@@ -148,21 +261,89 @@ function getMonthInputListPop() {
 	
 	 $.ajax({
 	      url : "./getMonthInputListData",
-	      type : "get",
+	      type : "post",
 	      data : JSON.stringify(param),
 	      contentType : 'application/json; charset="utf-8"', 
 	      dataType : "json",
 	      success:function(list){
 	         console.log(list);
+	         //레이어 팝업 제목 셋팅 (연월 셋팅)
+	         $('#pop_tax_year').text(day.substr(0,2) + "년");
+	         $('#pop_tax_month').text(day.substr(2,4) + "월");
+	         
+	         var app;
+	         $('.pop_tax_list_data').remove();
+	         
+	         if(list.length == 0){
+	        	 app += '<tr class="pop_tax_list_data">';
+		         app += '	<td colspan="3" id="pop_tax_id" style="color:red; text-align:center;">데이터가 존재하지 않습니다</td>      	';
+		         app += '</tr>';
+	         }else{
+	        	 for (var i = 0; i < list.length; i++) {
+					 var myid = list[i].MYID;
+	 		 	 	 var inputtime = (list[i].INSERTDAY).substr(0,4) + "." + (list[i].INSERTDAY).substr(4,2) + "." + (list[i].INSERTDAY).substr(6,2) + "." + (list[i].INSERTDAY).substr(8,2) 
+	 								+ ":" + (list[i].INSERTDAY).substr(10,2) + ":" + (list[i].INSERTDAY).substr(12,2);				 				
+					 var htcustomer = list[i].HTCUSTOMER1;
+//함수가 동작하지 않고 있음 원인확인 필요
+					 var inputfee = threeAddComma(list[i].INPUTFEE);
+					 
+					 
+			         app += '<tr class="pop_tax_list_data">';
+			         app += '	<td id="pop_tax_id">'+myid+'</td>      	';
+			         app += '	<td id="pop_tax_input_time">'+inputtime+'</td>   ';
+			         app += '	<td id="pop_tax_input_amount">'+inputfee+'원</td>  ';
+			         app += '	<td id="pop_tax_custome">'+htcustomer+'</td>      ';
+			         app += '</tr>';
+						
+			        
+				}	         
+	         }
+	         
+			 
+	          
+			 $('#pop_tax_table_body').append(app);
+			 
+			 //팝업띄우기 			 
+			 $('#popUp_1').fadeIn(200);
 	      },//success
 	      error : function(){
 			alert('error');
 			}
 	   });//ajax
+	   
+	   
 
 }
 
 
+
+//레이어팝업
+$(function(){
+	  setPop();
+	});
+
+
+	// 팝업 세팅
+	function setPop() {
+	  /*
+	  var popOpenBtn = $('.pop_tax_href');
+	  
+	  //팝업 열기
+	 
+	  popOpenBtn.on('click',function(){
+	    var clickNum = $(this).attr('data-num');
+	    
+	    $('#popUp_'+clickNum).fadeIn(200);
+	  })
+	  */
+	  
+	  //팝업 닫기
+	  $('.popBg, .popCloseBtnCmmn').on('click',function(){
+	    var clickNum = $(this).attr('data-num');
+	    
+	    $('#popUp_'+clickNum).fadeOut(200);
+	  })
+	}
 
 
 </script>

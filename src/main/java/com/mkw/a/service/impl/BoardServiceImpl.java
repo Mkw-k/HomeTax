@@ -12,11 +12,13 @@ import com.mkw.a.domain.BoardVo;
 import com.mkw.a.mapper.BoardDao;
 import com.mkw.a.service.BoardService;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class BoardServiceImpl implements BoardService{
 
-	@Autowired
-	BoardDao dao;
+	private final BoardDao dao;
 	
 	@Override
 	public List<BoardVo> viewAll() {
