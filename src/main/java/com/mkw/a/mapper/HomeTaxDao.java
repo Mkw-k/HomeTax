@@ -23,6 +23,16 @@ public interface HomeTaxDao {
 
 	boolean insertTableInput(HomeTaxVo home);
 
-	List<HashMap<String, Object>> getMonthInputListData(HashMap<String, Object> param);  
+	List<HashMap<String, Object>> getMonthInputListData(HashMap<String, Object> param);
+
+	boolean inputTempTax(HomeTaxVo home);
+
+	List<HomeTaxVo> getNoConfirmData();
+
+	boolean confirmTaxAf(HashMap<String, Object> param);
+
+	boolean inputTaxMaster(HashMap<String, Object> param);
+
+	boolean recallTaxAf(HashMap<String, Object> param);  
 
 }

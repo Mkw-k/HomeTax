@@ -3,9 +3,11 @@
 <mapper namespace="com.mkw.a.mapper.HomeTaxDao">
 
 <!-- 월세 입력 -->
+<!-- 밑에 셀렉문 수정해야함!!!!!!!!!!! -->
 <insert id="createTax">
 	/*HomeTaxMapper.createTax*/
-	INSERT INTO HOMETAX (
+	INSERT ALL
+	INTO HOMETAX (
 		SEQ, 
 		MYID, 
 		DAY, 
@@ -41,6 +43,44 @@
 			,#{htcustome, jdbcType=VARCHAR}
 		</if>
 		)
+		
+	INTO HOMETAX_MASTER (
+		SEQ, 
+		MYID, 
+		DAY, 
+		WATER, 
+		ELEC, 
+		GAS, 
+		INTER, 
+		MANAGERFEE, 
+		MONTHFEE, 
+		TOTALFEE, 
+		RESTFEE, 
+		INPUTFEE, 
+		DEL 
+		<if test='htcustome != null and htcustome != ""'>
+			,HTCUSTOME
+		</if>
+		)
+	VALUES(
+		SEQ_HOMETAX.NEXTVAL, 
+		#{myid}, 
+		#{day}, 
+		#{water}, 
+		#{elec}, 
+		#{gas}, 
+		#{inter}, 
+		#{managerfee}, 
+		#{monthfee}, 
+		#{totalfee}, 
+		#{restfee}, 
+		0, 
+		0
+		<if test='htcustome != null and htcustome != ""'>
+			,#{htcustome, jdbcType=VARCHAR}
+		</if>
+		)
+		select * from HOMETAX_MASTER
 </insert>
 
 <!-- 모든 월세 리스트 가지고 오기 : 메인페이지용 -->
@@ -72,10 +112,13 @@
 	H.TOTALFEE, 
 	H.RESTFEE, 
 	H.INPUTFEE, 
-	H.DEL, 
-	M.NAME
-	FROM HOMETAX H , HOME_MEMBER M 
+	H.DEL,  
+	M.NAME, 
+	R.RESTFEE AS RESTFEEMASTER, 
+	R.INPUTFEE AS INPUTFEEMASTER
+	FROM HOMETAX H , HOME_MEMBER M , HOMETAX_MASTER R
 	WHERE H.MYID = M.MYID 
+	     AND H.SEQ = R.SEQ
 		<choose>
 			<when test='myid == "admin" and myid != null and myid != ""'>
 				AND H.MYID in (select myid from home_member where auth = '1')
@@ -193,7 +236,9 @@ HAVING DAY = #{day}
 	MYID,	
 	HTCUSTOMER1,
 	INPUTFEE,
-	DAY
+	DAY, 
+	DEL_YN, 
+	CONFIRM_YN
 	)
 	VALUES(
 	#{seq},
@@ -208,7 +253,9 @@ HAVING DAY = #{day}
 		</otherwise>
 	</choose>
 	#{inputfee}, 
-	#{day} 
+	#{day}, 
+	'N', 
+	'N'
 	)
 </insert>
 
@@ -218,5 +265,69 @@ HAVING DAY = #{day}
     where myid = (select myid from HOME_MEMBER where name = #{name}) 
     and day = #{day}
 </select>
+
+<select id="getNoConfirmData" resultType="com.mkw.a.domain.HomeTaxVo">
+select  TAXSEQ AS seq,	
+		MYID,
+		INPUTFEE,
+		INSERTDAY,
+		DAY,
+		HTCUSTOMER1,
+		DEL_YN,
+		CONFIRM_YN
+from hometax_insert
+where confirm_yn = 'N'
+AND DEL_YN = 'N'
+</select>
+
+<update id="confirmTaxAf" parameterType="hashmap">
+/*HomeTaxMapper.confirmTaxAf*/ 
+update HOMETAX_INSERT 
+<set>
+confirm_yn = 'Y'
+</set>
+where TAXSEQ = #{taxseq}
+and INSERTDAY = #{insertday}
+and myid = #{myid}
+and day = #{day}
+and confirm_yn = 'N'
+</update>
+
+<update id="recallTaxAf" parameterType="hashmap">
+/*HomeTaxMapper.recallTaxAf*/ 
+update HOMETAX_INSERT 
+set del_yn = 'Y'
+where TAXSEQ = #{taxseq}
+and INSERTDAY = #{insertday}
+and myid = #{myid}
+and day = #{day}
+and confirm_yn = 'N'
+</update>
+
+<insert id="inputTaxMaster" parameterType="com.mkw.a.domain.HomeTaxVo">
+/*HomeTaxMapper.inputTaxMaster*/ 
+UPDATE HOMETAX_MASTER 
+<set>
+INPUTFEE = INPUTFEE + #{inputfee}, 
+RESTFEE = case 
+               when (  RESTFEE - #{inputfee} )>=0 then RESTFEE - #{inputfee}
+      <![CDATA[when (  RESTFEE - #{inputfee} )<0 then 0	]]>
+             end,
+OVERFEE = case 
+            when (  #{inputfee} - RESTFEE )>=0 then (#{inputfee} - RESTFEE)
+      <![CDATA[when (  #{inputfee} - RESTFEE )<0 then 0 ]]>
+          end
+
+<choose>
+	<when test='myid == "admin" and myid != "" and myid != null'>
+		WHERE DAY = #{day} AND MYID = (SELECT MYID FROM HOME_MEMBER WHERE NAME = #{name})
+	</when>
+	<otherwise>
+		WHERE DAY = #{day} AND MYID = #{myid}
+	</otherwise>
+</choose>
+</set>
+</insert>
+
 
 </mapper>

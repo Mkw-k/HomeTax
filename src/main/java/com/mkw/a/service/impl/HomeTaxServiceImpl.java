@@ -108,7 +108,7 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 		
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			e.printStackTrace();
 			System.out.println("**********************");
 			System.out.println("예외발생 롤백처리진행!");
 			PrintWriter pw = response.getWriter();
@@ -170,7 +170,7 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 		return resultMap;
 	}
 
-	//R 전체 합산 데이터 가져오기 
+	//R 전체 합산 데이터 가져오기
 	@Override
 	public HomeTaxVo getTotalData(String day) {
 		return hometaxdao.getTotalData(day);
@@ -191,6 +191,60 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 	//납부 상세내역에서 해당월을 클릭할 경우 해당월의 모든 납부내역을 레이어팝업창에서 확일할수 있는 기능 
 	public List<HashMap<String, Object>> getMonthInputListData(HashMap<String, Object> param) {
 		return hometaxdao.getMonthInputListData(param);
+	}
+
+
+	public HashMap<String, Object> inputTempTax(HomeTaxVo home) {
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		boolean b = false;
+		
+		b = hometaxdao.inputTempTax(home);
+		
+		if(b) {
+			logger.debug("데이터 확인 >>> seq: " + home.getSEQ() + "납부완료");
+			resultMap.put("resultMsg", "납부성공!");
+		}else {
+			logger.debug("데이터 확인 >>> seq: " + home.getSEQ() + "납부실패");
+			resultMap.put("resultMsg", "납부실패!");
+		}
+		
+		return resultMap;
+	}
+
+
+	public List<HomeTaxVo> getNoConfirmData() {
+		return hometaxdao.getNoConfirmData();
+	}
+
+
+	public HashMap<String, Object> confirmTaxAf(HashMap<String, Object> param) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		boolean b  = hometaxdao.confirmTaxAf(param);
+		
+		boolean b1 = hometaxdao.inputTaxMaster(param);
+		
+		if(b && b1) {
+			resultMap.put("resultMsg", "Y");
+		}else {
+			resultMap.put("resultMsg", "N");
+		}
+		
+		return resultMap;
+	}
+
+
+	public HashMap<String, Object> recallTaxAf(HashMap<String, Object> param) {
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		boolean b  = hometaxdao.recallTaxAf(param);
+		
+		if(b) {
+		}else {
+			resultMap.put("resultMsg", "N");
+		}
+		
+		return resultMap;
 	}
 	
 	

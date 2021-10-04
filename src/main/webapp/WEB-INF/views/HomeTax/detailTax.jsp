@@ -59,12 +59,14 @@ String day = vo.getDay();
                   <th scope="col">납부금액</th>
                   <th scope="col">잔여금액</th>
                   <th scope="col">완납여부</th>
+                  <th scope="col">납부승인</th>
                 </tr>
               </thead>
               
             </table>
             
             <button onclick="inputModal()">납부하기</button>
+            <p style="color: red;">*최종납부승인은 관리자가 납부금액을 확인한 후 납부내역이 일치할시 승인하여 최종월세 납부를 승인한 내역을 확인하는 부분입니다.</p>
           </div>
         </div>
       </div>
@@ -198,6 +200,18 @@ function getDetailData( day ){
 	                   }else{
 	                	   app+= "<td>미납</td>";
 	                   }
+                	   
+                	   
+                	   if(voList[i].restfee == voList[i].restfeemaster 
+                			   && voList[i].inputfee == voList[i].inputfeemaster 
+                			   && voList[i].inputfee != '0'){
+                		   app += "<td>"+"Y"+"</td>";
+                	   }else if(voList[i].inputfee == '0'){
+                		   app += "<td>"+"None"+"</td>";   
+                	   }else{
+                		   app += "<td>"+"N"+"</td>";
+                	   }
+                	   
                 	 
                    }else{
                 	   app += "<td colspan='10'>"

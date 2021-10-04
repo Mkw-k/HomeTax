@@ -13,11 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mkw.a.domain.HomeTaxVo;
@@ -150,11 +152,65 @@ public class HomeTaxController {
 		pw.flush();
 	}
 	
+	
+	@ResponseBody
+	@RequestMapping(value = "getNoConfirmData", method = RequestMethod.GET)
+	public List<HomeTaxVo> getNoConfirmData(){
+		
+		return homeTaxService.getNoConfirmData();
+	}
+	
+	@ResponseBody 
+	@RequestMapping(value = "confirmTaxAf", method = RequestMethod.POST)
+	public HashMap<String, Object> confirmTaxAf(@RequestBody HashMap<String, Object> param) throws IOException {
+		System.out.println("*******confirmTaxAf 파라미터확인*******");
+		System.out.println(param.toString());
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = homeTaxService.confirmTaxAf(param);
+		
+		return resultMap;
+	}
+	
+	/* get 방식으로 쿼리스트링 받을때 requestparam을 쓰면 해시맵에 데이터를 넣을수 있음 
+	@RequestMapping(value = "confirmTaxAf", method = RequestMethod.GET)
+	public void confirmTaxAf(@RequestParam HashMap<String, Object> param) throws IOException {
+		System.out.println("*******confirmTaxAf 파라미터확인*******");
+		System.out.println(param.toString());
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = homeTaxService.confirmTaxAf(param);
+	}
+	*/
+	
+	@ResponseBody
+	@RequestMapping(value = "recallTaxAfter", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public HashMap<String, Object> recallTaxAfter(@RequestBody HashMap<String, Object> param) throws IOException {
+		System.out.println("*******recallTaxAfter 파라미터확인*******");
+		System.out.println(param.toString());
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		resultMap = homeTaxService.recallTaxAf(param);
+		
+		return resultMap;
+	}
+	
 
 	@RequestMapping(value = "chkTax", method = RequestMethod.GET)
 	public String chkTax(HomeTaxVo home, Model model) {
 		
 		return "HomeTax/chkTax";
+	}
+	
+	@RequestMapping(value = "confirmTax", method = RequestMethod.GET)
+	public String confirmTax(@RequestParam HashMap<String, Object> param, Model model) {
+		
+		logger.debug("아이디 체크 >>>> " + (String)param.get("myid"));
+		
+		return "HomeTax/confirmTax";
 	}
 	
 	

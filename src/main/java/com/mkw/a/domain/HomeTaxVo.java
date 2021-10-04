@@ -20,8 +20,29 @@ public class HomeTaxVo implements Serializable{
 	private int seq;
 	private int overfee;
 	private String htcustome;
+	private String restfeemaster;
+	private String inputfeemaster;
+	private String insertday;
 	
 	
+	public String getInsertday() {
+		return insertday;
+	}
+	public void setInsertday(String insertday) {
+		this.insertday = insertday;
+	}
+	public String getRestfeemaster() {
+		return restfeemaster;
+	}
+	public void setRestfeemaster(String restfeemaster) {
+		this.restfeemaster = restfeemaster;
+	}
+	public String getInputfeemaster() {
+		return inputfeemaster;
+	}
+	public void setInputfeemaster(String inputfeemaster) {
+		this.inputfeemaster = inputfeemaster;
+	}
 	public String getHtcustome() {
 		return htcustome;
 	}

@@ -271,7 +271,9 @@ request.setCharacterEncoding("UTF-8");
         });
         
         
-  	
+  		
+        
+        /*
         let skBtn = document.getElementById('_skTest');
         skBtn.addEventListener('click', function() {
             alert('_skTest 클릭');
@@ -294,7 +296,7 @@ request.setCharacterEncoding("UTF-8");
             console.log(arr);
             
             
-            //alert('데이터취득');
+            alert('데이터취득');
        	   $.ajax({
        	      url : "./skTest",
        	      type : "post",
@@ -302,8 +304,8 @@ request.setCharacterEncoding("UTF-8");
        	   	  contentType: 'application/json; charset=utf-8',
        	      data: JSON.stringify(arr),
        	      success:function(list){
-       	         //alert('success');
-       	         //alert(list);
+       	         alert('success');
+       	         alert(list);
 
        	      },
        	      error:function(){
@@ -314,6 +316,7 @@ request.setCharacterEncoding("UTF-8");
             
   	  		
         });
+        */
     
      
     //현재 년 월을 불러와서 셋팅 
