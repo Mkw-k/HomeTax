@@ -1,26 +1,21 @@
 package com.mkw.a.service.impl;
 
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.junit.platform.commons.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import com.mkw.a.controller.HomeTaxController;
 import com.mkw.a.domain.HomeTaxVo;
 import com.mkw.a.domain.MemberVo;
 import com.mkw.a.mapper.HomeTaxDao;
@@ -41,6 +36,7 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 	
 	public HomeTaxServiceImpl(DiscountService discountService) {
 		this.discountService = discountService;
+		
 	}
 	
 
@@ -72,6 +68,8 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 		List<MemberVo> MemberList = memberservice.getMemberList();
 		
 		try {
+			
+			boolean b1 = hometaxdao.create_hometax_payment_chk(day);
 		
 			for (MemberVo memberVo : MemberList) {
 				
@@ -90,7 +88,9 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 					//System.out.println(resultTax.toString());
 					b = hometaxdao.createTax(resultTax);
 					
-					if(b) {
+					
+					
+					if(b && b1) {
 						System.out.println(memberVo.getName()+"님의 월세정보 등록성공");
 					}else {
 						System.out.println(memberVo.getName()+"님의 월세정보 등록실패");
@@ -101,6 +101,8 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 			}
 			System.out.println("**********************");
 			System.out.println("등록 성공 DB 커밋!");
+			
+			
 			PrintWriter pw = response.getWriter();
 			pw.println("<script>alert('월세 등록 성공'); "
 					+ "location.href='home';</script>");
@@ -111,6 +113,8 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 			e.printStackTrace();
 			System.out.println("**********************");
 			System.out.println("예외발생 롤백처리진행!");
+			
+			
 			PrintWriter pw = response.getWriter();
 			pw.println("<script>alert('월세 등록 실패'); "
 					+ "location.href='home';</script>");
@@ -246,6 +250,56 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 		
 		return resultMap;
 	}
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.DEFAULT, timeout = 10)
+	public HashMap<String, Object> inputDues(HashMap<String, Object> param) {
+		logger.debug("HomeTaxServiceImpl >>> inputDues >>> param 확인 >>> " + param);
+		
+		HashMap<String, Object> dueParam = new HashMap<String, Object>();
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+
+		String bValue =  StringUtils.nullSafeToString(param.get("bValue").toString());
+		String isChecked = StringUtils.nullSafeToString(param.get("isChecked").toString());
+		String bday = StringUtils.nullSafeToString(param.get("bday").toString()); 
+		
+		if(isChecked.equals("true") && isChecked != null && isChecked != "") {
+			isChecked = "Y";
+		}else {
+			isChecked = "N";
+		}
+		
+		logger.debug("bValue >>> " + bValue);
+		logger.debug("isChecked >>> " + isChecked);
+		logger.debug("bday >>> " + bday);
+		
+		dueParam.put(bValue, isChecked);
+		dueParam.put("bday", bday);
+		
+		boolean b = hometaxdao.payment_chk_update(dueParam);
+		
+		if(b) {
+			resultMap.put("resultMsg", "Y");
+		}else {
+			resultMap.put("resultMsg", "N");
+		}
+		
+		return resultMap;
+	}
+
+	
+	@Override
+	public HashMap<String, Object> getDuesStatus(HashMap<String, Object> param) {
+
+		logger.debug("HomeTaxServiceImpl >>> getDuesStatus");
+		logger.debug("param >>> " + param);
+		
+		HashMap<String, Object> resultMap = hometaxdao.getDuesStatus(param);
+		
+		return resultMap;
+	}
+	
+	
 	
 	
 	

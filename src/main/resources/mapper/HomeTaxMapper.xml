@@ -79,8 +79,11 @@
 		<if test='htcustome != null and htcustome != ""'>
 			,#{htcustome, jdbcType=VARCHAR}
 		</if>
-		)
-		select * from HOMETAX_MASTER
+	)
+
+	 
+	select * from
+	DUAL
 </insert>
 
 <!-- 모든 월세 리스트 가지고 오기 : 메인페이지용 -->
@@ -328,6 +331,67 @@ OVERFEE = case
 </choose>
 </set>
 </insert>
+
+<!-- 월세 및 공과금 주인 및 공공기관에 납부했는지를 체크해주는 테이블 데이터 생성 2109 2101 -->
+<insert id="create_hometax_payment_chk" parameterType="String">
+/*HomeTaxMapper.create_hometax_payment_chk*/
+INSERT INTO HOMETAX_PAYMENT_CHK
+	(
+	BDAY, 
+	BWATER, 
+	BELEC, 
+	BGAS, 
+	BINTER,
+	BMANAGERFEE,
+	BMONTHFEE, 
+	BTOTAL, 
+	DEL, 
+	HTCUSTOME1
+	)
+VALUES(
+	#{day}, 
+	'N',
+	'N',
+	'N',
+	'N',
+	'N',
+	'N',
+	'N',
+	'N',
+	''
+	)
+</insert>
+
+<update id="payment_chk_update" parameterType="hashmap">
+update HOMETAX_PAYMENT_CHK
+<set>
+	<if test = 'BWATER != null and BWATER != ""'>
+		BWATER = #{BWATER}
+	</if>
+	<if test = 'BELEC != null and BELEC != ""'>
+		BELEC = #{BELEC}
+	</if>
+	<if test = 'BGAS != null and BGAS != ""'>
+		BGAS = #{BGAS}
+	</if>
+	<if test = 'BINTER != null and BINTER != ""'>
+		BINTER = #{BINTER}
+	</if>
+	<if test = 'BMANAGERFEE != null and BMANAGERFEE != ""'>
+		BMANAGERFEE = #{BMANAGERFEE}
+	</if>
+	<if test = 'BMONTHFEE != null and BMONTHFEE != ""'>
+		BMONTHFEE = #{BMONTHFEE}
+	</if>
+</set>
+where bday = #{bday}
+</update>
+
+<select id="getDuesStatus" parameterType="hashmap" resultType="hashmap">
+select * 
+from HOMETAX_PAYMENT_CHK 
+where bday = #{bday}
+</select>
 
 
 </mapper>

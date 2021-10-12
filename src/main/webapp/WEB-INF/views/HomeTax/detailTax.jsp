@@ -67,6 +67,41 @@ String day = vo.getDay();
             
             <button onclick="inputModal()">납부하기</button>
             <p style="color: red;">*최종납부승인은 관리자가 납부금액을 확인한 후 납부내역이 일치할시 승인하여 최종월세 납부를 승인한 내역을 확인하는 부분입니다.</p>
+            <p>
+          	<span id="payment_chk_tax_day"></span>
+          	&nbsp;&nbsp;
+          	<c:choose>
+          		<c:when test="${login.myid == 'admin' && login.myid != null && login.myid != ''}">
+          			<input type="checkbox" class="dues_payment_btn" id="BWATER" value="BWATER" onchange="input_dues_check_box_click()">수도세 
+		          	<input type="checkbox" class="dues_payment_btn" id="BELEC" value="BELEC" onchange="input_dues_check_box_click()">전기세 
+		          	<input type="checkbox" class="dues_payment_btn" id="BGAS" value="BGAS" onchange="input_dues_check_box_click()">가스비 
+		          	<input type="checkbox" class="dues_payment_btn" id="BINTER" value="BINTER" onchange="input_dues_check_box_click()">인터넷 
+		          	<input type="checkbox" class="dues_payment_btn" id="BMANAGE" value="BMANAGE" onchange="input_dues_check_box_click()">관리비 
+		          	<input type="checkbox" class="dues_payment_btn" id="BMONTH" value="BMONTH" onchange="input_dues_check_box_click()">월세 
+          		</c:when>
+          		<c:otherwise>
+          			<span>
+          			수도세 : <span id="water">Y</span>
+          			</span>
+          			<span>
+          			전기세 : <span id="elec">Y</span>
+          			</span>
+          			<span>
+          			가스비 : <span id="gas">Y</span>
+          			</span>
+          			<span>
+          			인터넷 : <span id="inter">Y</span>
+          			</span>
+          			<span>
+          			관리비 : <span id="manage">Y</span>
+          			</span>
+          			<span>
+          			월세 : <span id="month">Y</span>
+          			</span>
+          		</c:otherwise>	
+          	</c:choose>
+          	
+          </p>
           </div>
         </div>
       </div>
@@ -152,11 +187,115 @@ function set_admin_modal_selectbox_data() {
 	
 }
 
+//관리자가 공과금 납입여부 확인해주는 체크박스 클릭시 
+function input_dues_check_box_click() {
+	console.log('클릭됨');
+	console.log(event.target.checked);
+	console.log(event.target.defaultValue);
+	
+	var isChecked = event.target.checked;	//체크박스 체크여부확인
+	var bValue = event.target.defaultValue;	//체크된건지 체크해제된건지
+	var text_day = $('#payment_chk_tax_day').text();
+	text_day = text_day.substr(0, 2) + text_day.substr(3, 2);
+	
+	console.log('bday : ' + text_day);
+	
+	var param = {
+			bValue : bValue, 
+			isChecked : isChecked,	
+			bday : text_day,
+	};
+	
+	 $.ajax({
+	      url : "./inputDues",
+	      type : "post",
+	      data:JSON.stringify(param),
+	      dataType:"json",
+	  	  contentType : "application/json;charset=UTF-8",
+	      success:function(data){
+	    	  console.log('업데이트성공');
+	    	  console.log(data);
+	           },//success
+	      error: function() {
+			console.log('아작스 실패');
+		}
+	   });//ajax
+	
+}
+
+getDuesStatus();
+function getDuesStatus() {
+	console.log('getDuesStatus 체크체크 !!');
+	
+	var text_day = $('#payment_chk_tax_day').text();
+	text_day = text_day.substr(0, 2) + text_day.substr(3, 2);
+	
+	console.log("day chk : " + text_day);
+	
+	var param = {
+			bday : text_day,			
+	};
+	
+	$.ajax({
+	      url : "./getDuesStatus",
+	      type : "post",
+	      data:JSON.stringify(param),
+	      dataType:"json",
+	  	  contentType : "application/json;charset=UTF-8",
+	      success:function(data){
+	    	  console.log('공동납부 상태확인 !!!');
+	    	  console.log(data);
+	    	  
+	    	  if(data.BELEC == "Y"){
+	    		  $("input:checkbox[id='BELEC']").prop("checked", true);
+	    	  }else{
+	    		  $("input:checkbox[id='BELEC']").prop("checked", false);
+	    	  }
+	    	  
+	    	  if(data.BGAS == "Y"){
+	    		  $("input:checkbox[id='BGAS']").prop("checked", true);
+	    	  }else{
+	    		  $("input:checkbox[id='BGAS']").prop("checked", false);
+	    	  }
+	    	  
+	    	  if(data.BINTER == "Y"){
+	    		  $("input:checkbox[id='BINTER']").prop("checked", true);
+	    	  }else{
+	    		  $("input:checkbox[id='BINTER']").prop("checked", false);
+	    	  }
+	    	  
+	    	  if(data.BMANAGERFEE == "Y"){
+	    		  $("input:checkbox[id='BMANAGERFEE']").prop("checked", true);
+	    	  }else{
+	    		  $("input:checkbox[id='BMANAGERFEE']").prop("checked", false);
+	    	  }
+	    	  
+	    	  if(data.BMONTHFEE == "Y"){
+	    		  $("input:checkbox[id='BMONTHFEE']").prop("checked", true);
+	    	  }else{
+	    		  $("input:checkbox[id='BMONTHFEE']").prop("checked", false);
+	    	  }
+	    	  
+	    	  if(data.BWATER == "Y"){
+	    		  $("input:checkbox[id='BWATER']").prop("checked", true);
+	    	  }else{
+	    		  $("input:checkbox[id='BWATER']").prop("checked", false);
+	    	  }
+	           },//success
+	      error: function() {
+			alert('아작스 실패');
+		}
+	   });//ajax
+	   
+}
+
 //월세 리스트 가져오는 함수 
 function getDetailData( day ){
 	var myid = '<c:out value="${login.myid}"/>';
 	
 	console.log('ajax day 확인 : '+day);
+	
+	$('#payment_chk_tax_day').text(day.substr(0, 2) + "년" + day.substr(2, 2) + "월");
 	
    //alert('데이터취득');
    $.ajax({
@@ -273,6 +412,7 @@ function prev() {
 	
 	day = year.toString() + month.toString();
 	getDetailData(day);
+	getDuesStatus();
 }
  	
 //오른쪽 화살표 클릭시 	
@@ -314,6 +454,7 @@ function next() {
 	
 	day = year.toString() + month.toString();
 	getDetailData(day);
+	getDuesStatus();
 }
 
 

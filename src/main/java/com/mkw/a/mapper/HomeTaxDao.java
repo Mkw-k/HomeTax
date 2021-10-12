@@ -33,6 +33,12 @@ public interface HomeTaxDao {
 
 	boolean inputTaxMaster(HashMap<String, Object> param);
 
-	boolean recallTaxAf(HashMap<String, Object> param);  
+	boolean recallTaxAf(HashMap<String, Object> param);
+
+	boolean create_hometax_payment_chk(String day);
+
+	boolean payment_chk_update(HashMap<String, Object> dueParam);
+
+	HashMap<String, Object> getDuesStatus(HashMap<String, Object> param);  
 
 }

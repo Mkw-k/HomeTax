@@ -235,4 +235,25 @@ public class HomeTaxController {
 		return list;
 	}
 	
+	@ResponseBody
+	@RequestMapping(value = "inputDues", method = RequestMethod.POST)
+	public HashMap<String, Object> inputDues(@RequestBody HashMap<String, Object> param) {
+		
+		logger.debug("HomeTaxController >>>> inputDues >>>>  param 확인 >>>>" + param);
+		
+		HashMap<String, Object> result = homeTaxService.inputDues(param);
+		
+		return result;
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "getDuesStatus", method = RequestMethod.POST)
+	public HashMap<String, Object> getDuesStatus(@RequestBody HashMap<String, Object> param) {
+			
+		HashMap<String, Object> result = homeTaxService.getDuesStatus(param);
+		
+		return result;
+	}
+	
 }

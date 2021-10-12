@@ -27,4 +27,8 @@ public interface HomeTaxService {
 	
 	public List<HashMap<String, Object>> getMonthInputListData(HashMap<String, Object> param);
 
+	HashMap<String, Object> inputDues(HashMap<String, Object> param);
+
+	HashMap<String, Object> getDuesStatus(HashMap<String, Object> param);
+
 }
