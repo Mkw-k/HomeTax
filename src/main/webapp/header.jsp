@@ -19,7 +19,7 @@
           <li class="nav-item"> <a class="nav-link" href="toCreateTax">월세입력</a> </li>
         </c:if>
         
-		<li class="nav-item"> <a class="nav-link" href="javascript:void(0)" id="_analysisTax">월세분석</a> </li>
+		<li class="nav-item"> <a class="nav-link" href="HomeTax/Graph" id="_analysisTax">월세분석</a> </li>
 		<li class="nav-item"> <a class="nav-link" id="_conformTax"  href="confirmTax?myid=${login.myid}">월세납부확인및승인</a> </li>
 		<!-- <li class="nav-item"> <a class="nav-link" href="javascript:void(0)" id="_skTest">업로드테스트</a> </li> -->
 		

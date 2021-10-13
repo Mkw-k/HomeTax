@@ -298,6 +298,12 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 		
 		return resultMap;
 	}
+
+
+	public ArrayList<HashMap<String, Object>> getTaxGraphData() {
+		
+		return hometaxdao.getTaxGraphData();
+	}
 	
 	
 	

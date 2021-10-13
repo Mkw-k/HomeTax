@@ -393,5 +393,12 @@ from HOMETAX_PAYMENT_CHK
 where bday = #{bday}
 </select>
 
+<select id="getTaxGraphData" resultType="hashmap">
+SELECT DAY, SUM(WATER), SUM(ELEC), SUM(GAS), SUM(INTER), SUM(MANAGERFEE), SUM(MONTHFEE)
+FROM HOMETAX_MASTER
+GROUP BY DAY
+ORDER BY DAY ASC
+</select>
+
 
 </mapper>

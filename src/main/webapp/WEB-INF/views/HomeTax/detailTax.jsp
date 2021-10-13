@@ -76,8 +76,8 @@ String day = vo.getDay();
 		          	<input type="checkbox" class="dues_payment_btn" id="BELEC" value="BELEC" onchange="input_dues_check_box_click()">전기세 
 		          	<input type="checkbox" class="dues_payment_btn" id="BGAS" value="BGAS" onchange="input_dues_check_box_click()">가스비 
 		          	<input type="checkbox" class="dues_payment_btn" id="BINTER" value="BINTER" onchange="input_dues_check_box_click()">인터넷 
-		          	<input type="checkbox" class="dues_payment_btn" id="BMANAGE" value="BMANAGE" onchange="input_dues_check_box_click()">관리비 
-		          	<input type="checkbox" class="dues_payment_btn" id="BMONTH" value="BMONTH" onchange="input_dues_check_box_click()">월세 
+		          	<input type="checkbox" class="dues_payment_btn" id="BMANAGERFEE" value="BMANAGERFEE" onchange="input_dues_check_box_click()">관리비 
+		          	<input type="checkbox" class="dues_payment_btn" id="BMONTHFEE" value="BMONTHFEE" onchange="input_dues_check_box_click()">월세 
           		</c:when>
           		<c:otherwise>
           			<span>
@@ -218,7 +218,7 @@ function input_dues_check_box_click() {
 	           },//success
 	      error: function() {
 			console.log('아작스 실패');
-		}
+		} 
 	   });//ajax
 	
 }
@@ -248,6 +248,7 @@ function getDuesStatus() {
 	    	  
 	    	  if(data.BELEC == "Y"){
 	    		  $("input:checkbox[id='BELEC']").prop("checked", true);
+	    		  
 	    	  }else{
 	    		  $("input:checkbox[id='BELEC']").prop("checked", false);
 	    	  }

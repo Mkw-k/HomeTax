@@ -39,6 +39,8 @@ public interface HomeTaxDao {
 
 	boolean payment_chk_update(HashMap<String, Object> dueParam);
 
-	HashMap<String, Object> getDuesStatus(HashMap<String, Object> param);  
+	HashMap<String, Object> getDuesStatus(HashMap<String, Object> param);
+
+	ArrayList<HashMap<String, Object>> getTaxGraphData();  
 
 }

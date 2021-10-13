@@ -213,6 +213,18 @@ public class HomeTaxController {
 		return "HomeTax/confirmTax";
 	}
 	
+	@RequestMapping(value = "HomeTax/Graph", method = RequestMethod.GET)
+	public String taxGraph(HomeTaxVo home, Model model) {
+		
+		logger.debug("HomeTaxController >>> taxGraph");
+		
+		ArrayList<HashMap<String, Object>> resultMap = new ArrayList<HashMap<String,Object>>();
+		resultMap = homeTaxService.getTaxGraphData();
+		
+		model.addAttribute("resultMap", resultMap);
+		
+		return "HomeTax/graphTax";
+	}
 	
 	@ResponseBody
 	@RequestMapping(value = "chkTaxAf", method = RequestMethod.GET)
