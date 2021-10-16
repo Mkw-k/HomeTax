@@ -41,6 +41,6 @@ public interface HomeTaxDao {
 
 	HashMap<String, Object> getDuesStatus(HashMap<String, Object> param);
 
-	ArrayList<HashMap<String, Object>> getTaxGraphData();  
+	ArrayList<HashMap<String, Object>> getMonthTaxListData();  
 
 }

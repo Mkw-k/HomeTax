@@ -300,9 +300,9 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 	}
 
 
-	public ArrayList<HashMap<String, Object>> getTaxGraphData() {
-		
-		return hometaxdao.getTaxGraphData();
+	public ArrayList<HashMap<String, Object>> getMonthTaxListData() {
+
+		return hometaxdao.getMonthTaxListData();
 	}
 	
 	

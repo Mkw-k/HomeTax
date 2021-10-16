@@ -213,18 +213,22 @@ public class HomeTaxController {
 		return "HomeTax/confirmTax";
 	}
 	
+	
 	@RequestMapping(value = "HomeTax/Graph", method = RequestMethod.GET)
 	public String taxGraph(HomeTaxVo home, Model model) {
 		
 		logger.debug("HomeTaxController >>> taxGraph");
 		
-		ArrayList<HashMap<String, Object>> resultMap = new ArrayList<HashMap<String,Object>>();
-		resultMap = homeTaxService.getTaxGraphData();
-		
-		model.addAttribute("resultMap", resultMap);
-		
+		/*
+		 * ArrayList<HashMap<String, Object>> resultMap = new
+		 * ArrayList<HashMap<String,Object>>(); resultMap =
+		 * homeTaxService.getMonthTaxListData();
+		 * 
+		 * model.addAttribute("resultMap", resultMap);
+		 */
 		return "HomeTax/graphTax";
 	}
+	
 	
 	@ResponseBody
 	@RequestMapping(value = "chkTaxAf", method = RequestMethod.GET)
@@ -266,6 +270,19 @@ public class HomeTaxController {
 		HashMap<String, Object> result = homeTaxService.getDuesStatus(param);
 		
 		return result;
+	}
+	
+	
+	//기존에 HomeTax/Graph로 타고 들어온 페이지에서 getMonthTaxListData로 가면 브라우저 주소는 HomeTax/getMonthTaxListData가 된다 
+	@ResponseBody    
+	@RequestMapping(value = "HomeTax/getMonthTaxListData", method = RequestMethod.GET)
+	public List<HashMap<String, Object>> getMonthTaxListData() {
+		
+		logger.debug("HomeTaxController >>> getMonthTaxListData");
+		
+		List<HashMap<String, Object>> resultMapList = homeTaxService.getMonthTaxListData();
+		
+		return resultMapList;
 	}
 	
 }
