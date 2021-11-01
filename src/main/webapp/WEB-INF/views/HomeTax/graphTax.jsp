@@ -13,14 +13,13 @@
 </head>
 
 <style>
-.chart_box_area {
-	width: 400 px !important;
-	height: 400 px !important;
-}
-
 #graph_container {
 	margin-top: 8px;
 	margin-bottom: 8px;
+}
+
+#line-chart{
+	margin: 0 auto !important;
 }
 </style>
 <body>
@@ -29,24 +28,25 @@
 <c:import url="/header.jsp" charEncoding="utf-8"/> 
 
 <div id="graph_container">
-<div>
-	<select id="select_content" onchange="createChart()">
-		<option value="WATER">수도세</option>
-		<option value="ELEC">전기세</option>
-		<option value="GAS">가스비</option>
-		<option value="MANAGERFEE">관리비</option>
-		<option value="INTER">인터넷</option>
-		<option value="MONTHFEE">월세</option>
-	</select>
-	<select>
-		<option>1</option>
-		<option>2</option>
-		<option>3</option>
-	</select>
-</div>
-<div id="chart_box" class="chart_box_area">
-<canvas id="line-chart" width="300" height="250"></canvas>
-</div>
+	<div>
+		<select id="select_content" onchange="createChart()"  class="form-control selectpicker">
+			<option value="WATER">수도세</option>
+			<option value="ELEC">전기세</option>
+			<option value="GAS">가스비</option>
+			<option value="MANAGERFEE">관리비</option>
+			<option value="INTER">인터넷</option>
+			<option value="MONTHFEE">월세</option>
+		</select>
+		<select class="form-control selectpicker" style="margin-top: 10px; display: none;">
+			<option>1</option>
+			<option>2</option>
+			<option>3</option>
+		</select>
+	</div>
+
+	<div id="chart_box" class="chart_box_area" style="position: relative; height:80vh; width:100vw">
+		<canvas id="line-chart"></canvas>
+	</div>
 </div>
 
  <c:import url="/footer.jsp" charEncoding="utf-8"/> 
@@ -172,11 +172,20 @@ function createChart() {
 	    		    ]
 	    		  },
 	    		  options: {
-	    		    title: {
-	    		      display: true,
-	    		      text: '연도별 월세 분석'
-	    		    }
-	    		  }
+	    				//responsive: false,
+	    				maintainAspectRatio: false,
+	    				scales: {
+	    					yAxes: [{
+	    						ticks: {
+	    							beginAtZero: true
+	    						}
+	    					}]
+	    				},
+	    				title: {
+	  	    		      display: true,
+	  	    		      text: '연도별 월세 분석'
+	  	    		    }
+	    			}
 	    		});
 	    	  
 	    	  

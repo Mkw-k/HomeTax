@@ -244,6 +244,7 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 		boolean b  = hometaxdao.recallTaxAf(param);
 		
 		if(b) {
+			resultMap.put("resultMsg", "Y");
 		}else {
 			resultMap.put("resultMsg", "N");
 		}

@@ -2,6 +2,9 @@
  * 공통 js 함수 보관용 js파일 
  */
  
+	function sleep(ms) {
+	  return new Promise((r) => setTimeout(r, ms));
+	}
  
  
   //현재 년 월을 불러와서 셋팅 
@@ -218,5 +221,7 @@ function getGeoDataError(){
 }
 
 navigator.geolocation.getCurrentPosition(getGeoData, getGeoDataError);
+
+
 
 

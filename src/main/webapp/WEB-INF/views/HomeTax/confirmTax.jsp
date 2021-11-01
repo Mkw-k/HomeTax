@@ -133,13 +133,17 @@ request.setCharacterEncoding("UTF-8");
 		      dataType : "json",
 		      success:function(data){
 		        console.log(data);
+		        
+		        var msg = data.resultMsg === 'Y' ? '납부성공!' : '납부실패!';
+		        alert(msg);
 		      },//success
 		      error : function(){
 				alert('error');
 				}
 		   });//ajax
-	 
-		getNoConfirmData();
+	    
+		 sleep(500).then(() => location.reload());
+		//getNoConfirmData();
 	}
   	
   	function recallTax() {
@@ -173,14 +177,16 @@ request.setCharacterEncoding("UTF-8");
 		      dataType : "json",
 		      success:function(data){
 		        console.log(data);
+		        var msg = data.resultMsg === 'Y' ? '반려성공!' : '반려실패!';
+		        alert(msg);
 		      },//success
 		      error : function(){
 				alert('error');
 				}
 		   });//ajax
 	 
-		
-		getNoConfirmData();
+		 sleep(500).then(() => location.reload());
+		//getNoConfirmData();
   	}
   	
   	

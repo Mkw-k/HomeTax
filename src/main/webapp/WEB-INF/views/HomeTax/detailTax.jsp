@@ -122,9 +122,6 @@ String day = vo.getDay();
           <c:if test="${login.auth == 3}">
           	<p>
           		<select id="memberSelector" onchange="inputMemberSelector()">
-          			<option value="0" id="member1">고명우</option>
-          			<option value="1" id="member2">박남준</option>
-          			<option value="2" id="member3">뀨뀨꺄꺄</option>
           		</select>
           	</p>
           </c:if>
@@ -284,7 +281,7 @@ function getDuesStatus() {
 	    	  }
 	           },//success
 	      error: function() {
-			alert('아작스 실패');
+			console.log('아작스 실패');
 		}
 	   });//ajax
 	   
@@ -308,6 +305,7 @@ function getDetailData( day ){
          //alert(vo);
 
          $(".list_col").remove();
+         $(".popup_col").remove();
          
          if(voList.length === 0){
         	 var app;
@@ -322,9 +320,13 @@ function getDetailData( day ){
 			//alert(val.jobSeq);
             let app = "<tr class= 'list_col'>"
                      +"<th scope='row'>" + i +"</th>";
+            let popApp = "";
                      
+                   //삭제여부(미삭제)일 경우에만 
                    if(voList[i].del==0){
-                	 app +="<td id='_name"+i+"'>"+voList[i].name+"</td>"
+                	 
+                	  //1.메인페이지 셋팅  
+                	  app +="<td id='_name"+i+"'>"+voList[i].name+"</td>"
                 	 	 +"<td>"+threeAddComma(voList[i].water)+"원"+"</td>"
                 	 	 +"<td>"+threeAddComma(voList[i].elec)+"원"+"</td>"
                 	 	 +"<td>"+threeAddComma(voList[i].gas)+"원"+"</td>"
@@ -352,7 +354,10 @@ function getDetailData( day ){
                 		   app += "<td>"+"N"+"</td>";
                 	   }
                 	   
-                	 
+                	   //2.팝업페이지 셋팅
+                	   popApp += '<option class="popup_col" value="'+i+'" id="member'+i+'">'+voList[i].name+'</option>';
+                	   
+                   //삭제일 경우에는 
                    }else{
                 	   app += "<td colspan='10'>"
                 			 +"<font color='#ff0000'>********* 이 글은 존재하지 않거나 작성자에 의해서 삭제되었습니다</font>"
@@ -362,6 +367,7 @@ function getDetailData( day ){
                 app +="</tr>";
                   
 			$("#taxtable").append(app);
+			$("#memberSelector").append(popApp);
          	}
          
       },
