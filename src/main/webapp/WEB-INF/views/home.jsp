@@ -267,7 +267,19 @@ request.setCharacterEncoding("UTF-8");
         let upButton = document.getElementById('_uploadTest');
         upButton.addEventListener('click', function() {
             alert('클릭');
-  	  		location.href = "upload";
+  	  		//location.href = "upload";
+  	  		var url = "./ajaxTest";
+  	  		var type = "post";
+  	  		var param = {
+  	  				name : "mkw", 
+  	  				age : "32", 
+  	  				phone : "123-123",
+  	  		}
+  	  		console.log('파라미터 보내기전 확인');
+  	  		console.log(param);
+  	  		
+  	  		var result = run_ajax(url, type, param);
+  	  		console.log(result);
         });
         
         

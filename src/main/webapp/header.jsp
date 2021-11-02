@@ -11,7 +11,7 @@
           <img alt="" src="https://i1.sndcdn.com/artworks-000055434563-cno6ba-t500x500.jpg" style="height: 50px; width: 50 px;"></img>
           <b>HomeTax</b>
         </a>
-        <ul class="navbar-nav mx-auto">
+        <ul class="navbar-nav mx-auto" id="top_menu_ul">
           <li class="nav-item"> <a class="nav-link"  href="#" onclick="location.href='detailTax?myid=${login.myid}&day='+ now; return false;">상세요금확인/납부</a> </li>
           <li class="nav-item"> <a class="nav-link" href="chkTax?myid=${login.myid}">납부내역</a> </li>
           <li class="nav-item"> <a class="nav-link" href="bbs">문의사항</a> </li>

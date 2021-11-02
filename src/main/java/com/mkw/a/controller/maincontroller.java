@@ -19,9 +19,12 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -341,9 +344,34 @@ public class maincontroller {
 		PrintWriter pw = response.getWriter();
 		
 		pw.println("<script>alert(확인); " +
-				"location.href='home';</script>");
+				"location.href='home';</script>"); 
 		pw.flush();
 		
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="/ajaxTest",method=RequestMethod.POST, produces = "application/json")
+	public HashMap<String, Object> ajaxTest(@RequestBody HashMap<String, Object> param, 
+											@RequestHeader(value ="Accept") String accept,
+											@RequestHeader(value="Accept-Language") String acceptLanguage,
+											@RequestHeader(value="User-Agent", defaultValue="myBrowser") String userAgent,
+											@RequestHeader(value="Host") String host){
+		
+	    System.out.println("Accept: " + accept);
+	    System.out.println("Accept-Language: " + acceptLanguage);
+	    System.out.println("User-Agent: " + userAgent);
+	    System.out.println("Host: " + host);
+
+		logger.debug("maincontroller >>> ajaxTest"); 
+		logger.debug(param.toString());
+		
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		resultMap.put("resultMsg", "Y");
+		resultMap.put("name", param.get("name").toString());
+		resultMap.put("age", param.get("age").toString());
+		resultMap.put("phone", param.get("phone").toString());
+		
+		return resultMap;
 	}
 	
 	

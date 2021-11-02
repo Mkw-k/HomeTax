@@ -2,6 +2,21 @@
  * 공통 js 함수 보관용 js파일 
  */
  
+ 
+ function Mobile(){
+	return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+	
+ }
+	
+if (Mobile()){// 모바일일 경우
+	console.log('모바일임');
+	var app = '<li class="nav-item"> <a class="nav-link" href="home">메인페이지로</a> </li>';
+    $('#top_menu_ul').append(app);
+} else {// 모바일 외
+    console.log('모바일아님');
+}
+
+ 
 	function sleep(ms) {
 	  return new Promise((r) => setTimeout(r, ms));
 	}
@@ -70,71 +85,33 @@ function deleteYearNMonthText(day){
 	 * @return data.result (맵.result)
 	 * </pre>	
 	 */
-	 /*
-	function run_ajax(url, type, param){
-			var deferred = $.Deferred();
-			
-			if(type === 'post'){
-				param = JSON.stringify(param);
-			}
-			
-			$.ajax({
-			url: url,
-			type: type,
-			cache: false,		//요청 페이지의 캐시 여부. false 또는 true
-			dataType: "json",	//서버에서 받아올 데이터를 어떤 형태로 해석할 것인지. xml, json, html, script를 선택할 수 있다.
-			data: param,
-			async: false,
-			//traditional : true,			//true를 주면 배열의 값을 자바단에 넘겨줄수 있게 만든다???
-			contentType: 'application/json; charset=utf-8',
-			success: function(result, textStatus, data) {
-				console.log("결과 : ");
-				console.log(data);
-			}.done(function (result, status, responseObj) {
-
-		        if (!result){    // failed
-					deferred.reject(result, status);
-					return;
-				}
-				//data = JSON.parse(result.sJsonData);
-			
-				data = ( result.sJsonData === null || result.sJsonData === "" ) ? null : JSON.parse(result.sJsonData);
-		
-				deferred.resolve(result, data);
-
-		    }).fail(function (result, status, responseObj) {
-		
-		        deferred.reject(result, status);
-			})
-		
-		});
-	return deferred.promise();
-	//출처: https://shxrecord.tistory.com/108 [첫 발]
-	}
+function run_ajax(url, type, param){
+	var result;
 	
+	// url에 mehod 방식에 맞게 데이터를 보냄.
+	var request = $.ajax({
+	    url: url,
+	    method: type,
+	    data: JSON.stringify(param),
+	    dataType : 'json',
+	    contentType: "application/json; charset=utf-8",
+	    async: false ,
+	});
+	// 성공 시, 받아온 데이터가 msg에 담김
+	request.done(function(msg) {
+	    console.log("ajax completed: " + msg)
+	    console.log(msg); 
+	    result = msg;
+	});
+	// 실패 시, 결과 출력
+	request.fail(function(jqXHR, textStatus) {
+	    console.log('ajax fail'); 
+	    console.log("ajax failed: " + textStatus)
+	});
 	
-	function run_get_ajax(url, type, param){
-		var data;
-		
-		$.ajax({
-		type : type,
-		data : param,
-		url : url,
-		aysnc : false,
-		success:function(data){
-			console.log('내부확인');
-			console.log(data);
-			data = data;
-		}, 
-		error:function(){
-			alert('에러발생');
-			data = data;
-		} 
-		});
-		
-		return data;
-	}
-	*/
+	return result;
+}
+/*
 function run_ajax(url, type, data){
 	var return_data;
 	$.ajax({
@@ -157,7 +134,7 @@ function run_ajax(url, type, data){
 		
 	return return_data;
 } 
-
+*/
 	
 	
 	//YYYYMMDDHHMMSS 년 월 일 시 분 초 추가
