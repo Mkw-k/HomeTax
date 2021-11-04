@@ -81,22 +81,22 @@ String day = vo.getDay();
           		</c:when>
           		<c:otherwise>
           			<span>
-          			수도세 : <span id="water">Y</span>
+          			수도세 : <span id="water">None</span>
           			</span>
           			<span>
-          			전기세 : <span id="elec">Y</span>
+          			전기세 : <span id="elec">None</span>
           			</span>
           			<span>
-          			가스비 : <span id="gas">Y</span>
+          			가스비 : <span id="gas">None</span>
           			</span>
           			<span>
-          			인터넷 : <span id="inter">Y</span>
+          			인터넷 : <span id="inter">None</span>
           			</span>
           			<span>
-          			관리비 : <span id="manage">Y</span>
+          			관리비 : <span id="manage">None</span>
           			</span>
           			<span>
-          			월세 : <span id="month">Y</span>
+          			월세 : <span id="month">None</span>
           			</span>
           		</c:otherwise>	
           	</c:choose>
@@ -185,6 +185,7 @@ function set_admin_modal_selectbox_data() {
 }
 
 //관리자가 공과금 납입여부 확인해주는 체크박스 클릭시 
+//관리자 기능 : 공과금 및 월세 납입 체크 
 function input_dues_check_box_click() {
 	console.log('클릭됨');
 	console.log(event.target.checked);
@@ -245,40 +246,54 @@ function getDuesStatus() {
 	    	  
 	    	  if(data.BELEC == "Y"){
 	    		  $("input:checkbox[id='BELEC']").prop("checked", true);
+	    		  $('#water').text('Y');
 	    		  
-	    	  }else{
+	    	  }else if(data.BELEC == "N"){
 	    		  $("input:checkbox[id='BELEC']").prop("checked", false);
+	    		  $('#water').text('N');
 	    	  }
 	    	  
 	    	  if(data.BGAS == "Y"){
 	    		  $("input:checkbox[id='BGAS']").prop("checked", true);
-	    	  }else{
+	    		  $('#gas').text('Y');
+	    	  }else if(data.BGAS == "N"){
 	    		  $("input:checkbox[id='BGAS']").prop("checked", false);
+	    		  $('#gas').text('N');
 	    	  }
 	    	  
 	    	  if(data.BINTER == "Y"){
 	    		  $("input:checkbox[id='BINTER']").prop("checked", true);
-	    	  }else{
+	    		  $('#inter').text('Y');
+	    	  }else if(data.BINTER == "N"){
 	    		  $("input:checkbox[id='BINTER']").prop("checked", false);
+	    		  $('#inter').text('N');
 	    	  }
 	    	  
 	    	  if(data.BMANAGERFEE == "Y"){
 	    		  $("input:checkbox[id='BMANAGERFEE']").prop("checked", true);
-	    	  }else{
+	    		  $('#manage').text('Y');
+	    	  }else if(data.BMANAGERFEE == "N"){
 	    		  $("input:checkbox[id='BMANAGERFEE']").prop("checked", false);
+	    		  $('#manage').text('N');
 	    	  }
 	    	  
 	    	  if(data.BMONTHFEE == "Y"){
 	    		  $("input:checkbox[id='BMONTHFEE']").prop("checked", true);
-	    	  }else{
+	    		  $('#month').text('Y');
+	    	  }else if(data.BMONTHFEE == "N"){
 	    		  $("input:checkbox[id='BMONTHFEE']").prop("checked", false);
+	    		  $('#month').text('N');
 	    	  }
 	    	  
 	    	  if(data.BWATER == "Y"){
 	    		  $("input:checkbox[id='BWATER']").prop("checked", true);
-	    	  }else{
+	    		  $('#water').text('Y');
+	    	  }else if(data.BWATER == "N"){
 	    		  $("input:checkbox[id='BWATER']").prop("checked", false);
+	    		  $('#water').text('N');
 	    	  }
+	    	  
+	    	  
 	           },//success
 	      error: function() {
 			console.log('아작스 실패');

@@ -31,4 +31,6 @@ public interface HomeTaxService {
 
 	HashMap<String, Object> getDuesStatus(HashMap<String, Object> param);
 
+	HashMap<String, Object> recallTaxAf(HashMap<String, Object> param);
+
 }

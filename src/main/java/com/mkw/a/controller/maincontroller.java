@@ -350,7 +350,7 @@ public class maincontroller {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/ajaxTest",method=RequestMethod.POST, produces = "application/json")
+	@RequestMapping(value="/ajaxTest",method=RequestMethod.POST)
 	public HashMap<String, Object> ajaxTest(@RequestBody HashMap<String, Object> param, 
 											@RequestHeader(value ="Accept") String accept,
 											@RequestHeader(value="Accept-Language") String acceptLanguage,

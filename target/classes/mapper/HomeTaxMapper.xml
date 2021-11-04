@@ -310,6 +310,15 @@ and day = #{day}
 and confirm_yn = 'N'
 </update>
 
+<update id="recallTaxAf_step2_updateTempTax" parameterType="hashmap">
+UPDATE HOMETAX
+SET INPUTFEE = INPUTFEE - #{inputfee}, 
+    RESTFEE = RESTFEE + #{inputfee}
+WHERE SEQ = #{taxseq}
+AND DAY = #{day}
+AND MYID = #{myid}
+</update>
+
 <insert id="inputTaxMaster" parameterType="com.mkw.a.domain.HomeTaxVo">
 /*HomeTaxMapper.inputTaxMaster*/ 
 UPDATE HOMETAX_MASTER 
@@ -401,7 +410,14 @@ where bday = #{bday}
 <!-- 그래프그리기 위한 용도 데이터 -->
 <select id="getMonthTaxListData" resultType="hashmap">
 /*getMonthTaxListData*/
-SELECT DAY, SUM(WATER) AS WATER, SUM(ELEC) AS ELEC, SUM(GAS) AS GAS, SUM(INTER) AS INTER, SUM(MANAGERFEE) AS MANAGERFEE, SUM(MONTHFEE) AS MONTHFEE
+SELECT DAY
+	, SUM(WATER) AS WATER
+	, SUM(ELEC) AS ELEC
+	, SUM(GAS) AS GAS
+	, SUM(INTER) AS INTER
+	, SUM(MANAGERFEE) AS MANAGERFEE
+	, SUM(MONTHFEE) AS MONTHFEE
+	, SUM(TOTALFEE) AS TOTALFEE
 FROM HOMETAX_MASTER
 GROUP BY DAY
 ORDER BY DAY ASC

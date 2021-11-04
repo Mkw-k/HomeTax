@@ -36,6 +36,7 @@
 			<option value="MANAGERFEE">관리비</option>
 			<option value="INTER">인터넷</option>
 			<option value="MONTHFEE">월세</option>
+			<option value="TOTALFEE">총액</option>
 		</select>
 		<select class="form-control selectpicker" style="margin-top: 10px; display: none;">
 			<option>1</option>
@@ -56,7 +57,7 @@
  <!-- JQuery -->
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
 <!-- js파일 임포트 -->        
- <script src="../resources/content/js/commons/commons.js"></script> 
+ <script src="./resources/content/js/commons/commons.js"></script> 
 <script>
 
 var fArr = new Array();
@@ -106,9 +107,13 @@ function createChart() {
 				  	console.log( '선택값 : MANAGERFEE' );
 				  	tempObj[key] =data[i].MANAGERFEE;
 				    break;
+				  case 'MONTHFEE':
+					  	console.log( '선택값 : MONTHFEE' );
+					  	tempObj[key] =data[i].MONTHFEE;
+					break;
 				  default:
-				    console.log('디폴트는 MONTHFEE');
-				  	tempObj[key] =data[i].MONTHFEE;
+				    console.log('디폴트는 TOTALFEE');
+				  	tempObj[key] =data[i].TOTALFEE;
 				}
 					
 					
@@ -187,9 +192,6 @@ function createChart() {
 	  	    		    }
 	    			}
 	    		});
-	    	  
-	    	  
-	    	  
 	      }//success
 	   });//ajax
 }

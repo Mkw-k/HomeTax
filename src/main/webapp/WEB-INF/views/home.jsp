@@ -263,7 +263,7 @@ request.setCharacterEncoding("UTF-8");
   			 
   	  		
        
-        
+        //테스트 버튼 및 테스트 함수 
         let upButton = document.getElementById('_uploadTest');
         upButton.addEventListener('click', function() {
             alert('클릭');

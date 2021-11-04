@@ -185,12 +185,10 @@ public class HomeTaxController {
 	}
 	*/
 	
+	//월세 반려
 	@ResponseBody
 	@RequestMapping(value = "recallTaxAfter", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public HashMap<String, Object> recallTaxAfter(@RequestBody HashMap<String, Object> param) throws IOException {
-		System.out.println("*******recallTaxAfter 파라미터확인*******");
-		System.out.println(param.toString());
-		
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 		
 		resultMap = homeTaxService.recallTaxAf(param);
@@ -214,7 +212,7 @@ public class HomeTaxController {
 	}
 	
 	
-	@RequestMapping(value = "HomeTax/Graph", method = RequestMethod.GET)
+	@RequestMapping(value = "Graph", method = RequestMethod.GET)
 	public String taxGraph(HomeTaxVo home, Model model) {
 		
 		logger.debug("HomeTaxController >>> taxGraph");
@@ -275,7 +273,7 @@ public class HomeTaxController {
 	
 	//기존에 HomeTax/Graph로 타고 들어온 페이지에서 getMonthTaxListData로 가면 브라우저 주소는 HomeTax/getMonthTaxListData가 된다 
 	@ResponseBody    
-	@RequestMapping(value = "HomeTax/getMonthTaxListData", method = RequestMethod.GET)
+	@RequestMapping(value = "getMonthTaxListData", method = RequestMethod.GET)
 	public List<HashMap<String, Object>> getMonthTaxListData() {
 		
 		logger.debug("HomeTaxController >>> getMonthTaxListData");

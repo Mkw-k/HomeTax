@@ -2,21 +2,22 @@
  * 공통 js 함수 보관용 js파일 
  */
  
- 
+ //모바일인지 확인하는 함수 
  function Mobile(){
 	return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 	
  }
 	
+//모바일일 경우에는 메인페이지 버튼 추가해줌 
 if (Mobile()){// 모바일일 경우
 	console.log('모바일임');
-	var app = '<li class="nav-item"> <a class="nav-link" href="home">메인페이지로</a> </li>';
+	var app = '<li class="nav-item"> <a class="nav-link" href="javascript:window.location.replace("home");">메인페이지로</a> </li>';
     $('#top_menu_ul').append(app);
 } else {// 모바일 외
     console.log('모바일아님');
 }
 
- 
+ //잠시 쉬었다가게 하는 콜백함수??? 조금 더 분석 필요 
 	function sleep(ms) {
 	  return new Promise((r) => setTimeout(r, ms));
 	}
@@ -77,12 +78,13 @@ function deleteYearNMonthText(day){
 	
 	/** <pre>
 	 * AJAX 공통함수 
-	 * JSON 형식으로 가고 JSON 형식으로 받음
+	 * JSON 형식으로 가고 JSON 형식으로 받음 <br>
+	 * 211104 보수 완료
 	 * @author K  
 	 * @param : url(action)    
-	 * @param : type(get/post)	 
+	 * @param : type(get/post)	 - 일단 post만 테스트 완료
 	 * @param : param(parameter)
-	 * @return data.result (맵.result)
+	 * @return JSON data.result (맵.result)
 	 * </pre>	
 	 */
 function run_ajax(url, type, param){
@@ -93,8 +95,9 @@ function run_ajax(url, type, param){
 	    url: url,
 	    method: type,
 	    data: JSON.stringify(param),
-	    dataType : 'json',
-	    contentType: "application/json; charset=utf-8",
+	    //data: param,
+	    //dataType : 'json',
+	    contentType: "application/json; charset=UTF-8",
 	    async: false ,
 	});
 	// 성공 시, 받아온 데이터가 msg에 담김

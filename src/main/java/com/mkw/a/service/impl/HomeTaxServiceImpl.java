@@ -237,15 +237,32 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 		return resultMap;
 	}
 
-
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public HashMap<String, Object> recallTaxAf(HashMap<String, Object> param) {
-		
+		logger.debug("월세 반려 비즈니스 로직 start !!!!!!");
+		logger.debug("*******recallTaxAfter 파라미터확인*******");
+		logger.debug(param.toString());
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
-		boolean b  = hometaxdao.recallTaxAf(param);
 		
-		if(b) {
-			resultMap.put("resultMsg", "Y");
-		}else {
+		try {
+			
+			//인서트 테이블에서 DEL = Y로 변경
+			boolean b  = hometaxdao.recallTaxAf(param);	
+			//홈택스 테이블(temp)에서 업데이트 되었던(인풋되었던) 금액 다시 원상복구
+			boolean b2 = hometaxdao.recallTaxAf_step2_updateTempTax(param); 
+			
+			if(b&&b2) {
+				resultMap.put("resultMsg", "Y");
+				logger.debug("월세 반려 성공!!!!!");
+			}else {
+				resultMap.put("resultMsg", "N");
+			}
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.debug("월세 반려 실패 예외 발생!!!!!");
 			resultMap.put("resultMsg", "N");
 		}
 		
