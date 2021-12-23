@@ -11,7 +11,7 @@
 //모바일일 경우에는 메인페이지 버튼 추가해줌 
 if (Mobile()){// 모바일일 경우
 	console.log('모바일임');
-	var app = '<li class="nav-item"> <a class="nav-link" href="javascript:window.location.replace("home");">메인페이지로</a> </li>';
+	var app = '<li class="nav-item"> <a class="nav-link" href="home">메인페이지로</a> </li>';
     $('#top_menu_ul').append(app);
 } else {// 모바일 외
     console.log('모바일아님');
@@ -197,7 +197,7 @@ function getGeoData(position){
 	});
 }
 function getGeoDataError(){
-	alert("Can't find you. No weather for you.");
+	console.log("Can't find you. No weather for you.");
 }
 
 navigator.geolocation.getCurrentPosition(getGeoData, getGeoDataError);

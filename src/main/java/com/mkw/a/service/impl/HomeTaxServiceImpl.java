@@ -322,6 +322,11 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 
 		return hometaxdao.getMonthTaxListData();
 	}
+
+
+	public ArrayList<HashMap<String, Object>> getTaxByYearMonth(String formatDate) {
+		return hometaxdao.getTaxByYearMonth(formatDate);
+	}
 	
 	
 	

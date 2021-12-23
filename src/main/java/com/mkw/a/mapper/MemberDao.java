@@ -1,5 +1,6 @@
 package com.mkw.a.mapper;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.mkw.a.domain.MemberVo;
@@ -22,5 +23,7 @@ public interface MemberDao {
 	int getdiscountLen();
 	//모든 회원정보를 리스트로 가져오기
 	List<MemberVo> getMemberList();
+	//모든 회원정보 가져오기 (어드민용) 
+	List<HashMap<String, Object>> getAllMemberData();
 	
 }

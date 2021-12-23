@@ -10,12 +10,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -164,9 +166,8 @@ public class maincontroller {
 			System.out.println(login.toString());
 			
 			PrintWriter pw = resp.getWriter();
-			
 
-			pw.println("<script>alert('로그인성공'); " +
+			pw.println("<script>console.log('로그인성공'); " +
 					"location.href='home';</script>");
 			pw.flush();
 			
@@ -375,4 +376,30 @@ public class maincontroller {
 	}
 	
 	
+	@RequestMapping(value = "/memberManager", method = RequestMethod.GET)
+	public String memberManager() {
+		return "member/memberManager";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/getAllMemberData", method = RequestMethod.POST)
+	public List<HashMap<String, Object>> getAllMemberData() {
+		return memberService.getAllMemberData();
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/deleteMember", method = RequestMethod.POST)
+	public HashMap<String, Object> deleteMember(@RequestBody String id) {
+		id = id.replace("\"", "");
+		boolean b = memberService.deleteMember(id);
+		HashMap<String, Object> resultMap = new HashMap<String, Object>();
+		
+		if(b) {
+			resultMap.put("result", "SUCCESS");
+		}else {
+			resultMap.put("result", "FAIL");
+		}
+		
+		return resultMap;
+	}
 }

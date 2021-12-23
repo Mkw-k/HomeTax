@@ -22,19 +22,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.mkw.a.common.LoginUtils;
 import com.mkw.a.domain.HomeTaxVo;
 import com.mkw.a.domain.MemberVo;
 import com.mkw.a.service.MemberService;
 import com.mkw.a.service.impl.HomeTaxServiceImpl;
 
+import lombok.RequiredArgsConstructor;
+
 @Controller
 public class HomeTaxController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeTaxController.class);
-
 	@Autowired
 	private HomeTaxServiceImpl homeTaxService;
-	
 	@Autowired
 	private MemberService memberservice;
 	
@@ -78,9 +79,11 @@ public class HomeTaxController {
 	 * @author K
 	 * @param myid 
 	 * @return HomeTaxVo (해당 월의 월세 디테일 데이터) 
+	 * 
+	 * 인터셉터 장착 211223 K 
 	 */
 	@RequestMapping(value = "detailTax", method = RequestMethod.GET)
-	public String detailTax(HomeTaxVo home, Model model) {
+	public String detailTax(HomeTaxVo home, Model model, HttpServletRequest req) {
 		System.out.println("이게 아이디:"+home.getMyid());
 		System.out.println("이게 날짜:"+home.getDay());
 		
@@ -106,6 +109,9 @@ public class HomeTaxController {
 		}else {
 			model.addAttribute("voList", taxVoList);
 		}
+		 
+//		String redirect = LoginUtils.loginCheck(req);
+//		return "redirect:"+redirect;
 		
 		return "HomeTax/detailTax";
 	}

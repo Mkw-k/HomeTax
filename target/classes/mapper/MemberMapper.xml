@@ -93,6 +93,9 @@ UPDATE HOME_MEMBER
 		FILENAME = #{filename, jdbcType=VARCHAR},
 		NEWFILENAME = #{newfilename, jdbcType=VARCHAR},
 	</if>
+	<if test='del != null and del != ""'>
+		del = #{del}
+	</if>
 </set>
 WHERE MYID=#{myid}
 </update>
@@ -137,6 +140,20 @@ WHERE MYID=#{myid}
 <select id="getMemberList" resultType="com.mkw.a.domain.MemberVo">
 	/*MemberMapper.getMemberList*/
 	SELECT * 
+	FROM HOME_MEMBER
+</select>
+
+<select id="getAllMemberData" resultType="hashmap">
+	/*MemberMapper.getAllMemberData*/
+	SELECT 
+		  NAME
+		, CLASSIFY
+		, EMAIL
+		, PHONE
+		, ISSALE
+		, MYID
+		, AUTH
+		, del
 	FROM HOME_MEMBER
 </select>
 

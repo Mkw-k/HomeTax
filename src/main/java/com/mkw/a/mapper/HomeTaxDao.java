@@ -44,5 +44,9 @@ public interface HomeTaxDao {
 	ArrayList<HashMap<String, Object>> getMonthTaxListData();
 
 	boolean recallTaxAf_step2_updateTempTax(HashMap<String, Object> param);  
+	
+	ArrayList<HashMap<String, Object>> getTaxByYearMonth(String formatDate);
+
+	int getDiscountPolicyPrice();
 
 }

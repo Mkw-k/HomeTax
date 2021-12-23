@@ -37,8 +37,9 @@
 	
 	
     <!-- download -->
-	<beans:bean id="DownloadView" class="com.mkw.a.util.DownloadView"/>
-		<beans:bean id="downloadViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
+    <beans:bean id="DownloadView" class="com.mkw.a.util.DownloadView"
+    	scope="session" />
+    <beans:bean id="downloadViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
 			<beans:property name="order">
 			<beans:value>0</beans:value>
 		</beans:property>
@@ -48,7 +49,14 @@
 		<mvc:interceptor>
 			<mvc:mapping path="/**" />
 			<beans:bean id="loggerInterceptor"
-				class="com.mkw.a.common.LoggerInterceptor"></beans:bean>
+				class="com.mkw.a.common.LoggerInterceptor">
+			</beans:bean>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/detailTax"/>
+			<mvc:mapping path="/chkTax"/>
+			<beans:bean id="loginInterceptor"
+				class="com.mkw.a.common.LoginIntercepter"></beans:bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
 	

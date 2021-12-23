@@ -423,5 +423,33 @@ GROUP BY DAY
 ORDER BY DAY ASC
 </select>
 
+<select id="getTaxByYearMonth" parameterType="String" resultType="hashmap">
+select 
+	master.SEQ
+	, master.MYID
+	, master.DAY
+	, master.WATER
+	, master.ELEC
+	, master.GAS
+	, master.INTER
+	, master.MANAGERFEE
+	, master.MONTHFEE
+	, master.TOTALFEE
+	, master.RESTFEE
+	, master.INPUTFEE
+	, master.DEL
+	, master.OVERFEE
+	, master.HTCUSTOME
+	, (select name from HOME_MEMBER where myid = master.myid) as NAME
+	, (select phone from HOME_MEMBER where myid = master.myid) as PHONE
+from HOMETAX_MASTER master
+where day = #{formatDate, jdbcType=VARCHAR}
+</select>
+
+<select id="getDiscountPolicyPrice" resultType="Integer"> 
+select codevalue 
+from HOMETAX_COMMON_CODE 
+where codeid='TAX_DISCOUNT_POLICY'
+</select>
 
 </mapper>

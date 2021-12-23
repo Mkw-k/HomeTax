@@ -209,7 +209,7 @@ request.setCharacterEncoding("UTF-8");
 			month = 0 + month;
 		}
 		
-		day = year + month;
+		day = year.toString() + month.toString();
 		getTaxListData(day);
 	}
   	
@@ -249,7 +249,7 @@ request.setCharacterEncoding("UTF-8");
 			month = 0 + month;
 		}
 		
-		day = year + month;
+		day = year.toString() + month.toString();
 		getTaxListData(day);
 	}
   	
