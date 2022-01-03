@@ -89,6 +89,15 @@ UPDATE HOME_MEMBER
 	<if test="myid != null and myid != ''">
 		MYID = #{myid, jdbcType=VARCHAR},
 	</if>
+	<if test="phone != null and phone != ''">
+		PHONE = #{phone, jdbcType=VARCHAR},
+	</if>
+	<if test="issale != null and issale != ''">
+		ISSALE = #{issale, jdbcType=VARCHAR},
+	</if>
+	<if test="auth != null and auth != ''">
+		AUTH = #{auth, jdbcType=VARCHAR},
+	</if>
 	<if test="filename != null and filename != ''">
 		FILENAME = #{filename, jdbcType=VARCHAR},
 		NEWFILENAME = #{newfilename, jdbcType=VARCHAR},

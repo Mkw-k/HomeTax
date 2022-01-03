@@ -16,11 +16,13 @@
 <c:import url="/header.jsp" charEncoding="utf-8"/> 
 <div style="text-align: center;">
 <h1>회원관리 페이지</h1>
+<input type="button" value="수정" id="memberUpdate" style="text-align: right !important;" onclick="updateMember(event)" >
 </div>
 <div style="text-align: center;">
 	<table style="margin: 0 auto;">
 		<thead>
 			<tr>
+				<th></th>
 				<th>NAME</th>
 				<th>CLASSIFY</th>
 				<th>EMAIL</th>
@@ -29,12 +31,10 @@
 				<th>MYID</th>
 				<th>AUTH</th>
 				<th>삭제여부(y/n)</th>
-				<th>수정</th>
 				<th>회원강퇴</th>
 			</tr>
 		</thead>
 		<tbody id="member_table_body">
-		
 		</tbody>
 	</table>
 </div>
@@ -46,7 +46,6 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" ></script>
 <!-- js파일 임포트 -->        
  <script src="./resources/content/js/commons/commons.js"></script> 
-
 </body>
 
 <script type="text/javascript">
@@ -70,25 +69,34 @@ function setDataGrid() {
 	var memberApp = '';
 
 	for (var i = 0; i < result.length; i++) {
+		var issale = result[i].ISSALE;
+		var auth = result[i].AUTH;
+		var del = result[i].DEL;
+		console.log(i+'번째 셀렉 데이터' + 'issale, auth, del :: ' + issale +', ' + auth + ', ' + del);
+		
 		memberApp += '<tr class="memberData">';
-		memberApp += '<td>'+result[i].NAME+'</td>';
-		memberApp += '<td>'+result[i].CLASSIFY+'</td>';
-	 	memberApp += '<td>'+result[i].EMAIL+'</td>';
-	 	memberApp += '<td>'+result[i].PHONE+'</td>';
+		memberApp += '<td>';
+		memberApp += '<input type="checkbox" name="user_checkbox">';
+		memberApp += '</td>';
+	 	memberApp += '<td>'+'<input type="text" value="'+result[i].NAME+'">'+'</td>';
+	 	memberApp += '<td>'+'<input type="text" value="'+result[i].CLASSIFY+'">'+'</td>';
+	 	memberApp += '<td>'+'<input type="text" value="'+result[i].EMAIL+'">'+'</td>';
+	 	memberApp += '<td>'+'<input type="text" value="'+result[i].PHONE+'">'+'</td>';
+	 	
 	 	memberApp += '<td>';
 		memberApp += '<select>';
 		if(result[i].ISSALE == 0){
-			memberApp += '	<option value="0" selected>일반</option>';
+			memberApp += '	<option value="0" selected="selected">일반</option>';
 			memberApp += '	<option value="1">할인</option>';
 			memberApp += '	<option value="9">운영자</option>';
 		}else if(result[i].ISSALE == 1){
 			memberApp += '	<option value="0">일반</option>';
-			memberApp += '	<option value="1" selected>할인</option>';
+			memberApp += '	<option value="1" selected="selected">할인</option>';
 			memberApp += '	<option value="9">운영자</option>';
 		}else{//9
 			memberApp += '	<option value="0">일반</option>';
 			memberApp += '	<option value="1">할인</option>';
-			memberApp += '	<option value="9" selected>운영자</option>';
+			memberApp += '	<option value="9" selected="selected">운영자</option>';
 		}
 		memberApp += '</select>';
 		memberApp += '</td>';
@@ -96,22 +104,31 @@ function setDataGrid() {
 		memberApp += '<td>';
 		memberApp += '<select>';
 		if(result[i].AUTH == 1){
-			memberApp += '	<option value="1" selected>일반(홈멤버)</option>';
+			memberApp += '	<option value="1" selected="selected">일반(홈멤버)</option>';
 			memberApp += '	<option value="9">일반(기본)</option>';
 			memberApp += '	<option value="3">운영자</option>';
 		}else if(result[i].AUTH == 9){
 			memberApp += '	<option value="1">일반(홈멤버)</option>';
-			memberApp += '	<option value="9" selected>일반(기본)</option>';
+			memberApp += '	<option value="9" selected="selected">일반(기본)</option>';
 			memberApp += '	<option value="3">운영자</option>';
 		}else{//3
 			memberApp += '	<option value="1">일반(홈멤버)</option>';
 			memberApp += '	<option value="9">일반(기본)</option>';
-			memberApp += '	<option value="3" selected>운영자</option>';
+			memberApp += '	<option value="3" selected="selected">운영자</option>';
 		}
 		memberApp += '</select>';
 		memberApp += '</td>';
-		memberApp += '<td>'+result[i].DEL+'</td>';
-		memberApp += '<td><input type="button" value="수정" id="memberUpdate" onclick="updateMember(event)" ></td>';
+		memberApp += '<td>';
+		memberApp += '<select>';
+		if(result[i].DEL == 'Y'){
+			memberApp += '	<option value="Y" selected="selected">Y</option>';
+			memberApp += '	<option value="N">N</option>';
+		}else{
+			memberApp += '	<option value="Y">Y</option>';
+			memberApp += '	<option value="N" selected="selected">N</option>';
+		}
+		memberApp += '</select>';
+		memberApp += '</td>';
 		memberApp += '<td><input type="button" value="강퇴" id="memberKick" onclick="kickMember(event)" ></td>';
 		memberApp += '</tr>';
 	}	
@@ -121,7 +138,58 @@ function setDataGrid() {
 }
 
 function updateMember(event) {
+	console.log('수정버튼 클릭됨');
+//	user_checkbox
+	var rowData = new Array();
+	var tdArr = new Array();
+	var checkbox = $('input[name=user_checkbox]:checked');
+	console.log(checkbox);
+	//tr
+	//var checkbox_list = checkbox[0].offsetParent.nextSibling.parentElement.cells;
+	//console.log(checkbox_list);
+
+	checkbox.each(function(i) {
+		/*
+		var tr = checkbox.parent()[i);
+		var td = tr.children();
+		*/
+		var td = checkbox[i].parentNode.parentElement.childNodes;
+		
+		console.log('td확인');
+		console.log(td);
+
+		var name = td[1].firstChild.value + "";
+		var classify = td[2].firstChild.value + "";
+		var email = td[3].firstChild.value + "";
+		var phone = td[4].firstChild.value + "";
+		var issale = td[5].children[0].value+ "";
+		var myid = td[6].outerText + "";
+		var auth = td[7].children[0].value + "";
+		var delyn = td[8].children[0].value + "";
+
+		var tempMap = {
+				name : name,
+				classify : classify,
+				email : email,
+				phone : phone,
+				issale : issale,
+				myid : myid,
+				auth : auth,
+				del : delyn,
+		}
+		
+		
+		tdArr.push(tempMap);
+	});
 	
+	console.log('td 데이터확인');
+	console.log(tdArr);
+	
+	//컨트롤러 연결해야되는 부분 
+	var result = run_ajax('updateMemberAdmin', 'post', tdArr);
+	$('.memberData').remove();
+	getMemberData();
+	setDataGrid();
 }
 
 function kickMember(event) {
@@ -131,17 +199,21 @@ function kickMember(event) {
 	if(result){
 		
 		console.log(event);
-		var delete_member_id = event.path[2].childNodes[5].innerHTML;
+		var delete_member_id = event.path[2].childNodes[6].innerHTML;
 		console.log('아이디 확인');
 		console.log(delete_member_id);
 		
 		var result = run_ajax('deleteMember', 'post', delete_member_id);
 		console.log(result);
 		
-		$('.memberData').remove();
-		
-		getMemberData();
-		setDataGrid();
+		if(result.result === 'SUCCESS'){
+			alert('강퇴성공');
+			$('.memberData').remove();
+			getMemberData();
+			setDataGrid();
+		}else{
+			alert('강퇴실패');
+		}
 	}
 	
 }

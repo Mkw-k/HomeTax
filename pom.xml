@@ -125,17 +125,22 @@
 		</dependency>
 	
 		<!-- Test -->
-		<!-- <dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.7</version>
 			<scope>test</scope>
-		</dependency> -->
+		</dependency>
 		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-test</artifactId>
+		    <version>5.1.1.RELEASE</version>
+		</dependency>
+		<!-- <dependency>
 		    <groupId>org.junit.jupiter</groupId>
 		    <artifactId>junit-jupiter-engine</artifactId>
 		    <version>5.5.2</version>
-		</dependency>
+		</dependency> -->
 		
 		<!-- JDBC 처리 -->
 		<dependency>
@@ -245,7 +250,7 @@
 				<artifactId>javaSDK</artifactId>
 				<version>2.2</version>
          	</dependency>
-	       
+         	
 	</dependencies>
 	
 	

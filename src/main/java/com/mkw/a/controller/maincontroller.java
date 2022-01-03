@@ -1,5 +1,7 @@
 package com.mkw.a.controller;
 
+import static org.junit.Assert.fail;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -54,6 +57,7 @@ public class maincontroller {
 	private static final Logger logger = LoggerFactory.getLogger(maincontroller.class);
 	private final BoardServiceImpl boardService;
 	private final MemberServiceImpl memberService;
+	public static String uuid;	//프로젝트 전체에서 1개 세션에 대하여 unique한 해당 UUID를 설정 
 
 	
 	@RequestMapping("test")
@@ -164,6 +168,11 @@ public class maincontroller {
 		if(login != null) {
 			req.getSession().setAttribute("login", login);
 			System.out.println(login.toString());
+
+			//해당 세션(유저)에 대한 unique한 UUID부여
+			//해당 로직에 대한 정확한 위치 선정 고려 필요함 -> 로그인시에 UUID부여시 로그인을 안햇을 경우에는 UUID가 NULL인 문제 발생
+			uuid = UUID.randomUUID().toString();
+			logger.debug("UUID \t : " + uuid);
 			
 			PrintWriter pw = resp.getWriter();
 
@@ -246,35 +255,16 @@ public class maincontroller {
 	public void updateAf(Model model, MemberVo mem, 
 		@RequestParam(value = "userPic", required = false)MultipartFile userPic, 
 		HttpServletRequest req, HttpServletResponse response) throws IOException {
-		/*
-		String pattern = "yyyyMMdd";
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-		String yymmdd = simpleDateFormat.format(new Date());
-		logger.debug("폴더명 >>> " + yymmdd);
-		*/
-		
+
+		//로거 쌓는 부분
 		String patter2 = "yyyyMMddHHmmss";
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(patter2);
 		String yymmddhhmmss = simpleDateFormat.format(new Date());
 		logger.debug("현재시간 >>> " + yymmddhhmmss);
-		
 		String dirStr = "D:/Temp/MemberLog";
-		
 		File loggerfile = new File(dirStr+ "/" + yymmddhhmmss +".txt");
 		logger.debug("경로 및 파일명 확인 >>> "+ dirStr+ "/" + yymmddhhmmss +".txt");
-		
 		FileWriter fw = new FileWriter(loggerfile, true);
-		
-		/*
-		//경로를 문자열로 받을 수도 있다
-		File newFile = new File(dirStr);
-		
-		if(newFile.mkdir()){   //만드려는 디렉토리가 하나일 경우
-		logger.debug(" <<<< 디렉토리를 생성했습니다. >>>> ");
-		}else{
-		logger.debug(" <<<< 디렉토리를 생성하지 못했습니다. >>>> ");
-		}
-		*/
 		
 		fw.write("입력시간 >>> " + yymmddhhmmss + "\r\n");
 		
@@ -290,8 +280,9 @@ public class maincontroller {
 		File file = new File(fupload + "/" +newfilename);
 		fw.write(">>> 업로드 경로 및 파일네임 : " + fupload + "/" +newfilename);
 		
+		FileUtils.writeByteArrayToFile(file, userPic.getBytes());
+		
 		try {
-			FileUtils.writeByteArrayToFile(file, userPic.getBytes());
 			
 			boolean b = memberService.updateMember(mem);
 			
@@ -328,6 +319,101 @@ public class maincontroller {
 		
 	}
 	
+	/**
+	 * <pre>멤버 데이터를 수정해주는 함수 </pre>
+	 * <br><br>
+	 * @author K
+	 * @param model
+	 * @param mem
+	 * @param userPic
+	 * @param req
+	 * @param response
+	 * @throws IOException
+	 * 
+	 */
+	@RequestMapping(value = "/updateMemberAdmin", method = RequestMethod.POST)
+	public void updateMemberAdmin(Model model, @RequestBody ArrayList<MemberVo> memList, 
+		@RequestParam(value = "userPic", required = false)MultipartFile userPic, 
+		HttpServletRequest req, HttpServletResponse response) throws IOException {
+
+		//로거 쌓는 부분
+		String patter2 = "yyyyMMddHHmmss";
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(patter2);
+		String yymmddhhmmss = simpleDateFormat.format(new Date());
+		logger.debug("현재시간 >>> " + yymmddhhmmss);
+		String dirStr = "D:/Temp/MemberLog";
+		File loggerfile = new File(dirStr+ "/" + yymmddhhmmss +".txt");
+		logger.debug("경로 및 파일명 확인 >>> "+ dirStr+ "/" + yymmddhhmmss +".txt");
+		FileWriter fw = new FileWriter(loggerfile, true);
+		fw.write("입력시간 >>> " + yymmddhhmmss + "\r\n");
+		
+		try {
+			
+			boolean b;
+			int sucCnt = 0;
+			int failCnt = 0;
+			
+			for (MemberVo memberVo : memList) {
+				
+				//파일 업로드 경로 및 뉴파일 네임 설정 
+				if(userPic != null) {
+					String filename = userPic.getOriginalFilename();
+					memberVo.setFilename(filename);
+					String fupload = req.getServletContext().getRealPath("/upload");
+					String newfilename = PdsUtil.getNewFileName(memberVo.getFilename());
+					memberVo.setNewfilename(newfilename);
+					File file = new File(fupload + "/" +newfilename);
+					fw.write(">>> 업로드 경로 및 파일네임 : " + fupload + "/" +newfilename);
+					FileUtils.writeByteArrayToFile(file, userPic.getBytes());	
+				}else {
+					logger.debug("userPic 정보 없음!");
+					fw.write("userPic 정보 없음!"+ "\r\n");
+				}
+				
+				b = memberService.updateMember(memberVo);
+				
+				if(b) {
+					sucCnt += 1;
+				}else {
+					failCnt += 1;
+				}
+			}
+			
+			logger.debug("Total Result :: SUCCESS :  " + sucCnt + ", FAIL : " + failCnt);
+			fw.write("Total Result :: SUCCESS :  " + sucCnt + ", FAIL : " + failCnt);
+			
+			response.setContentType("text/html; charset=euc-kr");
+			
+			if(failCnt == 0) {
+				logger.debug("수정성공");
+				fw.write("최종수정성공!!!");
+				PrintWriter pw = response.getWriter();
+				pw.println("<script>alert('수정에 성공하였습니다'); "
+						+ "location.href='home';</script>");
+				pw.flush();
+				
+			}else {
+				logger.debug("수정실패");
+				fw.write("최종수정실패!!!");
+				PrintWriter pw = response.getWriter();
+				pw.println("<script>alert('수정에 실패하였습니다'); "
+						+ "location.href='home';</script>");
+				pw.flush();
+				throw new IOException();
+			}
+			
+		} catch (IOException e) {
+		logger.debug("IO익셉션 발생 : 가입에 실패하였거나 다른 익셉션이 발생하였을수 있습니다");
+		logger.debug(e.toString());
+		
+		}catch (Exception e) {
+		logger.debug(e.toString());
+		}
+		finally {
+		fw.close();
+		}
+		
+	}
 	
 	@ResponseBody
 	@RequestMapping(value="/skTest",method=RequestMethod.POST)  

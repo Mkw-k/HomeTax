@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.junit.platform.commons.util.StringUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -277,9 +277,9 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 		HashMap<String, Object> dueParam = new HashMap<String, Object>();
 		HashMap<String, Object> resultMap = new HashMap<String, Object>();
 
-		String bValue =  StringUtils.nullSafeToString(param.get("bValue").toString());
-		String isChecked = StringUtils.nullSafeToString(param.get("isChecked").toString());
-		String bday = StringUtils.nullSafeToString(param.get("bday").toString()); 
+		String bValue =  StringUtils.defaultIfEmpty(param.get("bValue").toString(), "");
+		String isChecked = StringUtils.defaultIfEmpty(param.get("isChecked").toString(), "");
+		String bday = StringUtils.defaultIfEmpty(param.get("bday").toString(), ""); 
 		
 		if(isChecked.equals("true") && isChecked != null && isChecked != "") {
 			isChecked = "Y";

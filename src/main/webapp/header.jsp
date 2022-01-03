@@ -12,15 +12,29 @@
           <b>HomeTax</b>
         </a>
         <ul class="navbar-nav mx-auto" id="top_menu_ul">
-          <li class="nav-item"> <a class="nav-link"  href="#" onclick="location.href='detailTax?myid=${login.myid}&day='+ now; return false;">상세요금확인/납부</a> </li>
-          <li class="nav-item"> <a class="nav-link" href="chkTax?myid=${login.myid}">납부내역</a> </li>
+       	  <li class="nav-item"><a class="nav-link" href="home">홈으로</a></li>
+          <%-- <li class="nav-item"> <a class="nav-link"  href="#" onclick="location.href='detailTax?myid=${login.myid}&day='+ now; return false;">상세요금확인/납부</a> </li> --%>
+          <%-- <li class="nav-item"> <a class="nav-link" href="chkTax?myid=${login.myid}">납부내역</a> </li> --%>
           <li class="nav-item"> <a class="nav-link" href="bbs">문의사항</a> </li>
-          <li class="nav-item"> <a class="nav-link" href="Graph" id="_analysisTax">월세분석</a> </li>
-		<c:if test="${login.auth == 3}">
-          <li class="nav-item"> <a class="nav-link" href="toCreateTax">월세입력</a> </li>
-          <li class="nav-item"> <a class="nav-link" id="_conformTax"  href="confirmTax?myid=${login.myid}">월세납부확인및승인</a> </li>
-          <li class="nav-item"> <a class="nav-link" href="memberManager">회원관리</a> </li>
-        </c:if>
+         <!--  <li class="nav-item"> <a class="nav-link" href="Graph" id="_analysisTax">월세분석</a> </li> -->
+           <li class="dropdown nav-item">
+	          <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">월세(홈택스)<b class="caret"></b></a>
+	          <ul class="dropdown-menu">
+   	            <li class="nav-item"> <a href="Graph" id="_analysisTax">월세분석</a> </li>
+   	            <li class="nav-item"> <a href="#" onclick="location.href='detailTax?myid=${login.myid}&day='+ now; return false;">상세요금확인/납부</a> </li>
+	            <li class="nav-item"> <a href="chkTax?myid=${login.myid}">납부내역</a> </li>
+	            <c:if test="${login.auth == 3}">
+	            <li class="divider"></li>
+	            <li class="dropdown-header">관리자 메뉴</li>
+		          <li class="nav-item"> <a href="toCreateTax">월세입력</a> </li>
+		          <li class="nav-item"> <a id="_conformTax"  href="confirmTax?myid=${login.myid}">월세납부확인및승인</a> </li>
+		        </c:if>
+	          </ul>
+           </li>
+            <c:if test="${login.auth == 3}">
+	          <li class="nav-item"> <a class="nav-link" href="memberManager">회원관리</a> </li>
+	        </c:if>
+		
 		
 		<!-- <li class="nav-item"> <a class="nav-link" href="javascript:void(0)" id="_skTest">업로드테스트</a> </li> -->
 		
