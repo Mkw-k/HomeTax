@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -75,14 +76,24 @@ public class HomeTaxController {
 	
 
 	/**
-	 * 요금상세 및 납부로 이동
-	 * @author K
-	 * @param myid 
-	 * @return HomeTaxVo (해당 월의 월세 디테일 데이터) 
-	 * 
-	 * 인터셉터 장착 211223 K 
-	 */
-	@RequestMapping(value = "detailTax", method = RequestMethod.GET)
+	  *
+	  * @Method Name : detailTax
+	  *<pre>
+	  *요금상세 및 납부로 이동
+	  *인터셉터 장착 211223 K
+	  *</pre>
+	  * @작성일 : 2021. 12. 23. 오후 10:46:57
+	  * @작성자 : K
+	  * @변경이력 : 
+	  * @Method 설명 :
+	  *
+	  * @param home
+	  * @param model
+	  * @param req
+	  * @return HomeTaxVo (해당 월의 월세 디테일 데이터)
+	  *
+	  */
+	@GetMapping(value = "detailTax")
 	public String detailTax(HomeTaxVo home, Model model, HttpServletRequest req) {
 		System.out.println("이게 아이디:"+home.getMyid());
 		System.out.println("이게 날짜:"+home.getDay());
@@ -218,7 +229,7 @@ public class HomeTaxController {
 	}
 	
 	
-	@RequestMapping(value = "Graph", method = RequestMethod.GET)
+	@GetMapping(value = "Graph")
 	public String taxGraph(HomeTaxVo home, Model model) {
 		
 		logger.debug("HomeTaxController >>> taxGraph");

@@ -33,7 +33,8 @@ public class NoDiscountService implements DiscountInterface{
 		int interfee = 0;
 		int monthfee = 0;
 		
-		interfee = tax.getInter()/nomalLen;
+		//22-01-29 박규하 이사로인하여 로직 수정 인터넷비는 할인회원도 적용됨 
+		interfee = tax.getInter()/(nomalLen+discountLen);
 		newTax.setInter(interfee);
 		monthfee = (tax.getMonthfee()/(nomalLen+discountLen))+10000;
 		newTax.setMonthfee(monthfee);

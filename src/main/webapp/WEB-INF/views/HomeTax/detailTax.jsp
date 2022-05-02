@@ -246,11 +246,11 @@ function getDuesStatus() {
 	    	  
 	    	  if(data.BELEC == "Y"){
 	    		  $("input:checkbox[id='BELEC']").prop("checked", true);
-	    		  $('#water').text('Y');
+	    		  $('#elec').text('Y');
 	    		  
 	    	  }else if(data.BELEC == "N"){
 	    		  $("input:checkbox[id='BELEC']").prop("checked", false);
-	    		  $('#water').text('N');
+	    		  $('#elec').text('N');
 	    	  }
 	    	  
 	    	  if(data.BGAS == "Y"){

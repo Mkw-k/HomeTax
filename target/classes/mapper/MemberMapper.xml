@@ -116,6 +116,7 @@ WHERE MYID=#{myid}
 	FROM HOME_MEMBER
 	WHERE ISSALE = 0 
 	AND AUTH = 1
+	AND DEL = 'N'
 </select>
 
 <!-- 할인회원수 -->
@@ -125,6 +126,7 @@ WHERE MYID=#{myid}
 	FROM HOME_MEMBER
 	WHERE ISSALE = 1
 	AND AUTH = 1
+	AND DEL = 'N'
 </select>
 
 <!-- 할인회원 및 일반회원수 가져오기 -->

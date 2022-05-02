@@ -67,6 +67,8 @@ var tempObj = {};
 
 createChart();
 
+//해당 기능에 대하여 클라이언트단이 아닌 서버단에서 자바 스트림을 통한 기능을 구현해서 넘기는 기능의 개선이 필요해보임
+//21년 22년으로 변경했음 (자동변경 기능 필요)
 function createChart() {
 	
 	$.ajax({
@@ -75,6 +77,7 @@ function createChart() {
 	      dataType:"json",
 	      success:function(data){
 	    	console.log(data);
+	    	debugger;
 	    	  //데이터 전처리 
 	    	  for (var i = 0; i < data.length; i++) {
 				
@@ -125,26 +128,17 @@ function createChart() {
 	    	  
 	    	  let array = Object.keys(tempObj);
 	    	  
-	    	  const a2020 = array.filter(item => item.substr(0, 2) == '20');
 	    	  const a2021 = array.filter(item => item.substr(0, 2) == '21');
+	    	  const a2022 = array.filter(item => item.substr(0, 2) == '22');
 	    	  
-	    	  let arrayOfNumbers2020 = a2020.map( item => parseInt(item));
 	    	  let arrayOfNumbers2021 = a2021.map( item => parseInt(item));
+	    	  let arrayOfNumbers2022 = a2022.map( item => parseInt(item));
 	    	  
-	    	  const realArray2020 = new Array();
 	    	  const realArray2021 = new Array();
+	    	  const realArray2022 = new Array();
 	    	  
 	    	  
-	    	  //2020년일떄 
-	    	  for (var i = 0; i < 12; i++) {
-	    		  if(arrayOfNumbers2020.indexOf(i+1)){
-	    			  realArray2020[i] = tempObj['20'+safeDate(i+1)];
-	    		  }else{
-	    			  realArray2020[i] = '0';
-	    		  }
-			}
-	    	  
-	    	  //2021년일때 
+	    	  //2021년일떄 데이터만 추려서 realArray2021에 넣어줌
 	    	  for (var i = 0; i < 12; i++) {
 	    		  if(arrayOfNumbers2021.indexOf(i+1)){
 	    			  realArray2021[i] = tempObj['21'+safeDate(i+1)];
@@ -153,10 +147,19 @@ function createChart() {
 	    		  }
 			}
 	    	  
-	    	  console.log('realArray2020 >>> '); 
-	    	  console.log(realArray2020);
+	    	  //2022년일떄 데이터만 추려서 realArray2021에 넣어줌
+	    	  for (var i = 0; i < 12; i++) {
+	    		  if(arrayOfNumbers2022.indexOf(i+1)){
+	    			  realArray2022[i] = tempObj['22'+safeDate(i+1)];
+	    		  }else{
+	    			  realArray2022[i] = '0';
+	    		  }
+			}
+	    	  
 	    	  console.log('realArray2021 >>> '); 
 	    	  console.log(realArray2021);
+	    	  console.log('realArray2022 >>> '); 
+	    	  console.log(realArray2022);
 	    	  
 	    	  new Chart(document.getElementById("line-chart"), {
 	    		  type: 'line',
@@ -164,13 +167,13 @@ function createChart() {
 	    		    labels: [1,2,3,4,5,6,7,8,9,10,11,12],
 	    		    datasets: [
 	    		      { 
-	    		        data: realArray2020,
-	    		        label: "2020",
+	    		        data: realArray2021,
+	    		        label: "2021",
 	    		        borderColor: "#3e95cd",
 	    		        fill: false
 	    		      }, { 
-	    		        data: realArray2021,
-	    		        label: "2021",
+	    		        data: realArray2022,
+	    		        label: "2022",
 	    		        borderColor: "#8e5ea2",
 	    		        fill: false
 	    		      }

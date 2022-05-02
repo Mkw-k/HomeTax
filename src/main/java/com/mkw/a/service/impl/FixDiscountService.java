@@ -26,6 +26,10 @@ public class FixDiscountService implements DiscountInterface{
 		int managerfee = tax.getManagerfee()/(nomalLen+discountLen);
 		String htCustome = tax.getHtcustome();
 		
+		//22-01-29 로직 수정 
+		//박규하 인터넷비 무료이던것 -> 남준이 반값으로 변경 
+		int interfee = tax.getInter()/(nomalLen+discountLen);
+		
 		HomeTaxVo newTax = new HomeTaxVo();
 		
 		newTax.setMyid(member.getMyid());
@@ -35,15 +39,16 @@ public class FixDiscountService implements DiscountInterface{
 		newTax.setGas(gas);
 		newTax.setManagerfee(managerfee);
 		newTax.setHtcustome(htCustome);
+		newTax.setInter(interfee);
 		
-		int interfee = 0;
+		//할인월세 계산을 위한 초기화 및 선언
 		int monthfee = 0;
 		
-		newTax.setInter(interfee);
 		//할인 정책 코드 라인 
 		//현재 지정되어있는 할인 금액 불러오기 (인당 지정금액 할인 정책임) 
 		int fixDiscountPrice = hometaxdao.getDiscountPolicyPrice();
 		
+		//할인월세 구현로직
 		monthfee = (tax.getMonthfee()/(nomalLen+discountLen))-(fixDiscountPrice*nomalLen);
 		System.out.println(tax.getMonthfee() + " + " + nomalLen + " + " + discountLen + " ) " +  "- (" +fixDiscountPrice +" * " + nomalLen + ") ");
 		newTax.setMonthfee(monthfee);

@@ -18,8 +18,6 @@ public class LoggerInterceptor extends HandlerInterceptorAdapter {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		
-//		String uuid = maincontroller.uuid;
-		
 		if (log.isDebugEnabled()) {
 			log.debug("====================================== START ======================================");
 //			log.debug(" Request UUID \t: " + uuid);

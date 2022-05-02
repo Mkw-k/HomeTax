@@ -124,7 +124,8 @@
 	     AND H.SEQ = R.SEQ
 		<choose>
 			<when test='myid == "admin" and myid != null and myid != ""'>
-				AND H.MYID in (select myid from home_member where auth = '1')
+<!-- 				AND H.MYID in (select myid from home_member where auth = '1') -->
+				AND H.MYID in (select myid from home_member)
 			</when>
 			<otherwise>
 				AND H.MYID = #{myid}

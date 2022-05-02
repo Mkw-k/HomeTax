@@ -30,26 +30,17 @@ public class MemberVo implements Serializable{
 	}
 
 	private String name; 
-	
 	private String classify; 
-	
 	private String email;
-	
 	private String phone;
 	
 	//@Setter(value = AccessLevel.NONE)	//해당 어노테이션을 붙여놓으면 롬복이 셋터를 생성하지 않음
 	private String pwd;
-	
 	private String issale;
-	
 	@NonNull
 	private String myid;
-	
 	private int auth;
-	
 	private String filename;
-	
 	private String newfilename;
-	
 	private String del;
 }

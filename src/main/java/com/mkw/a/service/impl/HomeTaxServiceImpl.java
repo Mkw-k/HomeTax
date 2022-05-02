@@ -123,7 +123,19 @@ public class HomeTaxServiceImpl implements HomeTaxService{
 		
 	}
 	
-	//R 전체 월세 내역 불러오기
+	/**
+	  *
+	  * @Method Name : getAllTaxList
+	  *<pre>
+	  *</pre>
+	  * @작성일 : 2022. 3. 28. 오후 11:33:57
+	  * @작성자 : K
+	  * @변경이력 : 
+	  * @Method 설명 : R 전체 월세 내역 불러오기
+	  * @param day
+	  * @return
+	  *
+	  */
 	@Override
 	public List<HomeTaxVo> getAllTaxList(String day) {
 		
