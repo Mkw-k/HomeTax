@@ -27,24 +27,27 @@ import lombok.RequiredArgsConstructor;
  * 월세 문자 전송 기능 
  * 추후 카카오 채널 톡 추가 예정 
  * 
+ * Junit Test 추가 필요 
+ * 
  * @author K
  *
  */
 @EnableScheduling
 @Component
 @RequiredArgsConstructor
-public class BatchApplication {
+public class SchedulerApplication {
 	
 	//api 
-	private final TestCoolsms testcoolsms;
+	private final TestCoolSms testcoolsms;
 	
 	//service
 	private final HomeTaxService homeTaxService; 
 	
 	/**
 	  *
-	  * @Method Name : scheduledTest
+	  * @Method Name : smsTaxScheduler
 	  *<pre>
+	  *	참고사항 : 스케쥴러는 파라미터가 있으면 에러남 
 	  *</pre>
 	  * @작성일 : 2022. 5. 3. 오전 12:35:42
 	  * @작성자 : K
@@ -54,36 +57,44 @@ public class BatchApplication {
 	  *
 	  */
 	@Scheduled(cron = "0 48 0 23 * ?")
-	public void scheduledTest(String day, HttpServletRequest request) throws Exception{
+	public void smsTaxScheduler() throws Exception{
 		Calendar calendar = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		MemberVo login = (MemberVo)request.getSession().getAttribute("login");
-		
+
 		System.out.println("스케쥴러 작동!!");
 		System.out.println("스케쥴러 작동 시간 :: " + sdf.format(calendar.getTime()));
 		
 		//1. sms 기본정보 셋팅 
 		String phoneNum = "01026074128";	//송신자 번호 
-		String cerNum = login.getPhone();	//수신자 번호
-		
-		//2. 납부 월세 기본정보 
-		List<HomeTaxVo> collect = homeTaxService.getAllTaxList(day)
-				.stream()
-				.filter(x->x.getMyid().equals(login.getMyid()))
-				.collect(Collectors.toList());
-		
-		//3. 검증작업 잘못된 리턴 데이터 경우 
-		if(collect.isEmpty()) {
-			throw new Exception("로그인한 유저의 해당 월의 납부월세기본 데이터가 없습니다");
-		}else if(collect.size() > 1) {
-			throw new Exception("로그인한 유저의 해당 월의 납부월세기본 데이터가 2개 이상입니다. 데이터에 문제가 있으니 관리자에게 문의하세요");
-		}
-		
-		//TODO sms 전문 생성하기 
-		//testcoolsms > certifiedPhoneNumber 구현되어있음 
 		
 		//sms 보내기 
-		testcoolsms.certifiedPhoneNumber(phoneNum, cerNum, sdf.format(calendar.getTime()));
+		testcoolsms.sendHomeTaxSms(phoneNum, sdf.format(calendar.getTime()));
 	}
 	
+	/**
+	  *
+	  * @Method Name : alertCreateTaxSmsScheduler
+	  *<pre>
+	  *</pre>
+	  * @작성일 : 2022. 5. 10. 오전 12:08:42
+	  * @작성자 : K
+	  * @변경이력 : 
+	  * @Method 설명 : 매달 15일 22시 까지 월세가 입력되있지 않으면 월세작성요청 문자 운영자에게 전송
+	  * @throws Exception
+	  *
+	  */
+	@Scheduled(cron = "0 0 22 15 * *")
+	public void alertCreateTaxSmsScheduler() throws Exception{
+		Calendar calendar = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+		System.out.println("스케쥴러 작동!!");
+		System.out.println("스케쥴러 작동 시간 :: " + sdf.format(calendar.getTime()));
+		
+		//1. sms 기본정보 셋팅 
+		String phoneNum = "01026074128";	//송신자 번호 
+		
+		//sms 보내기 
+		testcoolsms.sendSmsForAdmin(phoneNum, sdf.format(calendar.getTime()));
+	}
 }
